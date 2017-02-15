@@ -1,0 +1,10 @@
+ R1 Net3 Net9 10K 
+ C1 Net2 Net3 100NF 
+ L1 Net1 Net2 10NH 
+V1 Net1 0 SINE ( 0 1 10Khz 0.0S )
+ L2 Net9 Net4 10NH 
+ C2 Net4 Net5 100NF 
+ R2 Net5 Net8 10K 
+ L3 Net8 Net6 10NH 
+ C3 Net6 0 100NF 
+ C4 NC161_1000 0 100NF 
