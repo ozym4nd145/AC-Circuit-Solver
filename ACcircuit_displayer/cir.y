@@ -38,27 +38,6 @@ COMPONENT TERMINAL TERMINAL RESISTANCE
 {list[numcmp].name=strdup($1);list[numcmp].id1=accept($2);list[numcmp].id2=accept($3);list[numcmp].val=strdup($5);list[numcmp].type=4;++numcmp;printf("matchedi\n");}
 ;
 
-/*
-file 	: line file {;}
-	|line	{;}
-	;
-										// with units
-line    :alnum alnum  alnum  number alnum new_line {printf("matched\n");}	//R1 Net2 Net1 1k
-	|alnum number alnum  number alnum new_line {printf("matched2\n");}	//R1 0 Net1 1k
-	|alnum alnum  number number alnum new_line {printf("matched3\n");}	//R1 Net1 0 1k
-	|alnum alnum  alnum  number  new_line {printf("matched\n");}	// without units
-	|alnum number alnum  number  new_line {printf("matched2\n");}
-	|alnum alnum  number number  new_line {printf("matched3\n");}	
-	|alnum alnum   alnum   sine '(' number  number  number alnum  number alnum  number ')' new_line {printf("matched4\n");}
-	|alnum number  alnum   sine '(' number  number  number alnum  number alnum  number ')' new_line {printf("matched5\n");}
-	|alnum alnum   number  sine '(' number  number  number alnum  number alnum  number ')' new_line {printf("matched6\n");}
-	|alnum alnum   alnum   sine '(' number  number  number alnum  number alnum   ')' new_line {printf("matched4\n");}
-	|alnum number  alnum   sine '(' number  number  number alnum  number alnum   ')' new_line {printf("matched5\n");}
-	|alnum alnum   number  sine '(' number  number  number alnum  number alnum   ')' new_line {printf("matched6\n");}		
-;
-
-num_type : number; */
-
 %%                    
 
 
@@ -98,11 +77,6 @@ list[5].type=capacitor;list[5].id1=5;list[5].id2=6;
 
 numcmp=6;
 numnets=7;
-
-/* R2 Net5 Net8 10K 
- L3 Net8 Net6 10NH 
- C3 Net6 0 100NF 
- C4 Net4 0 1NF */
 }
 
 int main() //TODO take file names from command line
@@ -114,24 +88,21 @@ yyin = fopen("top.cir","r");
 if(yyin==NULL)
 {yyerror("Input file not found\n");exit(1);}
 
-printf("76\n");
+
 //change to keep parsing multiple times because we just want to ignore the wrong line
     do {
         yyparse();
     } while (!feof(yyin));
 
-test_print();
-
-printf("213\n");
 
 outfile = fopen("top.svg","w");
 if(outfile==NULL)
 {yyerror("Output file not found\n");exit(1);}
 
+//start of svg file
 fprintf(outfile,"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n");
-fprintf(outfile,"<svg    xmlns:svg=\"http://www.w3.org/2000/svg\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  height=\"500\" width=\"500\" version=\"1.0\" style=\"background: white\">\n");//start of svg file
+fprintf(outfile,"<svg    xmlns:svg=\"http://www.w3.org/2000/svg\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  height=\"500\" width=\"500\" version=\"1.0\" style=\"background: white\">\n");
 
-//inti();
 
 int incrementor=60;
 
