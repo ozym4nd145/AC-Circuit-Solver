@@ -95,12 +95,6 @@ int main(int argc, char* argv[]) //TODO take file names from command line
         yyerror("Output file not found\n");
         exit(1);
     }
- 	
- 	for(i=0;i<numnets;++i)
- 	{
- 		if(times[i]==1)
- 		{fprintf(stderr,"Error - Net: \"%s\" is connected to only one component\n",arr[i]);}
- 	}
 
     start_svg(numnets,numcmp,outfile);
 

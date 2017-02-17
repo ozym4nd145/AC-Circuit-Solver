@@ -23,7 +23,6 @@ int numcmp;//number of components
 int numnets;//number of nets
 
 /*--------starting and ending pixels of each net---------*/
-int times[20005];
 int start[20005];
 int end[20005];
 char * arr[20005]; //arr[id] stores netlist name corresponding to the id 
