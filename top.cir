@@ -1,5 +1,7 @@
 R1 net0 net1 10
-R2 net3 net2 10K
+R2 $ 65898459023845 0934580 30924850 9328450 sfj 29034 31 8 2138r794 8927e rqw8er2
+
+ 
 R3 net0 net3 10
-R4 net0 net4 10
+R4 net0 net4 99
 L net0 net5 10

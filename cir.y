@@ -19,25 +19,33 @@ int yylex();
 
 Input: Line  
 	| Line Input 
-	| er		{;} 	
 ;
 
-Line:
-     Expression END { }
-     |END	      { }
+Line: END	      {/*printf("Got only end\n");*/}
+     | Expression {/*printf("Got only expression\n");*/}
 ;
 
 Expression:
-COMPONENT TERMINAL TERMINAL RESISTANCE 
-{list[numcmp].name=strdup($1);list[numcmp].id1=accept($2);list[numcmp].id2=accept($3);list[numcmp].val=strdup($4);list[numcmp].type=0;if(check(numcmp)==1){++numcmp;}}
-| COMPONENT TERMINAL TERMINAL INDUCTANCE 
-{list[numcmp].name=strdup($1);list[numcmp].id1=accept($2);list[numcmp].id2=accept($3);list[numcmp].val=strdup($4);list[numcmp].type=1;if(check(numcmp)==1){++numcmp;}}
-| COMPONENT TERMINAL TERMINAL CAPACITANCE 
-{list[numcmp].name=strdup($1);list[numcmp].id1=accept($2);list[numcmp].id2=accept($3);list[numcmp].val=strdup($4);list[numcmp].type=2;if(check(numcmp)==1){++numcmp;}}
-| VSOURCE TERMINAL TERMINAL SINE SOURCEDATA 
-{list[numcmp].name=strdup($1);list[numcmp].id1=accept($2);list[numcmp].id2=accept($3);list[numcmp].val=strdup($5);list[numcmp].type=3;if(check(numcmp)==1){++numcmp;}}
-| ISOURCE TERMINAL TERMINAL SINE SOURCEDATA 
-{list[numcmp].name=strdup($1);list[numcmp].id1=accept($2);list[numcmp].id2=accept($3);list[numcmp].val=strdup($5);list[numcmp].type=4;if(check(numcmp)==1){++numcmp;}}
+COMPONENT TERMINAL TERMINAL RESISTANCE END
+	{list[numcmp].name=strdup($1);list[numcmp].id1=accept($2);list[numcmp].id2=accept($3);list[numcmp].val=strdup($4);list[numcmp].type=0;if(check(numcmp)==1){++numcmp;}}
+| COMPONENT TERMINAL TERMINAL INDUCTANCE END 
+	{list[numcmp].name=strdup($1);list[numcmp].id1=accept($2);list[numcmp].id2=accept($3);list[numcmp].val=strdup($4);list[numcmp].type=1;if(check(numcmp)==1){++numcmp;}}
+| COMPONENT TERMINAL TERMINAL CAPACITANCE END
+	{list[numcmp].name=strdup($1);list[numcmp].id1=accept($2);list[numcmp].id2=accept($3);list[numcmp].val=strdup($4);list[numcmp].type=2;if(check(numcmp)==1){++numcmp;}}
+| VSOURCE TERMINAL TERMINAL SINE SOURCEDATA END
+	{list[numcmp].name=strdup($1);list[numcmp].id1=accept($2);list[numcmp].id2=accept($3);list[numcmp].val=strdup($5);list[numcmp].type=3;if(check(numcmp)==1){++numcmp;}}
+| ISOURCE TERMINAL TERMINAL SINE SOURCEDATA END
+	{list[numcmp].name=strdup($1);list[numcmp].id1=accept($2);list[numcmp].id2=accept($3);list[numcmp].val=strdup($5);list[numcmp].type=4;if(check(numcmp)==1){++numcmp;}}
+| COMPONENT TERMINAL TERMINAL er {/*printf("Got and error\n");*/}
+| VSOURCE TERMINAL TERMINAL er {/*printf("Got and error\n");*/}
+| ISOURCE TERMINAL TERMINAL er {/*printf("Got and error\n");*/}
+| COMPONENT TERMINAL er {/*printf("Got and error\n");*/}
+| VSOURCE TERMINAL er {/*printf("Got and error\n");*/}
+| ISOURCE TERMINAL er {/*printf("Got and error\n");*/}
+| COMPONENT er {/*printf("Got and error\n");*/}
+| VSOURCE er {/*printf("Got and error\n");*/}
+| ISOURCE er {/*printf("Got and error\n");*/}
+| er {/*printf("ERRor\n");*/}
 ;
 
 %%                    
@@ -83,13 +91,13 @@ int main(int argc, char* argv[]) //TODO take file names from command line
     int i=0;
     for(i=0;i<20005;i++)
     {
-	times[i] = 0;
+		times[i] = 0;
         start[i] = inf;
     }
 
     yyin = fopen(argv[1], "r");
     if (yyin == NULL) {
-        yyerror("Input file not found\n");
+        fprintf(stderr,"Error - Input file not found\n");
         exit(-1);
     }
 
@@ -98,9 +106,11 @@ int main(int argc, char* argv[]) //TODO take file names from command line
         yyparse();
     } while (!feof(yyin));
 
+//	test_print();	//debug
+
     outfile = fopen(argv[2], "w");
     if (outfile == NULL) {
-        yyerror("Output file not found\n");
+        fprintf(stderr,"Error - Output file not found\n");
         exit(-1);
     }
  	
@@ -168,10 +178,10 @@ void test_print() {
 void yyerror(char * s) {
 
     if (strcmp(s, "syntax error") == 0) {
-        printf("Format of input file is wrong\n");
+        fprintf(stderr,"Error - Format of input file is wrong\n");
     } else {
-        printf("%s\n", s);
+        fprintf(stderr,"%s\n", s);
     }
-    return;
+
 }
 
