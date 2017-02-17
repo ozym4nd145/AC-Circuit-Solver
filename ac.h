@@ -32,4 +32,5 @@ char * arr[20005]; //arr[id] stores netlist name corresponding to the id
 
 void yyerror(char  * s);
 int accept(char * s);
+int check(int i);
 #endif
