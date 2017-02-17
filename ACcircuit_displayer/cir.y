@@ -56,29 +56,6 @@ return numnets-1;}
 }
 
 
-void inti()
-{
-arr[0]="Net3";start[0]=inf;end[0]=0;
-arr[1]="Net9";start[1]=inf;end[1]=0;
-arr[2]="Net2";start[2]=inf;end[2]=0;
-arr[3]="Net1";start[3]=inf;end[3]=0;
-arr[4]="0";start[4]=inf;end[4]=0;
-arr[5]="Net4";start[5]=inf;end[5]=0;
-arr[6]="Net5";start[6]=inf;end[6]=0;
-arr[7]="Net8";start[7]=inf;end[7]=0;
-arr[8]="Net6";start[8]=inf;end[8]=0;
-
-list[0].type=resistor;list[0].id1=0;list[0].id2=1;
-list[1].type=capacitor;list[1].id1=2;list[1].id2=0;
-list[2].type=inductor;list[2].id1=3;list[2].id2=2;
-list[3].type=voltage;list[3].id1=3;list[3].id2=4;
-list[4].type=inductor;list[4].id1=1;list[4].id2=5;
-list[5].type=capacitor;list[5].id1=5;list[5].id2=6;
-
-numcmp=6;
-numnets=7;
-}
-
 int main() //TODO take file names from command line
 {
 numcmp=numnets=0;
