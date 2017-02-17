@@ -123,7 +123,7 @@ int draw_net_text(int x, int y, int is_up,char* text, FILE* ptr)
 	}
 	else
 	{
-		off_y = 2.5*CIRCLE_WIDTH;
+		off_y = 3.0*CIRCLE_WIDTH;
 	}
 	fprintf(ptr, "<text x = \"%f\" y=\"%f\" font-size=\"%f\" fill=\"black\">%s</text>\n",x-0.15,y+off_y,LINE_WIDTH*3,text);	
 }
