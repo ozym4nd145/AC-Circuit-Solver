@@ -684,7 +684,7 @@ YY_DECL
 		}
 
 	{
-#line 5 "cir.l"
+#line 7 "cir.l"
 
 #line 690 "lex.yy.c"
 
@@ -745,44 +745,44 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 6 "cir.l"
+#line 8 "cir.l"
 {printf("sine returned\n");return sine;}
 	YY_BREAK
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
-#line 7 "cir.l"
+#line 9 "cir.l"
 {printf("alnum returned\n");return alnum;}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 8 "cir.l"
+#line 10 "cir.l"
 {printf("number returned\n"); return number;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 9 "cir.l"
-{;}
+#line 11 "cir.l"
+{printf("space returned\n"); return space;}
 	YY_BREAK
 case 5:
 /* rule 5 can match eol */
 YY_RULE_SETUP
-#line 10 "cir.l"
+#line 12 "cir.l"
 {printf("new_line returned\n");return new_line;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 11 "cir.l"
+#line 13 "cir.l"
 {printf("%s returned\n",yytext);return yytext[0];}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 12 "cir.l"
+#line 14 "cir.l"
 {yyerror ("Unrecognized character");exit(1);}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 13 "cir.l"
+#line 15 "cir.l"
 ECHO;
 	YY_BREAK
 #line 789 "lex.yy.c"
@@ -1780,7 +1780,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 12 "cir.l"
+#line 14 "cir.l"
 
 
 

@@ -67,11 +67,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include "ac.h"
 extern FILE *yyin;
 FILE *outfile;
 void yyerror (char *s);
 
-#line 75 "y.tab.c" /* yacc.c:339  */
+#line 76 "y.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -125,10 +126,10 @@ extern int yydebug;
 typedef union YYSTYPE YYSTYPE;
 union YYSTYPE
 {
-#line 10 "cir.y" /* yacc.c:355  */
+#line 11 "cir.y" /* yacc.c:355  */
 int n1;
 
-#line 132 "y.tab.c" /* yacc.c:355  */
+#line 133 "y.tab.c" /* yacc.c:355  */
 };
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
@@ -143,7 +144,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 147 "y.tab.c" /* yacc.c:358  */
+#line 148 "y.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -441,8 +442,8 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    19,    19,    20,    23,    24,    25,    26,    27,    28,
-      29,    30,    31,    32,    33,    34
+       0,    20,    20,    21,    24,    25,    26,    27,    28,    29,
+      30,    31,    32,    33,    34,    35
 };
 #endif
 
@@ -1240,91 +1241,91 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 19 "cir.y" /* yacc.c:1646  */
+#line 20 "cir.y" /* yacc.c:1646  */
     {;}
-#line 1246 "y.tab.c" /* yacc.c:1646  */
+#line 1247 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 3:
-#line 20 "cir.y" /* yacc.c:1646  */
+#line 21 "cir.y" /* yacc.c:1646  */
     {;}
-#line 1252 "y.tab.c" /* yacc.c:1646  */
+#line 1253 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 4:
-#line 23 "cir.y" /* yacc.c:1646  */
+#line 24 "cir.y" /* yacc.c:1646  */
     {printf("matched\n");}
-#line 1258 "y.tab.c" /* yacc.c:1646  */
+#line 1259 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 5:
-#line 24 "cir.y" /* yacc.c:1646  */
+#line 25 "cir.y" /* yacc.c:1646  */
     {printf("matched2\n");}
-#line 1264 "y.tab.c" /* yacc.c:1646  */
+#line 1265 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 6:
-#line 25 "cir.y" /* yacc.c:1646  */
+#line 26 "cir.y" /* yacc.c:1646  */
     {printf("matched3\n");}
-#line 1270 "y.tab.c" /* yacc.c:1646  */
+#line 1271 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 7:
-#line 26 "cir.y" /* yacc.c:1646  */
+#line 27 "cir.y" /* yacc.c:1646  */
     {printf("matched\n");}
-#line 1276 "y.tab.c" /* yacc.c:1646  */
+#line 1277 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 8:
-#line 27 "cir.y" /* yacc.c:1646  */
+#line 28 "cir.y" /* yacc.c:1646  */
     {printf("matched2\n");}
-#line 1282 "y.tab.c" /* yacc.c:1646  */
+#line 1283 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 28 "cir.y" /* yacc.c:1646  */
+#line 29 "cir.y" /* yacc.c:1646  */
     {printf("matched3\n");}
-#line 1288 "y.tab.c" /* yacc.c:1646  */
+#line 1289 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 29 "cir.y" /* yacc.c:1646  */
+#line 30 "cir.y" /* yacc.c:1646  */
     {printf("matched4\n");}
-#line 1294 "y.tab.c" /* yacc.c:1646  */
+#line 1295 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 30 "cir.y" /* yacc.c:1646  */
+#line 31 "cir.y" /* yacc.c:1646  */
     {printf("matched5\n");}
-#line 1300 "y.tab.c" /* yacc.c:1646  */
+#line 1301 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 12:
-#line 31 "cir.y" /* yacc.c:1646  */
+#line 32 "cir.y" /* yacc.c:1646  */
     {printf("matched6\n");}
-#line 1306 "y.tab.c" /* yacc.c:1646  */
+#line 1307 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 32 "cir.y" /* yacc.c:1646  */
+#line 33 "cir.y" /* yacc.c:1646  */
     {printf("matched4\n");}
-#line 1312 "y.tab.c" /* yacc.c:1646  */
+#line 1313 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 14:
-#line 33 "cir.y" /* yacc.c:1646  */
+#line 34 "cir.y" /* yacc.c:1646  */
     {printf("matched5\n");}
-#line 1318 "y.tab.c" /* yacc.c:1646  */
+#line 1319 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 15:
-#line 34 "cir.y" /* yacc.c:1646  */
+#line 35 "cir.y" /* yacc.c:1646  */
     {printf("matched6\n");}
-#line 1324 "y.tab.c" /* yacc.c:1646  */
+#line 1325 "y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1328 "y.tab.c" /* yacc.c:1646  */
+#line 1329 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1552,20 +1553,88 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 37 "cir.y" /* yacc.c:1906  */
+#line 39 "cir.y" /* yacc.c:1906  */
                     
 
-int main() 
+void inti()
 {
+arr[0]="Net3";
+arr[1]="Net9";
+arr[2]="Net2";
+arr[3]="Net1";
+arr[4]="0";
+arr[5]="Net4";
+arr[6]="Net5";
+arr[7]="Net8";
+arr[8]="Net6";
 
+list[0].type=resistor;list[0].id1=0;list[0].id2=1;
+list[1].type=capacitor;list[1].id1=2;list[1].id2=0;
+list[2].type=inductor;list[2].id1=3;list[2].id2=2;
+list[3].type=voltage;list[3].id1=3;list[3].id2=4;
+list[4].type=inductor;list[4].id1=1;list[4].id2=5;
+list[5].type=capacitor;list[5].id1=5;list[5].id2=6;
+
+numcmp=6;
+numnets=7;
+
+/* R2 Net5 Net8 10K 
+ L3 Net8 Net6 10NH 
+ C3 Net6 0 100NF 
+ C4 Net4 0 1NF */
+}
+
+int main() //TODO take file names from command line
+{
+/*
 yyin = fopen("top.cir","r");
 if(yyin==NULL)
 {yyerror("Input file not found\n");}
 
+oufile = fopen("top.svg","w");
+if(outfile==NULL)
+{yyerror("Output file not found\n");}
 
+
+//change to keep parsing multiple times because we just want to ignore the wrong line
 yyparse();
+
+
+*/
+inti();
+
+int incrementor=40;
+
+int j;
+for(j=0;j<numnets;++j)
+{y_coordinate[j]=(j+1)*incrementor;}
+
+
+int i,x=incrementor;
+for(i=0;i<numcmp;++i)
+{
+int net1 = list[i].id1;
+int net2 = list[i].id2;
+
+make_point(x,y_coordinate[net1]);
+make_point(x,y_coordinate[net2]);
+
+int a=y_coordinate[net1];
+int b=y_coordinate[net2];
+
+if(a>b)
+{int t=b;b=a;a=t;}
+//a<=b
+
+make_element(x,a,x,a+incrementor,list[i].type);
+make_line(x,a+incrementor,x,b);
+
+x+=incrementor;
+}
+
 return 0; 
 }
+
 
 //print error but don't exit
 void yyerror (char *s) 

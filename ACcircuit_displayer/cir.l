@@ -1,7 +1,9 @@
 %{
 #include "y.tab.h"
 %}
-natural [0-9]+
+digit [0-9]
+natural (digit)+
+unit ("F"|"P"|"N"|"U"|"M"|"K"|"MEG"|"")
 %%
 [sS][iI][nN][eE]		{printf("sine returned\n");return sine;}
 [a-zA-Z][^ \t]*			{printf("alnum returned\n");return alnum;}

@@ -64,7 +64,7 @@ extern int yydebug;
 typedef union YYSTYPE YYSTYPE;
 union YYSTYPE
 {
-#line 10 "cir.y" /* yacc.c:1909  */
+#line 11 "cir.y" /* yacc.c:1909  */
 int n1;
 
 #line 71 "y.tab.h" /* yacc.c:1909  */
