@@ -4,7 +4,7 @@
 V1 Net1 0 SINE ( 0 1 10Khz 0.0S )
  L2 Net9 Net4 10NH 
  C2 Net4 Net5 100NF 
- R2 Net5 Net8
+ R2 Net5 Net8 100K
  L3 Net8 Net6 10NH 
  C3 Net6 Net7 100NF 
  R3 Net7 0 10K

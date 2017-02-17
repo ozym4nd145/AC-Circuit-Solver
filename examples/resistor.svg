@@ -77,7 +77,7 @@
 		</g>
 	</g> -->
 
-	<g transform="translate(1,1) scale(0.02125,0.022727272727272728)">
+	<!-- <g transform="translate(1,1) scale(0.02125,0.022727272727272728)">
 		<g transform="translate(-25.08161,-2.992383)">
 		    <path
 		       d="m 40,25 c 0,8.284271 -6.715729,15 -15,15 -8.284271,0 -15,-6.715729 -15,-15 0,-8.284271 6.715729,-15 15,-15 8.284271,0 15,6.715729 15,15 l 0,0 z"
@@ -95,6 +95,23 @@
 		       style="fill:#000000;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1"
 		       d="m 25.136017,18.552775 -3.210011,4.951033 6.63765,0.05441 z"/>
 		  </g>
+	</g> -->
+
+	<g transform="translate(1,1)">
+		<g transform="matrix(0.01259861,0,0,0.01413041,-0.15527664,-0.06236267)">
+		    <path
+		       d="m 0.5,24.5 24,0"
+		       style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"/>
+		    <path
+		       d="m 4.5,27.5 16,0"
+		       style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"/>
+		    <path
+		       d="m 16.5,30.5 -8,0"
+		       style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"/>
+		    <path
+		       d="m 12.5,24.5 0,-20"
+		       style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"/>
+	  	</g>
 	</g>
 
  	<line x1="0" y1="0" x2="2" y2="0" stroke="black" stroke-width="0.01"/>

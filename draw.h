@@ -24,4 +24,5 @@ int make_element(int x1,int y1,int x2,int y2,enum component_type type,char* name
 int place_text(int x,int y, float off_x,char* text, char* color, FILE* ptr);
 int draw_text(int x, int y, char* text, enum component_type type, FILE* ptr);
 int draw_net_text(int x, int y, int is_up,char* text, FILE* ptr);
+int draw_ground(int x,int y, FILE* ptr);
 #endif

@@ -3,8 +3,8 @@
 #include <assert.h>
 #include "ac.h"
 
-float LINE_WIDTH=0.05;
-float CIRCLE_WIDTH=0.07;
+float LINE_WIDTH=0.03;
+float CIRCLE_WIDTH=0.05;
 float WIDTH = 2000;
 float HEIGHT = 2000;
 
@@ -92,6 +92,11 @@ int draw_current(int x1,int y1, int x2, int y2,FILE* ptr)
 	draw_line(x1,y1+1,x2,y2,ptr);
 }
 
+int draw_ground(int x,int y, FILE* ptr)
+{
+	fprintf(ptr, " <g transform=\"translate(%d,%d)\"> <g transform=\"matrix(0.01259861,0,0,0.01413041,-0.15527664,-0.06236267)\"> <path d=\"m 0.5,24.5 24,0\" style=\"fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:%f;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1\"/> <path d=\"m 4.5,27.5 16,0\" style=\"fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:%f;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1\"/> <path d=\"m 16.5,30.5 -8,0\" style=\"fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:%f;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1\"/> <path d=\"m 12.5,24.5 0,-20\" style=\"fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:%f;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1\"/> </g> </g> \n",x,y,(60*LINE_WIDTH),(60*LINE_WIDTH),(60*LINE_WIDTH),(60*LINE_WIDTH));
+}
+
 int draw_text(int x, int y, char* text, enum component_type type, FILE* ptr)
 {
 	switch(type)
@@ -125,12 +130,12 @@ int draw_net_text(int x, int y, int is_up,char* text, FILE* ptr)
 	{
 		off_y = 3.0*CIRCLE_WIDTH;
 	}
-	fprintf(ptr, "<text x = \"%f\" y=\"%f\" font-size=\"%f\" fill=\"black\">%s</text>\n",x-0.15,y+off_y,LINE_WIDTH*3,text);	
+	fprintf(ptr, "<text x = \"%f\" y=\"%f\" font-size=\"%f\" fill=\"black\">%s</text>\n",x-0.15,y+off_y,LINE_WIDTH*4,text);	
 }
 
 int place_text(int x,int y, float off_x,char* text, char* color, FILE* ptr)
 {
-	fprintf(ptr, "<text x = \"%f\" y=\"%f\" font-size=\"%f\" style=\"writing-mode: tb;\" fill=\"%s\">%s</text>\n",x+off_x,y+0.2,LINE_WIDTH*3,color,text);
+	fprintf(ptr, "<text x = \"%f\" y=\"%f\" font-size=\"%f\" style=\"writing-mode: tb;\" fill=\"%s\">%s</text>\n",x+off_x,y+0.2,LINE_WIDTH*4,color,text);
 }
 
 int place_resistor(int x, int y, FILE* ptr)
@@ -233,6 +238,7 @@ int make_element(int x1,int y1,int x2,int y2,enum component_type type,char* name
 // 	draw_text(2,1,"SINE ( 0.0 1.0 10Khz 0.0S 0.0 )",inductor,fl);
 // 	draw_text(5,1,"SINE ( 0.0 1.0 10Khz 0.0S 0.0 )",voltage,fl);
 // 	draw_net_text(1,0,1,"Net1",fl);
+// 	draw_ground(6,7,fl);
 // 	end_svg(fl);
 // 	fclose(fl);
 // }

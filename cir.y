@@ -76,6 +76,58 @@ int check(int i)
 	{return 1;}
 }
 
+int swap_net(int idx1,int idx2)
+{
+    // printf("Swapping - %d = %s <=> %d = %s\n",idx1,arr[idx1],idx2,arr[idx2]);
+    if(idx1==idx2)
+    {
+        return 1;
+    }
+    char* p = arr[idx1];
+    arr[idx1] = arr[idx2];
+    arr[idx2] = p;
+    // printf("After %d = %s <=> %d = %s\n",idx1,arr[idx1],idx2,arr[idx2]);
+
+    int i=0;
+    for(i=0;i<numcmp;i++)
+    {
+        // printf("Edge - %s , t1 - %d, t2 - %d\n",list[i].name, list[i].id1,list[i].id2);
+        if(list[i].id1 == idx1)
+        {
+            list[i].id1 = idx2;
+        }
+        else if(list[i].id1 == idx2)
+        {
+            list[i].id1 = idx1;
+        }
+        if(list[i].id2 == idx1)
+        {
+            list[i].id2 = idx2;
+        }
+        else if(list[i].id2 == idx2)
+        {
+            list[i].id2 = idx1;
+        }
+        // printf("Edge - %s , t1 - %d, t2 - %d\n",list[i].name, list[i].id1,list[i].id2);
+    }
+
+}
+
+int check_ground()
+{
+    int i=0;
+    int found = 0;
+    for(i=0;i<numnets && found==0;i++)
+    {
+        if(!strcmp(arr[i],"0"))
+        {
+            found = 1;
+            swap_net(i,numnets-1);
+        }
+    }
+    return found;
+}
+
 int main(int argc, char* argv[]) //TODO take file names from command line
 {
     if(argc != 3)
@@ -113,12 +165,26 @@ int main(int argc, char* argv[]) //TODO take file names from command line
         fprintf(stderr,"Error - Output file not found\n");
         exit(-1);
     }
- 	
+
  	for(i=0;i<numnets;++i)
  	{
- 		if(times[i]==1)
- 		{fprintf(stderr,"Error - Net: \"%s\" is connected to only one component\n",arr[i]);}
+ 		
+        if(times[i]==1)
+ 		{
+            fprintf(stderr,"Error - Net: \"%s\" is connected to only one component\n",arr[i]);
+        }
  	}
+
+    int is_draw_ground = 0;
+
+    if(!check_ground())
+    {
+        fprintf(stderr,"Error - No ground net found\n");
+    }
+    else
+    {
+        is_draw_ground = 1;
+    }
 
     start_svg(numnets,numcmp,outfile);
 
@@ -132,7 +198,7 @@ int main(int argc, char* argv[]) //TODO take file names from command line
             net1 = t;
         }
         
-        make_element(i,net1,i,net2,list[i].type,list[i].name,outfile);
+        make_element(i,net1,i,net2,list[i].type,strcat(strcat(list[i].name," "),list[i].val),outfile);
         
         
         if (i < start[net1]) {
@@ -152,6 +218,10 @@ int main(int argc, char* argv[]) //TODO take file names from command line
 
     for (i = 0; i < numnets; ++i) {
         draw_line(start[i], i, end[i], i,outfile);
+    }
+    if(is_draw_ground)
+    {
+        draw_ground(end[numnets-1],numnets-1,outfile);
     }
 
     end_svg(outfile);
