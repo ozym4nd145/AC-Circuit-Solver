@@ -23,17 +23,13 @@ int numcmp;//number of components
 int numnets;//number of nets
 
 /*--------starting and ending pixels of each net---------*/
+int times[20005];
 int start[20005];
 int end[20005];
-int y_coordinate[20005];
 char * arr[20005]; //arr[id] stores netlist name corresponding to the id 
 
 /*-------x is horizontal, y is vertical------*/
 
-
-
-void make_point(int ,int );
-void make_line(int x1,int y1,int x2,int y2);
 void yyerror(char  * s);
 int accept(char * s);
 #endif
