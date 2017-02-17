@@ -82,6 +82,11 @@ int draw_current(int x1,int y1, int x2, int y2,FILE* ptr)
 	draw_line(x1,y1+1,x2,y2,ptr);
 }
 
+int draw_text_element(int x,int y, char* text, FILE* ptr)
+{
+	fprintf(ptr, "<text x = \"%f\" y=\"%f\" transform=\"rotate(90)\">%s</text>\n",x+0.3,y+0.3,text);
+}
+
 int place_resistor(int x, int y, FILE* ptr)
 {
 	fprintf(ptr,"<path d=\" M 0 0 l 0.25 0 l 0.04166666667 -0.08333333334 l 0.08333333334 0.166666666667 l 0.08333333334 -0.166666666667 l 0.08333333334 0.166666666667 l 0.08333333334 -0.166666666667 l 0.08333333334 0.166666666667 l 0.04166666667 -0.08333333334 l 0.25 0 \" stroke=\"black\" stroke-width=\"%f\" stroke-linejoin=\"bevel\" fill=\"none\"  transform=\"translate(%d %d) rotate(90)\"/>\n",LINE_WIDTH,x,y);
@@ -177,5 +182,6 @@ int make_element(int x1,int y1,int x2,int y2,enum component_type type,FILE* ptr)
 // 	draw_ac(5,1,5,3,fl);
 // 	draw_current(6,1,6,3,fl);
 // 	end_svg(fl);
+// 	draw_text_element(5,1,"SINE ( 0.0 1.0 10Khz 0.0S 0.0 )",fl);
 // 	fclose(fl);
 // }

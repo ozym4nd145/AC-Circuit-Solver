@@ -1,0 +1,31 @@
+<svg width="2000.000000" height="2000.000000" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" transform="translate(100 100)">
+<line x1="0" x2="10" y1="0" y2="0" stroke-width="0.050000" stroke="black"/>
+<line x1="0" x2="10" y1="1" y2="1" stroke-width="0.050000" stroke="black"/>
+<line x1="0" x2="10" y1="2" y2="2" stroke-width="0.050000" stroke="black"/>
+<line x1="0" x2="10" y1="3" y2="3" stroke-width="0.050000" stroke="black"/>
+<line x1="0" x2="10" y1="4" y2="4" stroke-width="0.050000" stroke="black"/>
+<circle cx="1" cy="0" r="0.070000"/>
+<circle cx="1" cy="4" r="0.070000"/>
+<path d=" M 0 0 l 0.25 0 l 0.04166666667 -0.08333333334 l 0.08333333334 0.166666666667 l 0.08333333334 -0.166666666667 l 0.08333333334 0.166666666667 l 0.08333333334 -0.166666666667 l 0.08333333334 0.166666666667 l 0.04166666667 -0.08333333334 l 0.25 0 " stroke="black" stroke-width="0.050000" stroke-linejoin="bevel" fill="none"  transform="translate(1 0) rotate(90)"/>
+<line x1="1" x2="1" y1="1" y2="4" stroke-width="0.050000" stroke="black"/>
+<circle cx="3" cy="2" r="0.070000"/>
+<circle cx="3" cy="4" r="0.070000"/>
+ 	<g transform = "translate(3,2)"> 		<path d=" 			M 0 0 			l 0 0.4 			" stroke="black" stroke-width="0.050000" stroke-linejoin="bevel" fill="none"/> 		<path d=" 			M -0.3 0.4 			l 0.6 0 			" stroke="black" stroke-width="0.050000" stroke-linejoin="bevel" fill="none"/> 		<path d=" 			M -0.3 0.6 			l 0.6 0 			" stroke="black" stroke-width="0.050000" stroke-linejoin="bevel" fill="none"/> 		<path d=" 			M 0 0.6 			l 0 0.4 			" stroke="black" stroke-width="0.050000" stroke-linejoin="bevel" fill="none"/>  	</g>  	<line x1="3" x2="3" y1="3" y2="4" stroke-width="0.050000" stroke="black"/>
+<circle cx="2" cy="1" r="0.070000"/>
+<circle cx="2" cy="3" r="0.070000"/>
+<path 		d=" 			M 0,0 			L 5.5,0 			C 5.5,0 5.5,-4 9.5,-4 			C 13.5,-4 13.5,0 13.5,0 			C 13.5,0 13.5,-4 17.5,-4 			C 21.5,-4 21.5,0 21.5,0 			C 21.5,0 21.5,-4 25.5,-4 			C 29.5,-4 29.5,0 29.5,0 			C 29.5,0 29.5,-4 33.5,-4 			C 37.5,-4 37.5,0 37.5,0 			L 43,0 		" 		stroke="black" stroke-width="2.150000" stroke-linejoin="miter" fill="none" fill-rule="evenodd" fill-opacity="0.75" stroke-linecap="butt" stroke-opacity="1" transform="translate(2,1) scale(0.02325581395) rotate(90) " />
+ <line x1="2" x2="2" y1="2" y2="3" stroke-width="0.050000" stroke="black"/>
+<circle cx="5" cy="1" r="0.070000"/>
+<circle cx="5" cy="3" r="0.070000"/>
+<g transform="translate(5,1) scale(0.02125,0.022727272727272728)"> <g transform="translate(-25.08161,-2.992383)"> <path d="m 40,25 c 0,8.284271 -6.715729,15 -15,15 -8.284271,0 -15,-6.715729 -15,-15 0,-8.284271 6.715729,-15 15,-15 8.284271,0 15,6.715729 15,15 l 0,0 z" style="opacity:1;fill:none;fill-opacity:1;stroke:#000000;stroke-width:2.150000;stroke-linecap:square;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"/> <path d="M 25,10 25,3" style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:2.150000;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"/> <path d="m 25,40 0,7" style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:2.150000;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"/> <path d="m 16,25.000005 c 0,0 1.5,-5.000001 4.5,-5.000001 3,0 6,10.000002 9,10.000002 3,0 4.5,-5.000001 4.5,-5.000001" style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:2.150000;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"/> </g> </g>
+<line x1="5" x2="5" y1="2" y2="3" stroke-width="0.050000" stroke="black"/>
+<circle cx="6" cy="1" r="0.070000"/>
+<circle cx="6" cy="3" r="0.070000"/>
+<g transform="translate(6,1) scale(0.02125,0.022727272727272728)"> <g transform="translate(-25.08161,-2.992383)"> <path d="m 40,25 c 0,8.284271 -6.715729,15 -15,15 -8.284271,0 -15,-6.715729 -15,-15 0,-8.284271 6.715729,-15 15,-15 8.284271,0 15,6.715729 15,15 l 0,0 z" style="opacity:1;fill:none;fill-opacity:1;stroke:#000000;stroke-width:2.150000;stroke-linecap:square;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" /> <path d="M 25,10 25,3" style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:2.150000;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"/> <path d="m 25,40 0,7" style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:2.150000;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"/> <path d="m 25.136017,23.540261 0,11.951034" style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:2.150000;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"/> <path style="fill:#000000;fill-rule:evenodd;stroke:#000000;stroke-width:2.150000;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1" d="m 25.136017,18.552775 -3.210011,4.951033 6.63765,0.05441 z"/> </g> </g>
+<line x1="6" x2="6" y1="2" y2="3" stroke-width="0.050000" stroke="black"/>
+<g transform="rotate(0)">
+	<g transform="scale(0.01)">
+		<text x = "530.0000" y="130.0000">S</text>
+	</g>
+</g>
+</svg>
