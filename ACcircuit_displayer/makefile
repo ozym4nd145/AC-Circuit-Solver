@@ -1,10 +1,7 @@
-cir: lex.yy.c y.tab.c
-	gcc -g y.tab.c lex.yy.c
-
-lex.yy.c: y.tab.c cir.l
+test: cir.l cir.y  
 	lex cir.l
-
-y.tab.c: cir.y
-	yacc -d cir.y
+	yacc -d cir.y	
+	gcc ac.h y.tab.c lex.yy.c utility.c
+	
 
 

@@ -47,27 +47,47 @@ extern int yydebug;
   {
     sine = 258,
     alnum = 259,
-    number = 260,
+    er = 260,
     space = 261,
-    new_line = 262
+    new_line = 262,
+    COMPONENT = 263,
+    TERMINAL = 264,
+    RESISTANCE = 265,
+    CAPACITANCE = 266,
+    INDUCTANCE = 267,
+    SINE = 268,
+    SOURCEDATA = 269,
+    END = 270,
+    VSOURCE = 271,
+    ISOURCE = 272
   };
 #endif
 /* Tokens.  */
 #define sine 258
 #define alnum 259
-#define number 260
+#define er 260
 #define space 261
 #define new_line 262
+#define COMPONENT 263
+#define TERMINAL 264
+#define RESISTANCE 265
+#define CAPACITANCE 266
+#define INDUCTANCE 267
+#define SINE 268
+#define SOURCEDATA 269
+#define END 270
+#define VSOURCE 271
+#define ISOURCE 272
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE YYSTYPE;
 union YYSTYPE
 {
-#line 11 "cir.y" /* yacc.c:1909  */
-int n1;
+#line 8 "cir.y" /* yacc.c:1909  */
+int n1;char * s;
 
-#line 71 "y.tab.h" /* yacc.c:1909  */
+#line 91 "y.tab.h" /* yacc.c:1909  */
 };
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
