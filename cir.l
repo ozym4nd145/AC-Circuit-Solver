@@ -21,6 +21,7 @@ unit ("F"|"P"|"N"|"U"|"M"|"K"|([Mm][Ee][Gg]))
 %s value
 %s SOURCE
 %s EXPECTINGEND
+%s ERR
 %%
 [ \t]+ 			{/*printf("Consuming space - \"%s\"\n",yytext);*/}
 <INITIAL>{voltage} { yylval.s=strdup(yytext); /*printf("Intial = \"%s\"\n",yytext);*/BEGIN TERMINAL1;/*printf("1\n");*/ return VSOURCE;}
@@ -32,10 +33,11 @@ unit ("F"|"P"|"N"|"U"|"M"|"K"|([Mm][Ee][Gg]))
 <value>{capacitance} { yylval.s=strdup(yytext);	/*printf("Val = \"%s\"\n",yytext);*/BEGIN EXPECTINGEND;/*printf("9\n");*/ return CAPACITANCE; }
 <value>{resistance} { yylval.s=strdup(yytext); /*printf("Val = \"%s\"\n",yytext);*/BEGIN EXPECTINGEND;/*printf("10\n");*/ return RESISTANCE; }
 <value>[sS][iI][nN][eE] { /*printf("Val = \"%s\"\n",yytext)*/;BEGIN SOURCE;/*printf("11\n");*/ return SINE; }
-<value>[^ \t\n]* {/* printf("Err match = \"%s\"\n",yytext);*/}
-<INITIAL>[^ \t\n]* {/* printf("Err match = \"%s\"\n",yytext);*/}
-<TERMINAL1>[^ \t\n]* {/* printf("Err match = \"%s\"\n",yytext);*/}
-<TERMINAL2>[^ \t\n]* { /*printf("Err match = \"%s\"\n",yytext);*/}
+<value>[^ \t\n]* {/* printf("Err match = \"%s\"\n",yytext);*/ BEGIN ERR;}
+<ERR>[^ \t\n]* {/* printf("Err match = \"%s\"\n",yytext);*/ BEGIN ERR;}
+<INITIAL>[^ \t\n]* {/* printf("Err match = \"%s\"\n",yytext);*/BEGIN ERR;}
+<TERMINAL1>[^ \t\n]* {/* printf("Err match = \"%s\"\n",yytext);*/BEGIN ERR;}
+<TERMINAL2>[^ \t\n]* { /*printf("Err match = \"%s\"\n",yytext);*/BEGIN ERR;}
 <EXPECTINGEND>[.\n] {/*printf("Matched End\n");*/BEGIN INITIAL;/*printf("12\n");*/ yylineno++;return END;}
 <SOURCE>.* { yylval.s=strdup(yytext);/*printf("Src = \"%s\"\n",yytext);*/ BEGIN EXPECTINGEND;/*printf("13\n");*/ return SOURCEDATA;}
 .                   {printf("Unrec char = \"%s\"\n",yytext);yyerror ("Error - Format of input file is wrong 2\n");}
