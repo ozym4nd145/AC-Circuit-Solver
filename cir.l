@@ -14,7 +14,7 @@ inductance {real}{unit}?[Hh]
 frequency {real}{unit}?([Hh][Zz])
 voltage [Vv]({alphabet}|{natural})*
 current [Ii]({alphabet}|{natural})*
-unit ("F"|"P"|"N"|"U"|"M"|"K"|"MEG")
+unit ("F"|"P"|"N"|"U"|"M"|"K"|([Mm][Ee][Gg]))
 
 %s TERMINAL1
 %s TERMINAL2
@@ -36,10 +36,10 @@ unit ("F"|"P"|"N"|"U"|"M"|"K"|"MEG")
 <INITIAL>[^ \t\n]* {/* printf("Err match = \"%s\"\n",yytext);*/}
 <TERMINAL1>[^ \t\n]* {/* printf("Err match = \"%s\"\n",yytext);*/}
 <TERMINAL2>[^ \t\n]* { /*printf("Err match = \"%s\"\n",yytext);*/}
-<EXPECTINGEND>[.\n]+ {/*printf("Matched End\n");*/BEGIN INITIAL;/*printf("12\n");*/ return END;}
+<EXPECTINGEND>[.\n] {/*printf("Matched End\n");*/BEGIN INITIAL;/*printf("12\n");*/ yylineno++;return END;}
 <SOURCE>.* { yylval.s=strdup(yytext);/*printf("Src = \"%s\"\n",yytext);*/ BEGIN EXPECTINGEND;/*printf("13\n");*/ return SOURCEDATA;}
 .                   {printf("Unrec char = \"%s\"\n",yytext);yyerror ("Error - Format of input file is wrong 2\n");}
-\n {/*printf("Matched stray \"\\n\"\n");*/ BEGIN INITIAL; return er;}
+\n {/*printf("Matched stray \"\\n\"\n");*/ BEGIN INITIAL; printf("Syntax Error in line no. %d\n",yylineno);yylineno++; return er;}
 %%
 
 int yywrap (void) 

@@ -45,7 +45,7 @@ COMPONENT TERMINAL TERMINAL RESISTANCE END
 | COMPONENT er {/*printf("Got and error\n");*/}
 | VSOURCE er {/*printf("Got and error\n");*/}
 | ISOURCE er {/*printf("Got and error\n");*/}
-| er {/*printf("ERRor\n");*/}
+| er {/*printf("Got and error\n");*/}
 ;
 
 %%                    
