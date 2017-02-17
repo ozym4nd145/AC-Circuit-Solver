@@ -132,7 +132,7 @@ int main(int argc, char* argv[]) //TODO take file names from command line
             net1 = t;
         }
         
-        make_element(i,net1,i,net2,list[i].type,outfile);
+        make_element(i,net1,i,net2,list[i].type,list[i].name,outfile);
         
         
         if (i < start[net1]) {

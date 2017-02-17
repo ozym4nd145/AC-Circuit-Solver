@@ -37,7 +37,9 @@ int draw_resistor(int x1,int y1, int x2, int y2,FILE* ptr)
 	assert(x1==x2);
 	assert(y1<y2);
 	draw_circle(x1,y1,ptr);
+	draw_net_text(x1,y1,1,arr[y1],ptr);
 	draw_circle(x2,y2,ptr);
+	draw_net_text(x2,y2,0,arr[y2],ptr);
 	place_resistor(x1,y1,ptr);
 	draw_line(x1,y1+1,x2,y2,ptr);
 }
@@ -47,7 +49,9 @@ int draw_capacitor(int x1,int y1, int x2, int y2,FILE* ptr)
 	assert(x1==x2);
 	assert(y1<y2);
 	draw_circle(x1,y1,ptr);
+	draw_net_text(x1,y1,1,arr[y1],ptr);
 	draw_circle(x2,y2,ptr);
+	draw_net_text(x2,y2,0,arr[y2],ptr);
 	place_capacitor(x1,y1,ptr);
 	draw_line(x1,y1+1,x2,y2,ptr);
 }
@@ -57,7 +61,9 @@ int draw_inductor(int x1,int y1, int x2, int y2,FILE* ptr)
 	assert(x1==x2);
 	assert(y1<y2);
 	draw_circle(x1,y1,ptr);
+	draw_net_text(x1,y1,1,arr[y1],ptr);
 	draw_circle(x2,y2,ptr);
+	draw_net_text(x2,y2,0,arr[y2],ptr);
 	place_inductor(x1,y1,ptr);
 	draw_line(x1,y1+1,x2,y2,ptr);
 }
@@ -67,7 +73,9 @@ int draw_ac(int x1,int y1, int x2, int y2,FILE* ptr)
 	assert(x1==x2);
 	assert(y1<y2);
 	draw_circle(x1,y1,ptr);
+	draw_net_text(x1,y1,1,arr[y1],ptr);
 	draw_circle(x2,y2,ptr);
+	draw_net_text(x2,y2,0,arr[y2],ptr);
 	place_ac(x1,y1,ptr);
 	draw_line(x1,y1+1,x2,y2,ptr);
 }
@@ -77,14 +85,52 @@ int draw_current(int x1,int y1, int x2, int y2,FILE* ptr)
 	assert(x1==x2);
 	assert(y1<y2);
 	draw_circle(x1,y1,ptr);
+	draw_net_text(x1,y1,1,arr[y1],ptr);
 	draw_circle(x2,y2,ptr);
+	draw_net_text(x2,y2,0,arr[y2],ptr);
 	place_current(x1,y1,ptr);
 	draw_line(x1,y1+1,x2,y2,ptr);
 }
 
-int draw_text_element(int x,int y, char* text, FILE* ptr)
+int draw_text(int x, int y, char* text, enum component_type type, FILE* ptr)
 {
-	fprintf(ptr, "<text x = \"%f\" y=\"%f\" transform=\"rotate(90)\">%s</text>\n",x+0.3,y+0.3,text);
+	switch(type)
+	{
+		case resistor:
+			place_text(x,y,0.2,text,"red",ptr);
+			break;
+		case inductor:
+			place_text(x,y,0.2,text,"green",ptr);
+			break;
+		case capacitor:
+			place_text(x,y,0.33,text,"blue",ptr);
+			break;
+		case voltage:
+			place_text(x,y,0.4,text,"brown",ptr);
+			break;
+		case current:
+			place_text(x,y,0.4,text,"purple",ptr);
+			break;
+	}
+}
+
+int draw_net_text(int x, int y, int is_up,char* text, FILE* ptr)
+{
+	float off_y;
+	if(is_up)
+	{
+		off_y = -1.5*CIRCLE_WIDTH;
+	}
+	else
+	{
+		off_y = 2.5*CIRCLE_WIDTH;
+	}
+	fprintf(ptr, "<text x = \"%f\" y=\"%f\" font-size=\"%f\" fill=\"black\">%s</text>\n",x-0.15,y+off_y,LINE_WIDTH*3,text);	
+}
+
+int place_text(int x,int y, float off_x,char* text, char* color, FILE* ptr)
+{
+	fprintf(ptr, "<text x = \"%f\" y=\"%f\" font-size=\"%f\" style=\"writing-mode: tb;\" fill=\"%s\">%s</text>\n",x+off_x,y+0.2,LINE_WIDTH*3,color,text);
 }
 
 int place_resistor(int x, int y, FILE* ptr)
@@ -101,12 +147,12 @@ int place_capacitor(int x, int y, FILE* ptr)
 			l 0 0.4 \
 			\" stroke=\"black\" stroke-width=\"%f\" stroke-linejoin=\"bevel\" fill=\"none\"/> \
 		<path d=\" \
-			M -0.3 0.4 \
-			l 0.6 0 \
+			M -0.25 0.4 \
+			l 0.5 0 \
 			\" stroke=\"black\" stroke-width=\"%f\" stroke-linejoin=\"bevel\" fill=\"none\"/> \
 		<path d=\" \
-			M -0.3 0.6 \
-			l 0.6 0 \
+			M -0.25 0.6 \
+			l 0.5 0 \
 			\" stroke=\"black\" stroke-width=\"%f\" stroke-linejoin=\"bevel\" fill=\"none\"/> \
 		<path d=\" \
 			M 0 0.6 \
@@ -145,8 +191,9 @@ int place_current(int x,int y, FILE* ptr)
 	fprintf(ptr, "<g transform=\"translate(%d,%d) scale(0.02125,0.022727272727272728)\"> <g transform=\"translate(-25.08161,-2.992383)\"> <path d=\"m 40,25 c 0,8.284271 -6.715729,15 -15,15 -8.284271,0 -15,-6.715729 -15,-15 0,-8.284271 6.715729,-15 15,-15 8.284271,0 15,6.715729 15,15 l 0,0 z\" style=\"opacity:1;fill:none;fill-opacity:1;stroke:#000000;stroke-width:%f;stroke-linecap:square;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1\" /> <path d=\"M 25,10 25,3\" style=\"fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:%f;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1\"/> <path d=\"m 25,40 0,7\" style=\"fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:%f;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1\"/> <path d=\"m 25.136017,23.540261 0,11.951034\" style=\"fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:%f;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1\"/> <path style=\"fill:#000000;fill-rule:evenodd;stroke:#000000;stroke-width:%f;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1\" d=\"m 25.136017,18.552775 -3.210011,4.951033 6.63765,0.05441 z\"/> </g> </g>\n",x,y,(43*LINE_WIDTH),(43*LINE_WIDTH),(43*LINE_WIDTH),(43*LINE_WIDTH),(43*LINE_WIDTH));
 }
 
-int make_element(int x1,int y1,int x2,int y2,enum component_type type,FILE* ptr)
+int make_element(int x1,int y1,int x2,int y2,enum component_type type,char* name,FILE* ptr)
 {
+	draw_text(x1,y1,name,type,ptr);
 	switch(type)
 	{
 		case resistor:
@@ -181,7 +228,11 @@ int make_element(int x1,int y1,int x2,int y2,enum component_type type,FILE* ptr)
 // 	draw_inductor(2,1,2,3,fl);
 // 	draw_ac(5,1,5,3,fl);
 // 	draw_current(6,1,6,3,fl);
+// 	draw_text(1,0,"SINE ( 0.0 1.0 10Khz 0.0S 0.0 )",resistor,fl);
+// 	draw_text(3,2,"SINE ( 0.0 1.0 10Khz 0.0S 0.0 )",capacitor,fl);
+// 	draw_text(2,1,"SINE ( 0.0 1.0 10Khz 0.0S 0.0 )",inductor,fl);
+// 	draw_text(5,1,"SINE ( 0.0 1.0 10Khz 0.0S 0.0 )",voltage,fl);
+// 	draw_net_text(1,0,1,"Net1",fl);
 // 	end_svg(fl);
-// 	draw_text_element(5,1,"SINE ( 0.0 1.0 10Khz 0.0S 0.0 )",fl);
 // 	fclose(fl);
 // }
