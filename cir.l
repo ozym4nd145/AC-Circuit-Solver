@@ -7,8 +7,7 @@ natural [0-9]+
 sp [ \t]+
 alphabet [a-zA-Z_]
 real {natural}("."{natural})?
-name [a-zA-Z_]({alphabet}|{natural})*
-zero "0"
+name ({alphabet}|{natural})+
 resistance {real}{unit}?
 capacitance {real}{unit}?[Ff]
 inductance {real}{unit}?[Hh]
@@ -32,7 +31,7 @@ unit ("F"|"P"|"N"|"U"|"M"|"K"|"MEG")
 <value>{inductance} { yylval.s=strdup(yytext);/*	printf("Val = \"%s\"\n",yytext);*/BEGIN EXPECTINGEND;/*printf("8\n");*/ return INDUCTANCE; }
 <value>{capacitance} { yylval.s=strdup(yytext);	/*printf("Val = \"%s\"\n",yytext);*/BEGIN EXPECTINGEND;/*printf("9\n");*/ return CAPACITANCE; }
 <value>{resistance} { yylval.s=strdup(yytext); /*printf("Val = \"%s\"\n",yytext);*/BEGIN EXPECTINGEND;/*printf("10\n");*/ return RESISTANCE; }
-<value>[sS][iI][nN][eE] { printf("Val = \"%s\"\n",yytext);BEGIN SOURCE;/*printf("11\n");*/ return SINE; }
+<value>[sS][iI][nN][eE] { /*printf("Val = \"%s\"\n",yytext)*/;BEGIN SOURCE;/*printf("11\n");*/ return SINE; }
 <value>[^ \t\n]* {/* printf("Err match = \"%s\"\n",yytext);*/}
 <INITIAL>[^ \t\n]* {/* printf("Err match = \"%s\"\n",yytext);*/}
 <TERMINAL1>[^ \t\n]* {/* printf("Err match = \"%s\"\n",yytext);*/}
