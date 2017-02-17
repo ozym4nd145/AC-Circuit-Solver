@@ -5,18 +5,18 @@
 #include <stdlib.h>
 #include<math.h>
 #include<string.h>
+
 #define inf 1000000000
 
 FILE *outfile;
 
 enum component_type {resistor, inductor, capacitor, voltage, current};
 struct component{
-int id1,id2;
-char * name;
-char * val;
-enum component_type type;
-
-}list[20005];//list of all components
+	int id1,id2;
+	char * name;
+	char * val;
+	enum component_type type;
+} list[20005];//list of all components
 
 
 int numcmp;//number of components
@@ -35,5 +35,5 @@ char * arr[20005]; //arr[id] stores netlist name corresponding to the id
 void make_point(int ,int );
 void make_line(int x1,int y1,int x2,int y2);
 void yyerror(char  * s);
-
+int accept(char * s);
 #endif

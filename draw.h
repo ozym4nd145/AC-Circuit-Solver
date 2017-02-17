@@ -2,6 +2,7 @@
 #define DRAW_H
 
 #include <stdio.h>
+#include "ac.h"
 
 extern float LINE_WIDTH;
 extern float CIRCLE_WIDTH;
@@ -19,5 +20,6 @@ int draw_capacitor(int x1,int y1, int x2, int y2,FILE* ptr);
 int draw_inductor(int x1,int y1, int x2, int y2,FILE* ptr);
 int draw_ac(int x1,int y1, int x2, int y2,FILE* ptr);
 int draw_current(int x1,int y1, int x2, int y2,FILE* ptr);
+int make_element(int x1,int y1,int x2,int y2,enum component_type type,FILE* ptr);
 
 #endif

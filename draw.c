@@ -1,6 +1,7 @@
 #include "draw.h"
 #include <stdio.h>
 #include <assert.h>
+#include "ac.h"
 
 float LINE_WIDTH=0.05;
 float CIRCLE_WIDTH=0.07;
@@ -15,7 +16,7 @@ float HEIGHT = 2000;
 
 int start_svg(int rows, int cols, FILE* ptr)
 {
-	fprintf(ptr, "<svg width=\"%f\" height=\"%f\" viewBox=\"0 0 %d %d\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" transform=\"translate(10 10)\">\n",WIDTH,HEIGHT,(cols+10),(rows+10));
+	fprintf(ptr, "<svg width=\"%f\" height=\"%f\" viewBox=\"0 0 %d %d\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" transform=\"translate(100 100)\">\n",WIDTH,HEIGHT,(cols+10),(rows+10));
 }
 int draw_line(int x1,int y1, int x2, int y2,FILE* ptr)
 {
@@ -139,20 +140,42 @@ int place_current(int x,int y, FILE* ptr)
 	fprintf(ptr, "<g transform=\"translate(%d,%d) scale(0.02125,0.022727272727272728)\"> <g transform=\"translate(-25.08161,-2.992383)\"> <path d=\"m 40,25 c 0,8.284271 -6.715729,15 -15,15 -8.284271,0 -15,-6.715729 -15,-15 0,-8.284271 6.715729,-15 15,-15 8.284271,0 15,6.715729 15,15 l 0,0 z\" style=\"opacity:1;fill:none;fill-opacity:1;stroke:#000000;stroke-width:%f;stroke-linecap:square;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1\" /> <path d=\"M 25,10 25,3\" style=\"fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:%f;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1\"/> <path d=\"m 25,40 0,7\" style=\"fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:%f;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1\"/> <path d=\"m 25.136017,23.540261 0,11.951034\" style=\"fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:%f;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1\"/> <path style=\"fill:#000000;fill-rule:evenodd;stroke:#000000;stroke-width:%f;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1\" d=\"m 25.136017,18.552775 -3.210011,4.951033 6.63765,0.05441 z\"/> </g> </g>\n",x,y,(43*LINE_WIDTH),(43*LINE_WIDTH),(43*LINE_WIDTH),(43*LINE_WIDTH),(43*LINE_WIDTH));
 }
 
-int main()
+int make_element(int x1,int y1,int x2,int y2,enum component_type type,FILE* ptr)
 {
-	FILE* fl = fopen("test_2.svg","w");
-	start_svg(10,10,fl);
-	draw_line(0,0,10,0,fl);
-	draw_line(0,1,10,1,fl);
-	draw_line(0,2,10,2,fl);
-	draw_line(0,3,10,3,fl);
-	draw_line(0,4,10,4,fl);
-	draw_resistor(1,0,1,4,fl);
-	draw_capacitor(3,2,3,4,fl);
-	draw_inductor(2,1,2,3,fl);
-	draw_ac(5,1,5,3,fl);
-	draw_current(6,1,6,3,fl);
-	end_svg(fl);
-	fclose(fl);
+	switch(type)
+	{
+		case resistor:
+			draw_resistor(x1,y1,x2,y2,ptr);
+			break;
+		case inductor:
+			draw_inductor(x1,y1,x2,y2,ptr);
+			break;
+		case capacitor:
+			draw_capacitor(x1,y1,x2,y2,ptr);
+			break;
+		case voltage:
+			draw_ac(x1,y1,x2,y2,ptr);
+			break;
+		case current:
+			draw_current(x1,y1,x2,y2,ptr);
+			break;
+	}
 }
+
+// int main()
+// {
+// 	FILE* fl = fopen("test_2.svg","w");
+// 	start_svg(10,10,fl);
+// 	draw_line(0,0,10,0,fl);
+// 	draw_line(0,1,10,1,fl);
+// 	draw_line(0,2,10,2,fl);
+// 	draw_line(0,3,10,3,fl);
+// 	draw_line(0,4,10,4,fl);
+// 	draw_resistor(1,0,1,4,fl);
+// 	draw_capacitor(3,2,3,4,fl);
+// 	draw_inductor(2,1,2,3,fl);
+// 	draw_ac(5,1,5,3,fl);
+// 	draw_current(6,1,6,3,fl);
+// 	end_svg(fl);
+// 	fclose(fl);
+// }

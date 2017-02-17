@@ -1,5 +1,6 @@
 %{
 #include "y.tab.h"
+#include "ac.h"
 %}
 digit [0-9]
 natural [0-9]+
@@ -35,7 +36,7 @@ unit ("F"|"P"|"N"|"U"|"M"|"K"|"MEG")
 <value>{resistance} { yylval.s=strdup(yytext); BEGIN EXPECTINGEND;printf("10\n"); return RESISTANCE; }
 <value>[sS][iI][nN][eE] { BEGIN SOURCE;printf("11\n"); return SINE; }
 <EXPECTINGEND>[\n]+ {BEGIN INITIAL;printf("12\n"); return END;}
-<SOURCE>.* { yylval.s=strdup(yytext); BEGIN EXPECTINGEND;printf("1\n"); return SOURCEDATA;}
+<SOURCE>.* { yylval.s=strdup(yytext); BEGIN EXPECTINGEND;printf("13\n"); return SOURCEDATA;}
 .                   {printf("%s\n",yytext);yyerror ("Error:- Format of input file is wrong 2\n");}
 %%
 
