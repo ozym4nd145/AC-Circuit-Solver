@@ -29,15 +29,15 @@ Line:
 
 Expression:
 COMPONENT TERMINAL TERMINAL RESISTANCE 
-{list[numcmp].name=strdup($1);list[numcmp].id1=accept($2);list[numcmp].id2=accept($3);list[numcmp].val=strdup($4);list[numcmp].type=0;++numcmp;}
+{list[numcmp].name=strdup($1);list[numcmp].id1=accept($2);list[numcmp].id2=accept($3);list[numcmp].val=strdup($4);list[numcmp].type=0;if(check(numcmp)==1){++numcmp;}}
 | COMPONENT TERMINAL TERMINAL INDUCTANCE 
-{list[numcmp].name=strdup($1);list[numcmp].id1=accept($2);list[numcmp].id2=accept($3);list[numcmp].val=strdup($4);list[numcmp].type=1;++numcmp;}
+{list[numcmp].name=strdup($1);list[numcmp].id1=accept($2);list[numcmp].id2=accept($3);list[numcmp].val=strdup($4);list[numcmp].type=1;if(check(numcmp)==1){++numcmp;}}
 | COMPONENT TERMINAL TERMINAL CAPACITANCE 
-{list[numcmp].name=strdup($1);list[numcmp].id1=accept($2);list[numcmp].id2=accept($3);list[numcmp].val=strdup($4);list[numcmp].type=2;++numcmp;}
+{list[numcmp].name=strdup($1);list[numcmp].id1=accept($2);list[numcmp].id2=accept($3);list[numcmp].val=strdup($4);list[numcmp].type=2;if(check(numcmp)==1){++numcmp;}}
 | VSOURCE TERMINAL TERMINAL SINE SOURCEDATA 
-{list[numcmp].name=strdup($1);list[numcmp].id1=accept($2);list[numcmp].id2=accept($3);list[numcmp].val=strdup($5);list[numcmp].type=3;++numcmp;}
+{list[numcmp].name=strdup($1);list[numcmp].id1=accept($2);list[numcmp].id2=accept($3);list[numcmp].val=strdup($5);list[numcmp].type=3;if(check(numcmp)==1){++numcmp;}}
 | ISOURCE TERMINAL TERMINAL SINE SOURCEDATA 
-{list[numcmp].name=strdup($1);list[numcmp].id1=accept($2);list[numcmp].id2=accept($3);list[numcmp].val=strdup($5);list[numcmp].type=4;++numcmp;}
+{list[numcmp].name=strdup($1);list[numcmp].id1=accept($2);list[numcmp].id2=accept($3);list[numcmp].val=strdup($5);list[numcmp].type=4;if(check(numcmp)==1){++numcmp;}}
 ;
 
 %%                    
@@ -58,6 +58,14 @@ int accept(char * s) {
 	++times[numnets - 1];
         return numnets - 1;
     }
+}
+
+int check(int i)
+{
+	if(list[i].id1==list[i].id2)
+	{fprintf(stderr,"Error - both terminal nets of %s are same, it is ignored\n",list[i].name);return 0;}
+	else
+	{return 1;}
 }
 
 int main(int argc, char* argv[]) //TODO take file names from command line
@@ -82,7 +90,7 @@ int main(int argc, char* argv[]) //TODO take file names from command line
     yyin = fopen(argv[1], "r");
     if (yyin == NULL) {
         yyerror("Input file not found\n");
-        exit(1);
+        exit(-1);
     }
 
     //change to keep parsing multiple times because we just want to ignore the wrong line
@@ -93,7 +101,7 @@ int main(int argc, char* argv[]) //TODO take file names from command line
     outfile = fopen(argv[2], "w");
     if (outfile == NULL) {
         yyerror("Output file not found\n");
-        exit(1);
+        exit(-1);
     }
  	
  	for(i=0;i<numnets;++i)
