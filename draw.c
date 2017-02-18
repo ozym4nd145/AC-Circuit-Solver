@@ -6,7 +6,7 @@
 float LINE_WIDTH=0.03;
 float CIRCLE_WIDTH=0.05;
 float WIDTH = 2000;
-float HEIGHT = 2000;
+float HEIGHT = 1500;
 
 /**
  * Convention: parameters x and y in functions
@@ -16,7 +16,7 @@ float HEIGHT = 2000;
 
 int start_svg(int rows, int cols, FILE* ptr)
 {
-	fprintf(ptr, "<svg width=\"%f\" height=\"%f\" viewBox=\"0 0 %d %d\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" transform=\"translate(100 100)\">\n",WIDTH,HEIGHT,(cols+10),(rows+10));
+	fprintf(ptr, "<svg width=\"%f\" height=\"%f\" viewBox=\"-2 -2 %d %d\" preserveAspectRatio=\"xMidYMid none\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n",WIDTH,HEIGHT,(cols+5),(rows+5));
 }
 int draw_line(int x1,int y1, int x2, int y2,FILE* ptr)
 {
