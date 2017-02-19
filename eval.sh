@@ -2,6 +2,6 @@
 for i in {1..10};
 do
 	echo "Test case $i";
-	./a.out ./examples/Testcases/Testcase$i/top.cir $i.svg
+	./ac_circuit_solver ./examples/Testcases/Testcase$i/top.cir $i.svg
 	echo "---------------";
 done;
