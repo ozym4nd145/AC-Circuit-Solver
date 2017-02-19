@@ -5,7 +5,7 @@
 natural [0-9]+
 sp [ \t]+
 alphabet [a-zA-Z_]
-real {natural}("."{natural})?
+real [0-9]*("."{natural})?
 name [^ \t\n]+
 resistance {real}{unit}?
 capacitance {real}{unit}?[Ff]
@@ -50,6 +50,3 @@ Damping_Factor 		{real}{unit}?
 
 int yywrap (void) 
 {return 1;}
-//{sp}{DC_Offset}{sp}{Amplitude}{sp}{frequency}{sp}{Delay}{sp}{Damping_Factor}{sp}
-
-//<SOURCE>[ \t]*\({sp}{DC_Offset}{sp}{Amplitude}{sp}{frequency}{sp}{Delay}{sp}\){sp} { yylval.s=strdup(yytext);fprintf(stderr,"Error - Damping factor not specified, taking it as 0\n"); BEGIN EXPECTINGEND;return SOURCEDATA;}
