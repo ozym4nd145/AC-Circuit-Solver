@@ -4,6 +4,5 @@ all: cir.l cir.y draw.c
 	gcc -o ac_circuit_solver ac.h y.tab.c lex.yy.c draw.c
 
 clean:
-	rm *.gch
 	rm *.tab.*
 	rm *.yy.*
