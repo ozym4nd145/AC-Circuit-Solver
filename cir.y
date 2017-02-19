@@ -226,7 +226,17 @@ int main(int argc, char* argv[]) //TODO take file names from command line
             net1 = t;
         }
         
-        make_element(i,net1,i,net2,list[i].type,strcat(strcat(list[i].name," "),list[i].val),outfile);
+        char* print_text = (char *)malloc((strlen(list[i].name)+strlen(list[i].val)+10)*sizeof(char));
+        strcpy(print_text,list[i].name);
+        strcat(print_text," ");
+        if(list[i].type == voltage || list[i].type == current)
+        {
+            strcat(print_text,"SINE ");
+        }
+        strcat(print_text,list[i].val);
+
+        make_element(i,net1,i,net2,list[i].type,print_text,outfile);
+        free(print_text);
         
         
         if (i < start[net1]) {
