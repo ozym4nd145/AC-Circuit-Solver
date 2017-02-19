@@ -12,8 +12,8 @@ resistance {real}{unit}?
 capacitance {real}{unit}?[Ff]
 inductance {real}{unit}?[Hh]
 frequency {real}{unit}?[Hh][Zz]
-voltage [Vv]({alphabet}|{natural})*
-current [Ii]({alphabet}|{natural})*
+voltage [Vv]{name}
+current [Ii]{name}
 unit ([Ff]|[Pp]|[Nn]|[Uu]|[Mm]|[Kk]|([Mm][Ee][Gg]))
 DC_Offset			{real}
 Amplitude			{real}
