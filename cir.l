@@ -2,7 +2,6 @@
 #include "y.tab.h"
 #include "ac.h"
 %}
-digit [0-9]
 natural [0-9]+
 sp [ \t]+
 alphabet [a-zA-Z_]
@@ -12,8 +11,8 @@ resistance {real}{unit}?
 capacitance {real}{unit}?[Ff]
 inductance {real}{unit}?[Hh]
 frequency {real}{unit}?[Hh][Zz]
-voltage [Vv]{name}
-current [Ii]{name}
+voltage [Vv][^ \t\n]*
+current [Ii][^ \t\n]*
 unit ([Ff]|[Pp]|[Nn]|[Uu]|[Mm]|[Kk]|([Mm][Ee][Gg]))
 DC_Offset			{real}{unit}?
 Amplitude			{real}{unit}?
