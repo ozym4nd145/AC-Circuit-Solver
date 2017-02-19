@@ -36,6 +36,8 @@ COMPONENT TERMINAL TERMINAL RESISTANCE END
 	{list[numcmp].name=strdup($1);list[numcmp].id1=accept($2);list[numcmp].id2=accept($3);list[numcmp].val=strdup($5);list[numcmp].type=3;if(check(numcmp)==1){++numcmp;}}
 | ISOURCE TERMINAL TERMINAL SINE SOURCEDATA END
 	{list[numcmp].name=strdup($1);list[numcmp].id1=accept($2);list[numcmp].id2=accept($3);list[numcmp].val=strdup($5);list[numcmp].type=4;if(check(numcmp)==1){++numcmp;}}
+| VSOURCE TERMINAL TERMINAL SINE er {/*printf("Got and error\n");*/}
+| ISOURCE TERMINAL TERMINAL SINE er {/*printf("Got and error\n");*/}
 | COMPONENT TERMINAL TERMINAL er {/*printf("Got and error\n");*/}
 | VSOURCE TERMINAL TERMINAL er {/*printf("Got and error\n");*/}
 | ISOURCE TERMINAL TERMINAL er {/*printf("Got and error\n");*/}

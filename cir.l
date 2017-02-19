@@ -11,11 +11,14 @@ name ({alphabet}|{natural})+
 resistance {real}{unit}?
 capacitance {real}{unit}?[Ff]
 inductance {real}{unit}?[Hh]
-frequency {real}{unit}?([Hh][Zz])
+frequency {real}{unit}?[Hh][Zz]
 voltage [Vv]({alphabet}|{natural})*
 current [Ii]({alphabet}|{natural})*
-unit ("F"|"P"|"N"|"U"|"M"|"K"|([Mm][Ee][Gg]))
-
+unit ([Ff]|[Pp]|[Nn]|[Uu]|[Mm]|[Kk]|([Mm][Ee][Gg]))
+DC_Offset			{real}
+Amplitude			{real}
+Delay				{real}{unit}?[sS]
+Damping_Factor 		{real}
 %s TERMINAL1
 %s TERMINAL2
 %s value
@@ -39,10 +42,15 @@ unit ("F"|"P"|"N"|"U"|"M"|"K"|([Mm][Ee][Gg]))
 <TERMINAL1>[^ \t\n]* {/* printf("Err match = \"%s\"\n",yytext);*/BEGIN ERR;}
 <TERMINAL2>[^ \t\n]* { /*printf("Err match = \"%s\"\n",yytext);*/BEGIN ERR;}
 <EXPECTINGEND>[.\n] {/*printf("Matched End\n");*/BEGIN INITIAL;/*printf("12\n");*/ yylineno++;return END;}
-<SOURCE>.* { yylval.s=strdup(yytext);/*printf("Src = \"%s\"\n",yytext);*/ BEGIN EXPECTINGEND;/*printf("13\n");*/ return SOURCEDATA;}
-.                   {printf("Unrec char = \"%s\"\n",yytext);yyerror ("Error - Format of input file is wrong 2\n");}
-\n {/*printf("Matched stray \"\\n\"\n");*/ BEGIN INITIAL; printf("Syntax Error in line no. %d\n",yylineno);yylineno++; return er;}
+<SOURCE>[ \t]*\({sp}{DC_Offset}{sp}{Amplitude}{sp}{frequency}{sp}{Delay}{sp}{Damping_Factor}{sp}\)[ \t]* { yylval.s=strdup(yytext);/*printf("Src = \"%s\"\n",yytext);*/ BEGIN EXPECTINGEND;return SOURCEDATA;}
+<SOURCE>[ \t]*\({sp}{DC_Offset}{sp}{Amplitude}{sp}{frequency}{sp}{Delay}{sp}\)[ \t]* { yylval.s=strdup(yytext);fprintf(stderr,"Warning - Damping factor not specified, taking it as 0\n"); BEGIN EXPECTINGEND;return SOURCEDATA;}
+<SOURCE>[^ \t\n]*	 {/*printf("Err match = \"%s\"\n",yytext);*/BEGIN ERR;}
+. 					{yyerror("Error - Format of input file is wrong 2");}
+\n {/*printf("Matched stray \"\\n\"\n");*/ BEGIN INITIAL; fprintf(stderr,"Syntax Error in line no. %d\n",yylineno);yylineno++; return er;}
 %%
 
 int yywrap (void) 
 {return 1;}
+//{sp}{DC_Offset}{sp}{Amplitude}{sp}{frequency}{sp}{Delay}{sp}{Damping_Factor}{sp}
+
+//<SOURCE>[ \t]*\({sp}{DC_Offset}{sp}{Amplitude}{sp}{frequency}{sp}{Delay}{sp}\){sp} { yylval.s=strdup(yytext);fprintf(stderr,"Error - Damping factor not specified, taking it as 0\n"); BEGIN EXPECTINGEND;return SOURCEDATA;}
