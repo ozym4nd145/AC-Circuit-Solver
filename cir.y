@@ -51,6 +51,7 @@ COMPONENT TERMINAL TERMINAL RESISTANCE END
 %%                    
 
 int accept(char * s) {
+    check_name_error(s);
     int i, f = 0;
     for (i = 0; i < numnets; ++i) {
         if (strcmp(s, arr[i]) == 0) {
@@ -63,7 +64,7 @@ int accept(char * s) {
     if (f == 0) {
         arr[numnets] = strdup(s);
         ++numnets;
-	++times[numnets - 1];
+	   ++times[numnets - 1];
         return numnets - 1;
     }
 }
@@ -71,11 +72,38 @@ int accept(char * s) {
 int check(int i)
 {
 	if(list[i].id1==list[i].id2)
-	{fprintf(stderr,"Error - both terminal nets of %s are same, it is ignored\n",list[i].name);return 0;}
+	{
+        fprintf(stderr,"Error - both terminal nets of %s are same, it is ignored\n",list[i].name);
+        return 0;
+    }
 	else
-	{return 1;}
+	{
+        check_name_error(list[i].name);
+        return 1;
+    }
 }
 
+int check_name_error(char* name)
+{
+    int err_flag = 0;
+    int i=0;
+    int len = strlen(name);
+    char* dup_name = strdup(name);
+    for(i=0;i<len;i++)
+    {
+        if(!((name[i]>=48 && name[i]<=57)||(name[i]>=65 && name[i]<=90)||(name[i]>=97 && name[i] <= 122)||(name[i]==95)))
+        {
+            err_flag=1;
+            name[i]=95;
+        }
+    }
+    if(err_flag)
+    {
+        fprintf(stderr, "Error - Foreign characters found in name - %s. Replacing it with - %s\n",dup_name,name);
+    }
+    free(dup_name);
+    return 0;
+}
 int swap_net(int idx1,int idx2)
 {
     // printf("Swapping - %d = %s <=> %d = %s\n",idx1,arr[idx1],idx2,arr[idx2]);

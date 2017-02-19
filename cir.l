@@ -7,7 +7,7 @@ natural [0-9]+
 sp [ \t]+
 alphabet [a-zA-Z_]
 real {natural}("."{natural})?
-name ({alphabet}|{natural})+
+name [^ \t\n]+
 resistance {real}{unit}?
 capacitance {real}{unit}?[Ff]
 inductance {real}{unit}?[Hh]
