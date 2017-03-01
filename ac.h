@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+#include "stack.h"
 
 #define inf 1000000000
 
@@ -21,7 +22,7 @@ struct component{
 
 int numcmp;//number of components
 int numnets;//number of nets
-int numsouces;
+int numsources;
 int numvoltage;
 
 /*--------starting and ending pixels of each net---------*/
@@ -50,4 +51,7 @@ struct complex add(struct complex a,struct complex b);
 struct complex sub(struct complex a,struct complex b);
 struct complex mult(struct complex a,struct complex b);
 struct complex div_(struct complex a,struct complex b);
+void solve_matrix();
+struct complex make_complex(double r,double i);
+
 #endif

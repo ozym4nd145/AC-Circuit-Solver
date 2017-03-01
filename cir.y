@@ -165,7 +165,7 @@ int main(int argc, char* argv[]) //TODO take file names from command line
         fprintf(stderr, "3 args required!\n");
         exit(-1);
     }
-    numcmp = numnets = 0;
+    numsources = numvoltage = numcmp = numnets = 0;
 
     //Initializing start to infinity    
     int i=0;

@@ -7,7 +7,7 @@ sp [ \t]+
 alphabet [a-zA-Z_]
 real [0-9]*("."{natural})?
 name [^ \t\n]+
-resistance {real}{unit}?
+resistance {real}({unit}{0,1})
 capacitance {real}{unit}?[Ff]
 inductance {real}{unit}?[Hh]
 frequency {real}{unit}?[Hh][Zz]
@@ -40,12 +40,12 @@ Damping_Factor 		{real}{unit}?
 <INITIAL>[^ \t\n]* {/* printf("Err match = \"%s\"\n",yytext);*/BEGIN ERR;}
 <TERMINAL1>[^ \t\n]* {/* printf("Err match = \"%s\"\n",yytext);*/BEGIN ERR;}
 <TERMINAL2>[^ \t\n]* { /*printf("Err match = \"%s\"\n",yytext);*/BEGIN ERR;}
-<EXPECTINGEND>[.\n] {/*printf("Matched End\n");*/BEGIN INITIAL;/*printf("12\n");*/ yylineno++;return END;}
+<EXPECTINGEND>[.\n] {/*printf("Matched End\n");*/BEGIN INITIAL;/*printf("12\n");*/ printf("%d\n",yylineno);yylineno++;return END;}
 <SOURCE>[ \t]*\({sp}{DC_Offset}{sp}{Amplitude}{sp}{frequency}{sp}{Delay}{sp}{Damping_Factor}{sp}\)[ \t]* { yylval.s=strdup(yytext);/*printf("Src = \"%s\"\n",yytext);*/ BEGIN EXPECTINGEND;return SOURCEDATA;}
 <SOURCE>[ \t]*\({sp}{DC_Offset}{sp}{Amplitude}{sp}{frequency}{sp}{Delay}{sp}\)[ \t]* { yylval.s=strdup(yytext);fprintf(stderr,"Warning - Damping factor not specified, taking it as 0\n"); BEGIN EXPECTINGEND;return SOURCEDATA;}
 <SOURCE>[^ \t\n]*	 {/*printf("Err match = \"%s\"\n",yytext);*/BEGIN ERR;}
 . 					{yyerror("Error - Format of input file is wrong 2");}
-\n {/*printf("Matched stray \"\\n\"\n");*/ BEGIN INITIAL; fprintf(stderr,"Syntax Error in line no. %d\n",yylineno);yylineno++; return er;}
+\n {/*printf("Matched stray \"\\n\"\n");*/ BEGIN INITIAL; fprintf(stderr,"Syntax Error in line no. %d\n",yylineno);printf("%d\n",yylineno);yylineno++; return er;}
 %%
 
 int yywrap (void) 

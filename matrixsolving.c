@@ -2,7 +2,7 @@
 #include "ac.h"
 #define complex struct complex
 
-int n;//size of b, x 
+int n;
 
 complex add(complex a,complex b)
 {
@@ -38,6 +38,13 @@ complex div_(complex a,complex b)// a / b
 	return res;
 }
 
+complex make_complex(double r,double i)
+{
+    complex res;
+    res.real=r;res.img=i;
+    return res;
+}
+
 double abs_(complex a)
 {
 	double res=a.real*a.real+a.img*a.img;
@@ -46,7 +53,7 @@ double abs_(complex a)
 }
 
 
-complex inverted_mat[11005][11005];
+complex inverted_mat[21005][21005];
 
 void init()//initialise for testing
 {
@@ -96,7 +103,7 @@ void test()
     {printf("t[%d]=(%lf, %lf)\n",i,t[i].real,t[i].img);}
 }
 
-void solve()
+void solve_matrix()
 {
 
 invert();

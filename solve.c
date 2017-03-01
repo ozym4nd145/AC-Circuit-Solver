@@ -1,6 +1,7 @@
 #include "ac.h"
 #include <stdio.h>
 #include <stdlib.h>
+#define complex struct complex
 
 stack **adjlist;
 complex** matrix;
@@ -24,12 +25,12 @@ void make_adjlist()
 	int k=numnets;
 	for(i=0;i<numcmp;i++)
 	{
-		adjlist[list[i]->id1] = push(adjlist[list[i]->id1],i);
-		adjlist[list[i]->id2] = push(adjlist[list[i]->id2],i);
+		adjlist[list[i].id1] = push(adjlist[list[i].id1],i);
+		adjlist[list[i].id2] = push(adjlist[list[i].id2],i);
 		
-		if(list[i]->type==voltage || list[i]->type==current)
+		if(list[i].type==voltage || list[i].type==current)
 		{
-			double freq = list[i]->freq;
+			double freq = list[i].freq;
 			
 			for(l=0;l<freq_arr_len;l++)
 			{
@@ -44,7 +45,7 @@ void make_adjlist()
 				freq_arr_len++;
 			}
 			
-			if(list[i]->type==voltage)
+			if(list[i].type==voltage)
 			{
 				index_cur_src[i] = k++;
 			}
@@ -64,25 +65,25 @@ void make_matrix(double cur_freq)
 
 	//V_net0 = 0
 	matrix[eqn] = (complex*)calloc(sizeof(complex)*(numnets+numvoltage));
-	matrix[eqn++][numnets-1] = 1;
+	matrix[eqn++][numnets-1] = make_complex(1,0);//1;   check!
 
 	int i=0,j=0;
 	//V1 - V2 = V eqns
 	for(i=0;i<numsources;i++)
 	{
-		if(list[sources[i]]->type==voltage)
+		if(list[sources[i]].type==voltage)
 		{
 			matrix[eqn] = (complex*)calloc(sizeof(complex)*(numnets+numvoltage));
-			if(list[sources[i]]->freq == cur_freq)
+			if(list[sources[i]].freq == cur_freq)
 			{
-				matrix[eqn][list[sources[i]]->id1] = make_complex(-1,0);
-				matrix[eqn][list[sources[i]]->id2] = make_complex(1,0);
+				matrix[eqn][list[sources[i]].id1] = make_complex(-1,0);
+				matrix[eqn][list[sources[i]].id2] = make_complex(1,0);
 				values[eqn++] = make_complex(1,0);//TODO put value here
 			}
 			else
 			{
-				matrix[eqn][list[sources[i]]->id1] = make_complex(-1,0);
-				matrix[eqn][list[sources[i]]->id2] = make_complex(1,0);
+				matrix[eqn][list[sources[i]].id1] = make_complex(-1,0);
+				matrix[eqn][list[sources[i]].id2] = make_complex(1,0);
 				values[eqn++] = make_complex(0,0);
 			}
 		}
@@ -98,9 +99,9 @@ void make_matrix(double cur_freq)
 		while(temp!=NULL)
 		{
 			id = temp->id;
-			if(list[id]->type==voltage)
+			if(list[id].type==voltage)
 			{
-				if(list[id]->id1 == i)
+				if(list[id].id1 == i)
 				{
 					//current outgoing from id1
 					matrix[eqn][index_cur_src[id]] = make_complex(1,0);
@@ -112,24 +113,24 @@ void make_matrix(double cur_freq)
 				}
 
 			}
-			else if(list[id]->type==current && list[id]->freq == cur_freq)
+			else if(list[id].type==current && list[id].freq == cur_freq)
 			{
 				//if current starts from here
-				if(list[id]->id1 == i)
+				if(list[id].id1 == i)
 				{
-					values[eqn] = add_complex(values[eqn],make_complex(-1,0));//TODO: put value here
+					values[eqn] = add(values[eqn],make_complex(-1,0));//TODO: put value here
 				}
 				else
 				{
-					values[eqn] = add_complex(values[eqn],make_complex(1,0));//TODO: put value here
+					values[eqn] = add(values[eqn],make_complex(1,0));//TODO: put value here
 				}
 			}
 			else
 			{
 				complex inductance = get_inverse(get_inductance(id));	
-				int other_net = (list[id]->id1==i)?(list[id]->id2):(list[id]->id1);
-				matrix[i][i] = sub_complex(matrix[i][i],inductance);
-				matrix[i][other_net] = add_complex(matrix[i][other_net],inductance);
+				int other_net = (list[id].id1==i)?(list[id].id2):(list[id].id1);
+				matrix[i][i] = sub(matrix[i][i],inductance);
+				matrix[i][other_net] = add(matrix[i][other_net],inductance);
 			}
 			temp = temp->next;
 		}
@@ -137,24 +138,6 @@ void make_matrix(double cur_freq)
 	}
 }
 
-void solve_circuit()
-{
-	make_adjlist();
-	voltage_soln = (complex**)calloc(sizeof(complex*)*freq_arr_len);
-	int i=0,j=0;
-	for(i=0;i<freq_arr_len;i++)
-	{
-		voltage_soln[i] = (complex*)calloc(sizeof(complex)*numnets);
-		make_matrix(freq_arr[i]);
-		solve_matrix();
-		for(j=0;j<numnets;j++)
-		{
-			voltage_soln[i][j] = answer[j];
-		}
-	}
-	free_list_sources();
-	free_matrix_values();
-}
 
 void free_matrix_values()
 {
@@ -183,3 +166,23 @@ void free_list_sources()
 	}
 	free(adjlist);
 }
+
+void solve_circuit()
+{
+	make_adjlist();
+	voltage_soln = (complex**)calloc(sizeof(complex*)*freq_arr_len);
+	int i=0,j=0;
+	for(i=0;i<freq_arr_len;i++)
+	{
+		voltage_soln[i] = (complex*)calloc(sizeof(complex)*numnets);
+		make_matrix(freq_arr[i]);
+		solve_matrix();
+		for(j=0;j<numnets;j++)
+		{
+			voltage_soln[i][j] = answer[j];
+		}
+	}
+	free_list_sources();
+	free_matrix_values();
+}
+
