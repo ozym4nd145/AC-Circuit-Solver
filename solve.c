@@ -19,7 +19,7 @@ int *index_cur_src; //maps index of current through voltage_sources in list arra
 struct source_data parse_source(char* str)
 {
 	struct source_data data;
-	sscanf(str," ( %f %f %f %f",&data.dcoff,&data.ampl,&data.freq,&data.phase);
+	sscanf(str," ( %lf %lf %lf %lf",&data.dcoff,&data.ampl,&data.freq,&data.phase);
 	return data;
 }
 
@@ -76,7 +76,7 @@ void make_matrix(double cur_freq)
 	//V_net0 = 0
 
 	matrix[eqn] = (complex*)calloc((numnets+numvoltage),sizeof(complex));
-	matrix[eqn++][numnets-1] = make_complex(1,0)//1;  
+	matrix[eqn++][numnets-1] = make_complex(1,0);//1;  
 
 
 	int i=0,j=0;
@@ -209,7 +209,7 @@ void free_list_sources()
 {
 	free(sources);
 	int i=0;
-	list* temp;
+	list * temp;
 	for(i=0;i<numnets;i++)
 	{
 		while(adjlist[i]!=NULL)
@@ -222,22 +222,4 @@ void free_list_sources()
 	free(adjlist);
 }
 
-void solve_circuit()
-{
-	make_adjlist();
-	voltage_soln = (complex**)calloc(sizeof(complex*)*freq_arr_len);
-	int i=0,j=0;
-	for(i=0;i<freq_arr_len;i++)
-	{
-		voltage_soln[i] = (complex*)calloc(sizeof(complex)*numnets);
-		make_matrix(freq_arr[i]);
-		solve_matrix();
-		for(j=0;j<numnets;j++)
-		{
-			voltage_soln[i][j] = answer[j];
-		}
-	}
-	free_list_sources();
-	free_matrix_values();
-}
 
