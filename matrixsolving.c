@@ -3,7 +3,6 @@
 #define complex struct complex
 
 int n;//size of b, x 
-complex a[2000][2000];
 
 complex add(complex a,complex b)
 {
@@ -32,7 +31,7 @@ complex mult(complex a,complex b)
 complex div_(complex a,complex b)// a / b
 {
 	double temp=b.real*b.real+b.img*b.img;
-	b.img*=-1.0;
+	b.img*= -1;
 	complex res=mult(a,b);
 	res.real /= temp;
 	res.img /= temp;
@@ -51,12 +50,22 @@ complex inverted_mat[11005][11005];
 
 void init()//initialise for testing
 {
-	n=2;
-	a[0][0].real=2;a[0][0].img=0;		a[0][1].real=3;a[0][1].img=0;
-	a[1][0].real=3;a[1][0].img=0;		a[1][1].real=2;a[1][1].img=0;
-    
-    constants[0].real=5;constants[0].img=0;
-    constants[1].real=5;constants[1].img=0;
+	scanf("%d",&n);
+	//a[0][0].real=2;a[0][0].img=-10000;		a[0][1].real=3;a[0][1].img=0;
+	//a[1][0].real=-3;a[1][0].img=0;		a[1][1].real=2;a[1][1].img=0;
+    for(int i=0;i<n;++i)
+    {
+        for(int j=0;j<n;++j)
+        {scanf("%lf%lf",&a[i][j].real,&a[i][j].img);}
+    }   
+
+    //constants[0].real=4;constants[0].img=-2;
+    //constants[1].real=5;constants[1].img=-1;
+    for(int i=0;i<n;++i)
+    {
+        scanf("%lf%lf",&constants[i].real,&constants[i].img);
+    }
+
        
 }
 
@@ -64,15 +73,24 @@ void init()//initialise for testing
 void test()
 {
     complex t[n];
+
+    for(int i=0;i<n;++i)
+    {
+        for(int j=0;j<n;++j)
+        {printf("a[%d][%d]=(%lf, %lf)       ",i,j,ao[i][j].real,ao[i][j].img);}
+    printf("\n");
+    }
+
     for(int i=0;i<n;++i)
     {
         t[i].real=0;t[i].img=0;
    //     printf("t[%d]=(%lf, %lf)\n",i,t[i].real,t[i].img);
         for(int j=0;j<n;++j)
         {
-             t[i] = add(t[i],mult(a[i][j], result[j]));   
+             t[i] = add(t[i],mult(ao[i][j], result[j]));   
         }
-        printf("t[%d]=(%lf, %lf)\n",i,t[i].real,t[i].img);
+//                printf("t[%d]=(%lf, %lf)\n",i,t[i].real,t[i].img);
+
     }
     for(int i=0;i<n;++i)
     {printf("t[%d]=(%lf, %lf)\n",i,t[i].real,t[i].img);}
@@ -94,11 +112,8 @@ invert();
 
 }
 
-int main()
+void print()
 {
-    init();
-    solve();
-
     for(int i=0;i<n;++i)
     {
         for(int j=0;j<n;++j)
@@ -110,8 +125,25 @@ int main()
         printf("result[%d]=(%lf, %lf)\n",i,result[i].real,result[i].img);
     }
 
-    test();
 }
+
+/*
+
+int main()
+{
+    for(int i=0;i<n;++i)
+    {
+        for(int j=0;j<n;++j)
+        {ao[i][j]=a[i][j];}
+    }
+
+    init();
+    solve();
+
+    print();
+
+    test();
+}*/
 
 //struct complex a[][] is in "ac.h"
 void invert() 

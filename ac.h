@@ -31,7 +31,9 @@ char * arr[20005]; //arr[id] stores netlist name corresponding to the id
 struct complex{
 double real;
 double img;
-}constants[2005],result[2005];
+} a[2005][2005],constants[20005],result[20005];
+
+struct complex ao[2005][2005];
 //a*result=constants
 
 /*-------x is horizontal, y is vertical------*/
@@ -42,8 +44,8 @@ int check(int i);
 int check_name_error(char*);
 void invert();
 void gaussian(int index[]);
-complex add(complex a,complex b);
-complex sub(complex a,complex b);
-complex mult(complex a,complex b);
-complex div_(complex a,complex b);
+struct complex add(struct complex a,struct complex b);
+struct complex sub(struct complex a,struct complex b);
+struct complex mult(struct complex a,struct complex b);
+struct complex div_(struct complex a,struct complex b);
 #endif
