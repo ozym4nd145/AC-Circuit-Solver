@@ -21,6 +21,8 @@ struct component{
 
 int numcmp;//number of components
 int numnets;//number of nets
+int numsouces;
+int numvoltage;
 
 /*--------starting and ending pixels of each net---------*/
 int times[20005];
