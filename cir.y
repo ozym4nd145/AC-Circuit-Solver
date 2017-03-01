@@ -33,9 +33,9 @@ COMPONENT TERMINAL TERMINAL RESISTANCE END
 | COMPONENT TERMINAL TERMINAL CAPACITANCE END
 	{list[numcmp].name=strdup($1);list[numcmp].id1=accept($2);list[numcmp].id2=accept($3);list[numcmp].val=strdup($4);list[numcmp].type=2;if(check(numcmp)==1){++numcmp;}}
 | VSOURCE TERMINAL TERMINAL SINE SOURCEDATA END
-	{list[numcmp].name=strdup($1);list[numcmp].id1=accept($2);list[numcmp].id2=accept($3);list[numcmp].val=strdup($5);list[numcmp].type=3;if(check(numcmp)==1){++numcmp;}}
+	{list[numcmp].name=strdup($1);list[numcmp].id1=accept($2);list[numcmp].id2=accept($3);list[numcmp].val=strdup($5);list[numcmp].type=3;if(check(numcmp)==1){++numcmp;++numsources;++numvoltage}}
 | ISOURCE TERMINAL TERMINAL SINE SOURCEDATA END
-	{list[numcmp].name=strdup($1);list[numcmp].id1=accept($2);list[numcmp].id2=accept($3);list[numcmp].val=strdup($5);list[numcmp].type=4;if(check(numcmp)==1){++numcmp;}}
+	{list[numcmp].name=strdup($1);list[numcmp].id1=accept($2);list[numcmp].id2=accept($3);list[numcmp].val=strdup($5);list[numcmp].type=4;if(check(numcmp)==1){++numcmp;++numsources;}}
 | VSOURCE TERMINAL TERMINAL SINE er {/*printf("Got and error\n");*/}
 | ISOURCE TERMINAL TERMINAL SINE er {/*printf("Got and error\n");*/}
 | COMPONENT TERMINAL TERMINAL er {/*printf("Got and error\n");*/}
