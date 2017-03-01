@@ -58,7 +58,7 @@ int accept(char * s) {
     for (i = 0; i < numnets; ++i) {
         if (strcmp(s, arr[i]) == 0) {
             f = 1;
-	    ++times[i];
+	        ++times[i];
             return i;
         }
     }
@@ -66,7 +66,7 @@ int accept(char * s) {
     if (f == 0) {
         arr[numnets] = strdup(s);
         ++numnets;
-	   ++times[numnets - 1];
+	    ++times[numnets - 1];
         return numnets - 1;
     }
 }
@@ -167,9 +167,7 @@ int main(int argc, char* argv[]) //TODO take file names from command line
     }
     numcmp = numnets = 0;
 
-    /**
-     * Initializing start to infinity
-     */
+    //Initializing start to infinity    
     int i=0;
     for(i=0;i<20005;i++)
     {
