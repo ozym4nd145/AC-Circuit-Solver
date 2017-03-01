@@ -1,7 +1,12 @@
 #include "ac.h"
 #include <stdio.h>
 #include <stdlib.h>
+<<<<<<< HEAD
 #define complex struct complex
+=======
+#include <math.h>
+
+>>>>>>> cf7ba016c488bee16500a02d6d5ad261c470559d
 
 stack **adjlist;
 complex** matrix;
@@ -13,12 +18,20 @@ int freq_arr_len;
 
 int *sources; //maps 0,1,2... to indices of sources in list array
 int *index_cur_src; //maps index of current through voltage_sources in list array to index in matrix
+
+struct source_data parse_source(char* str)
+{
+	struct source_data data;
+	sscanf(str," ( %f %f %f %f",&data.dcoff,&data.ampl,&data.freq,&data.phase);
+	return data;
+}
+
 void make_adjlist()
 {
-	sources = (int*)calloc(sizeof(int)*numsources);
-	index_cur_src = (int*)calloc(sizeof(int)*numcmp);
-	adjlist = (stack**)calloc(sizeof(stack*)*numnets);
-	freq_arr = (double*)calloc(sizeof(double)*numsources);
+	sources = (int*)calloc(numsources,sizeof(int));
+	index_cur_src = (int*)calloc(numcmp,sizeof(int));
+	adjlist = (stack**)calloc(numnets,sizeof(stack*));
+	freq_arr = (double*)calloc(numsources,sizeof(double));
 
 	int i=0;
 	int j=0,l=0;
@@ -59,13 +72,18 @@ void make_matrix(double cur_freq)
 	//current_variables of voltage sources are 
 	
 	int cur_src_done = 0;
-	matrix = (complex**)calloc(sizeof(complex*)*(numnets+numvoltage));
-	values = (complex*)calloc(sizeof(complex)*(numnets+numvoltage));
+	matrix = (complex**)calloc((numnets+numvoltage),sizeof(complex*));
+	values = (complex*)calloc((numnets+numvoltage),sizeof(complex));
 	int eqn = 0;
 
 	//V_net0 = 0
+<<<<<<< HEAD
 	matrix[eqn] = (complex*)calloc(sizeof(complex)*(numnets+numvoltage));
 	matrix[eqn++][numnets-1] = make_complex(1,0);//1;   check!
+=======
+	matrix[eqn] = (complex*)calloc((numnets+numvoltage),sizeof(complex));
+	matrix[eqn++][numnets-1] = 1;
+>>>>>>> cf7ba016c488bee16500a02d6d5ad261c470559d
 
 	int i=0,j=0;
 	//V1 - V2 = V eqns
@@ -73,12 +91,23 @@ void make_matrix(double cur_freq)
 	{
 		if(list[sources[i]].type==voltage)
 		{
+<<<<<<< HEAD
 			matrix[eqn] = (complex*)calloc(sizeof(complex)*(numnets+numvoltage));
 			if(list[sources[i]].freq == cur_freq)
 			{
 				matrix[eqn][list[sources[i]].id1] = make_complex(-1,0);
 				matrix[eqn][list[sources[i]].id2] = make_complex(1,0);
 				values[eqn++] = make_complex(1,0);//TODO put value here
+=======
+			matrix[eqn] = (complex*)calloc((numnets+numvoltage),sizeof(complex));
+			struct source_data data = parse_source(list[sources[i]]->val);
+
+			if(data.freq == cur_freq)
+			{
+				matrix[eqn][list[sources[i]]->id1] = make_complex(-1,0);
+				matrix[eqn][list[sources[i]]->id2] = make_complex(1,0);
+				values[eqn++] = make_complex(sqrt(2)*data.ampl,0);
+>>>>>>> cf7ba016c488bee16500a02d6d5ad261c470559d
 			}
 			else
 			{
@@ -116,6 +145,7 @@ void make_matrix(double cur_freq)
 			else if(list[id].type==current && list[id].freq == cur_freq)
 			{
 				//if current starts from here
+<<<<<<< HEAD
 				if(list[id].id1 == i)
 				{
 					values[eqn] = add(values[eqn],make_complex(-1,0));//TODO: put value here
@@ -123,6 +153,16 @@ void make_matrix(double cur_freq)
 				else
 				{
 					values[eqn] = add(values[eqn],make_complex(1,0));//TODO: put value here
+=======
+				struct source_data data = parse_source(list[id].val);
+				if(list[id].id1 == i)
+				{
+					values[eqn] = add_complex(values[eqn],make_complex(-1*sqrt(2)*data.ampl,0));//TODO: put value here
+				}
+				else
+				{
+					values[eqn] = add_complex(values[eqn],make_complex(sqrt(2)*data.ampl,0));//TODO: put value here
+>>>>>>> cf7ba016c488bee16500a02d6d5ad261c470559d
 				}
 			}
 			else
@@ -138,6 +178,27 @@ void make_matrix(double cur_freq)
 	}
 }
 
+<<<<<<< HEAD
+=======
+void solve_circuit()
+{
+	make_adjlist();
+	voltage_soln = (complex**)calloc(freq_arr_len,sizeof(complex*));
+	int i=0,j=0;
+	for(i=0;i<freq_arr_len;i++)
+	{
+		voltage_soln[i] = (complex*)calloc(numnets,sizeof(complex));
+		make_matrix(freq_arr[i]);
+		solve_matrix();
+		for(j=0;j<numnets;j++)
+		{
+			voltage_soln[i][j] = answer[j];
+		}
+	}
+	free_list_sources();
+	free_matrix_values();
+}
+>>>>>>> cf7ba016c488bee16500a02d6d5ad261c470559d
 
 void free_matrix_values()
 {

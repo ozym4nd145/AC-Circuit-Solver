@@ -20,6 +20,14 @@ struct component{
 } list[20005];//list of all components
 
 
+struct source_data
+{
+	double freq;
+	double ampl;
+	double phase;
+	double dcoff;
+}
+
 int numcmp;//number of components
 int numnets;//number of nets
 int numsources;
@@ -51,7 +59,10 @@ struct complex add(struct complex a,struct complex b);
 struct complex sub(struct complex a,struct complex b);
 struct complex mult(struct complex a,struct complex b);
 struct complex div_(struct complex a,struct complex b);
+<<<<<<< HEAD
 void solve_matrix();
 struct complex make_complex(double r,double i);
+=======
+>>>>>>> cf7ba016c488bee16500a02d6d5ad261c470559d
 
 #endif
