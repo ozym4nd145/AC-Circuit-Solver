@@ -1,10 +1,10 @@
 #ifndef AC_H
 #define AC_H
 
-#include<stdio.h>
+#include <stdio.h>
 #include <stdlib.h>
-#include<math.h>
-#include<string.h>
+#include <math.h>
+#include <string.h>
 
 #define inf 1000000000
 
@@ -31,8 +31,8 @@ char * arr[20005]; //arr[id] stores netlist name corresponding to the id
 struct complex{
 double real;
 double img;
-} a[11005][11005],b[20005],x[20005];
-
+}constants[2005],result[2005];
+//a*result=constants
 
 /*-------x is horizontal, y is vertical------*/
 
@@ -40,4 +40,10 @@ void yyerror(char  * s);
 int accept(char * s);
 int check(int i);
 int check_name_error(char*);
+void invert();
+void gaussian(int index[]);
+complex add(complex a,complex b);
+complex sub(complex a,complex b);
+complex mult(complex a,complex b);
+complex div_(complex a,complex b);
 #endif

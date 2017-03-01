@@ -3,12 +3,13 @@
 #define complex struct complex
 
 int n;//size of b, x 
+complex a[2000][2000];
 
 complex add(complex a,complex b)
 {
 	complex res;
-	res.real = a.real+b.real;
-	res.img = a.img+b.img;
+	res.real = a.real + b.real;
+	res.img = a.img + b.img;
 	return res;	
 }
 
@@ -20,18 +21,18 @@ complex sub(complex a,complex b)//a-b
 	return res;	
 }
 
-complex div_(complex a,complex b)// a / b
+complex mult(complex a,complex b)
 {
 	complex res;
-	res.real = a.real*b.real-a.img*b.img;
-	res.img = a.real*b.img+a.img*b.real;
+	res.real = a.real * b.real - a.img * b.img;
+	res.img = a.real*b.img + a.img * b.real;
 	return res;
 }
 
-complex mult(complex a,complex b)
+complex div_(complex a,complex b)// a / b
 {
 	double temp=b.real*b.real+b.img*b.img;
-	b.img*=-1;
+	b.img*=-1.0;
 	complex res=mult(a,b);
 	res.real /= temp;
 	res.img /= temp;
@@ -47,21 +48,69 @@ double abs_(complex a)
 
 
 complex inverted_mat[11005][11005];
+
+void init()//initialise for testing
+{
+	n=2;
+	a[0][0].real=2;a[0][0].img=0;		a[0][1].real=3;a[0][1].img=0;
+	a[1][0].real=3;a[1][0].img=0;		a[1][1].real=2;a[1][1].img=0;
+    
+    constants[0].real=5;constants[0].img=0;
+    constants[1].real=5;constants[1].img=0;
+       
+}
+
+
+void test()
+{
+    complex t[n];
+    for(int i=0;i<n;++i)
+    {
+        t[i].real=0;t[i].img=0;
+   //     printf("t[%d]=(%lf, %lf)\n",i,t[i].real,t[i].img);
+        for(int j=0;j<n;++j)
+        {
+             t[i] = add(t[i],mult(a[i][j], result[j]));   
+        }
+        printf("t[%d]=(%lf, %lf)\n",i,t[i].real,t[i].img);
+    }
+    for(int i=0;i<n;++i)
+    {printf("t[%d]=(%lf, %lf)\n",i,t[i].real,t[i].img);}
+}
+
 void solve()
 {
 
 invert();
         for (int i = 0; i < n; i++) 
         {
-            for (int j = 0; j < 1; j++) 
-            {
+            result[i].real=0;result[i].img=0;    
                 for (int k = 0; k < n; k++)
                 {	 
                     result[i] = add(result[i], mult(inverted_mat[i][k], constants[k]) );
                 }
-            }
+            
         }
 
+}
+
+int main()
+{
+    init();
+    solve();
+
+    for(int i=0;i<n;++i)
+    {
+        for(int j=0;j<n;++j)
+        {printf("(%lf, %lf)    ",inverted_mat[i][j].real,inverted_mat[i][j].img);}
+    printf("\n");
+    }
+    for(int i=0;i<n;++i)
+    {
+        printf("result[%d]=(%lf, %lf)\n",i,result[i].real,result[i].img);
+    }
+
+    test();
 }
 
 //struct complex a[][] is in "ac.h"
@@ -73,10 +122,15 @@ void invert()
         
         int index[n];
         
+
+        for(int i=0;i<n;++i)
+        {
+            for(int j=0;j<n;++j)
+            {b[i][j].real=0;b[i][j].img=0;}
+        }
         for (int i=0; i<n; ++i) 
         {b[i][i].real=1;b[i][i].img=0;}
  
-
         gaussian(index);
 
  
