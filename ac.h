@@ -28,6 +28,12 @@ int start[20005];
 int end[20005];
 char * arr[20005]; //arr[id] stores netlist name corresponding to the id 
 
+struct complex{
+double real;
+double img;
+} a[11005][11005],b[20005],x[20005];
+
+
 /*-------x is horizontal, y is vertical------*/
 
 void yyerror(char  * s);
