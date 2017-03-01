@@ -1,6 +1,6 @@
 #include <math.h>
 #include "ac.h"
-#define complex struct complex
+
 
 
 complex add(complex a,complex b)

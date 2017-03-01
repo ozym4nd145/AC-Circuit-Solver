@@ -45,7 +45,9 @@ double real;
 double img;
 } a[20005][2005],constants[20005],result[20005];
 
-struct complex ao[20005][2005];/*!!Not able to make it of [20005][20005]!!*/
+typedef struct complex complex;
+
+complex ao[20005][2005];/*!!Not able to make it of [20005][20005]!!*/
 //a*result=constants
 
 /*-------x is horizontal, y is vertical------*/
@@ -64,6 +66,6 @@ void solve_matrix();
 struct complex make_complex(double r,double i);
 
 struct complex get_inverse(struct complex a);
-struct complex get_inductance(int a);
+struct complex get_inductance(int ,double);
 
 #endif

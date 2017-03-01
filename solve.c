@@ -1,9 +1,9 @@
 #include "ac.h"
 #include <stdio.h>
 #include <stdlib.h>
-#define complex struct complex
 #include <math.h>
-
+#include <string.h>
+#include <ctype.h>
 
 stack **adjlist;
 complex** matrix;
@@ -16,11 +16,139 @@ int freq_arr_len;
 int *sources; //maps 0,1,2... to indices of sources in list array
 int *index_cur_src; //maps index of current through voltage_sources in list array to index in matrix
 
+//TODO PARSE UNITS ALSO
 struct source_data parse_source(char* str)
 {
 	struct source_data data;
-	sscanf(str," ( %lf %lf %lf %lf",&data.dcoff,&data.ampl,&data.freq,&data.phase);
+	char unit_freq[5];unit_freq[0]='\0';
+	char unit_phase[5];unit_phase[0]='\0';
+	sscanf(str," ( %lf %lf %lf %s %lf %s",&data.dcoff,&data.ampl,&data.freq,unit_freq,&data.phase,unit_phase);
 	return data;
+}
+
+complex get_inductance(int id,double freq)
+{
+	if(list[id].type == resistor)
+	{
+		double value;
+		char unit[5];
+		unit[0] = '\0';
+		sscanf(list[id].val," %lf %s",&value,unit);
+		if(unit[0]!='\0')
+		{
+			char *tmp = unit;
+			for(;*tmp;tmp++)
+			{
+				*tmp = toupper(*tmp);
+			}
+			if(strcmp(unit,"K")==0)
+			{
+				value = 1000*value;
+			}
+			else if(strcmp(unit,"MEG")==0)
+			{
+				value = 1000000*value;
+			}
+			else if(strcmp(unit,"F")==0)
+			{
+				value = value/1000000000000000L;
+			}
+			else if(strcmp(unit,"P")==0)
+			{
+				value = value/1000000000000L;
+			}
+			else if(strcmp(unit,"N")==0)
+			{
+				value = value/1000000000;
+			}
+			else if(strcmp(unit,"M")==0)
+			{
+				value = value/1000000;
+			}
+		}
+		return make_complex(value,0);
+	}
+	if(list[id].type == capacitor)
+	{
+		double value;
+		char unit[5];
+		unit[0] = '\0';
+		sscanf(list[id].val," %lf %s",&value,unit);
+		if(unit[0]!='\0')
+		{
+			char *tmp = unit;
+			for(;*tmp;tmp++)
+			{
+				*tmp = toupper(*tmp);
+			}
+			if(strcmp(unit,"KF")==0)
+			{
+				value = 1000*value;
+			}
+			else if(strcmp(unit,"MEGF")==0)
+			{
+				value = 1000000*value;
+			}
+			else if(strcmp(unit,"FF")==0)
+			{
+				value = value/1000000000000000L;
+			}
+			else if(strcmp(unit,"PF")==0)
+			{
+				value = value/1000000000000L;
+			}
+			else if(strcmp(unit,"NF")==0)
+			{
+				value = value/1000000000;
+			}
+			else if(strcmp(unit,"MF")==0)
+			{
+				value = value/1000000;
+			}
+		}
+		return div_(make_complex(1,0),make_complex(0,value*freq));
+	}
+	if(list[id].type == inductor)
+	{
+		double value;
+		char unit[5];
+		unit[0] = '\0';
+		sscanf(list[id].val," %lf %s",&value,unit);
+		if(unit[0]!='\0')
+		{
+			char *tmp = unit;
+			for(;*tmp;tmp++)
+			{
+				*tmp = toupper(*tmp);
+			}
+			if(strcmp(unit,"KH")==0)
+			{
+				value = 1000*value;
+			}
+			else if(strcmp(unit,"MEGH")==0)
+			{
+				value = 1000000*value;
+			}
+			else if(strcmp(unit,"FH")==0)
+			{
+				value = value/1000000000000000L;
+			}
+			else if(strcmp(unit,"PH")==0)
+			{
+				value = value/1000000000000L;
+			}
+			else if(strcmp(unit,"NH")==0)
+			{
+				value = value/1000000000;
+			}
+			else if(strcmp(unit,"MH")==0)
+			{
+				value = value/1000000;
+			}
+		}
+		return make_complex(0,freq*value);
+	}
+	return make_complex(0,0);
 }
 
 void make_adjlist()
@@ -40,7 +168,8 @@ void make_adjlist()
 		
 		if(list[i].type==voltage || list[i].type==current)
 		{
-			double freq = list[i].freq;
+			struct source_data data = parse_source(list[i].val);
+			double freq = data.freq;
 			
 			for(l=0;l<freq_arr_len;l++)
 			{
@@ -115,6 +244,9 @@ void make_matrix(double cur_freq)
 		while(temp!=NULL)
 		{
 			id = temp->id;
+
+			struct source_data data = parse_source(list[id].val);
+
 			if(list[id].type==voltage)
 			{
 				if(list[id].id1 == i)
@@ -129,11 +261,9 @@ void make_matrix(double cur_freq)
 				}
 
 			}
-			else if(list[id].type==current && list[id].freq == cur_freq)
+			else if(list[id].type==current && data.freq == cur_freq)
 			{
 				//if current starts from here
-
-				struct source_data data = parse_source(list[id].val);
 				if(list[id].id1 == i)
 				{
 					values[eqn] = add(values[eqn],make_complex(-1*sqrt(2)*data.ampl,0));//TODO: put value here
@@ -145,7 +275,7 @@ void make_matrix(double cur_freq)
 			}
 			else
 			{
-				complex inductance = get_inverse(get_inductance(id));	
+				complex inductance = div_(make_complex(1,0),get_inductance(id,cur_freq));	
 				int other_net = (list[id].id1==i)?(list[id].id2):(list[id].id1);
 				matrix[i][i] = sub(matrix[i][i],inductance);
 				matrix[i][other_net] = add(matrix[i][other_net],inductance);
