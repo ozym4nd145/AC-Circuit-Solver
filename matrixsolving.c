@@ -2,7 +2,6 @@
 #include "ac.h"
 #define complex struct complex
 
-int n;
 
 complex add(complex a,complex b)
 {
