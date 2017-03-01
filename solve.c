@@ -119,7 +119,7 @@ void make_matrix(double cur_freq)
 	j=0;
 	for(i=0;i<numnets-1;i++)
 	{
-		list* temp = adjlist[i];
+		stack* temp= adjlist[i];
 		int id;
 		while(temp!=NULL)
 		{
@@ -191,7 +191,7 @@ void free_list_sources()
 {
 	free(sources);
 	int i=0;
-	list * temp;
+	stack * temp;
 	for(i=0;i<numnets;i++)
 	{
 		while(adjlist[i]!=NULL)
@@ -222,5 +222,4 @@ void solve_circuit()
 	free_list_sources();
 	free_matrix_values();
 }
-
 

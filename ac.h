@@ -62,4 +62,7 @@ struct complex div_(struct complex a,struct complex b);
 void solve_matrix();
 struct complex make_complex(double r,double i);
 
+struct complex get_inverse(struct complex a);
+struct complex get_inductance(int a);
+
 #endif
