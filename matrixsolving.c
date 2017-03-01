@@ -133,23 +133,23 @@ void print()
 
 }
 
-/*
 
-int main()
-{
-    for(int i=0;i<n;++i)
-    {
-        for(int j=0;j<n;++j)
-        {ao[i][j]=a[i][j];}
-    }
 
-    init();
-    solve();
+// int main()
+// {
+//     for(int i=0;i<n;++i)
+//     {
+//         for(int j=0;j<n;++j)
+//         {ao[i][j]=a[i][j];}
+//     }
 
-    print();
+//     init();
+//     solve();
 
-    test();
-}*/
+//     print();
+
+//     test();
+// }
 
 //struct complex a[][] is in "ac.h"
 void invert() 

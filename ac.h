@@ -40,6 +40,9 @@ int start[20005];
 int end[20005];
 char * arr[20005]; //arr[id] stores netlist name corresponding to the id 
 
+
+
+
 struct complex{
 double real;
 double img;
@@ -58,14 +61,27 @@ int check(int i);
 int check_name_error(char*);
 void invert();
 void gaussian(int index[]);
-struct complex add(struct complex a,struct complex b);
-struct complex sub(struct complex a,struct complex b);
-struct complex mult(struct complex a,struct complex b);
-struct complex div_(struct complex a,struct complex b);
+complex add(complex a,complex b);
+complex sub(complex a,complex b);
+complex mult(complex a,complex b);
+complex div_(complex a,complex b);
 void solve_matrix();
-struct complex make_complex(double r,double i);
+complex make_complex(double r,double i);
 
-struct complex get_inverse(struct complex a);
-struct complex get_inductance(int ,double);
+complex get_inverse(complex a);
+complex get_inductance(int ,double);
+
+stack **adjlist;
+complex** matrix;
+complex* values;
+complex** voltage_soln; //array of freq_arr_len X num_nets containing voltage of net at frequency of source
+double* freq_arr;
+complex* answer; //array containig soln of matrix
+int freq_arr_len;
+
+int *sources; //maps 0,1,2... to indices of sources in list array
+int *index_cur_src; //maps index of current through voltage_sources in list array to index in matrix
+
+
 
 #endif

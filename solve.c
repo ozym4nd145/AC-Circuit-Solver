@@ -5,16 +5,6 @@
 #include <string.h>
 #include <ctype.h>
 
-stack **adjlist;
-complex** matrix;
-complex* values;
-complex** voltage_soln; //array of freq_arr_len X num_nets containing voltage of net at frequency of source
-double* freq_arr;
-complex* answer; //array containig soln of matrix
-int freq_arr_len;
-
-int *sources; //maps 0,1,2... to indices of sources in list array
-int *index_cur_src; //maps index of current through voltage_sources in list array to index in matrix
 
 //TODO PARSE UNITS ALSO
 struct source_data parse_source(char* str)
@@ -26,6 +16,12 @@ struct source_data parse_source(char* str)
 	return data;
 }
 
+
+
+// complex get_inductance(int id,double freq)
+// {
+// 	return make_complex(0,0);
+// }
 complex get_inductance(int id,double freq)
 {
 	if(list[id].type == resistor)
