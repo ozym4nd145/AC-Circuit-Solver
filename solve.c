@@ -1,12 +1,9 @@
 #include "ac.h"
 #include <stdio.h>
 #include <stdlib.h>
-<<<<<<< HEAD
 #define complex struct complex
-=======
 #include <math.h>
 
->>>>>>> cf7ba016c488bee16500a02d6d5ad261c470559d
 
 stack **adjlist;
 complex** matrix;
@@ -77,13 +74,10 @@ void make_matrix(double cur_freq)
 	int eqn = 0;
 
 	//V_net0 = 0
-<<<<<<< HEAD
-	matrix[eqn] = (complex*)calloc(sizeof(complex)*(numnets+numvoltage));
-	matrix[eqn++][numnets-1] = make_complex(1,0);//1;   check!
-=======
+
 	matrix[eqn] = (complex*)calloc((numnets+numvoltage),sizeof(complex));
-	matrix[eqn++][numnets-1] = 1;
->>>>>>> cf7ba016c488bee16500a02d6d5ad261c470559d
+	matrix[eqn++][numnets-1] = make_complex(1,0)//1;  
+
 
 	int i=0,j=0;
 	//V1 - V2 = V eqns
@@ -91,23 +85,23 @@ void make_matrix(double cur_freq)
 	{
 		if(list[sources[i]].type==voltage)
 		{
-<<<<<<< HEAD
+
 			matrix[eqn] = (complex*)calloc(sizeof(complex)*(numnets+numvoltage));
 			if(list[sources[i]].freq == cur_freq)
 			{
 				matrix[eqn][list[sources[i]].id1] = make_complex(-1,0);
 				matrix[eqn][list[sources[i]].id2] = make_complex(1,0);
 				values[eqn++] = make_complex(1,0);//TODO put value here
-=======
+
 			matrix[eqn] = (complex*)calloc((numnets+numvoltage),sizeof(complex));
 			struct source_data data = parse_source(list[sources[i]]->val);
 
 			if(data.freq == cur_freq)
 			{
-				matrix[eqn][list[sources[i]]->id1] = make_complex(-1,0);
-				matrix[eqn][list[sources[i]]->id2] = make_complex(1,0);
+				matrix[eqn][list[sources[i]].id1] = make_complex(-1,0);
+				matrix[eqn][list[sources[i]].id2] = make_complex(1,0);
 				values[eqn++] = make_complex(sqrt(2)*data.ampl,0);
->>>>>>> cf7ba016c488bee16500a02d6d5ad261c470559d
+
 			}
 			else
 			{
@@ -145,7 +139,7 @@ void make_matrix(double cur_freq)
 			else if(list[id].type==current && list[id].freq == cur_freq)
 			{
 				//if current starts from here
-<<<<<<< HEAD
+
 				if(list[id].id1 == i)
 				{
 					values[eqn] = add(values[eqn],make_complex(-1,0));//TODO: put value here
@@ -153,16 +147,15 @@ void make_matrix(double cur_freq)
 				else
 				{
 					values[eqn] = add(values[eqn],make_complex(1,0));//TODO: put value here
-=======
+
 				struct source_data data = parse_source(list[id].val);
 				if(list[id].id1 == i)
 				{
-					values[eqn] = add_complex(values[eqn],make_complex(-1*sqrt(2)*data.ampl,0));//TODO: put value here
+					values[eqn] = add(values[eqn],make_complex(-1*sqrt(2)*data.ampl,0));//TODO: put value here
 				}
 				else
 				{
-					values[eqn] = add_complex(values[eqn],make_complex(sqrt(2)*data.ampl,0));//TODO: put value here
->>>>>>> cf7ba016c488bee16500a02d6d5ad261c470559d
+					values[eqn] = add(values[eqn],make_complex(sqrt(2)*data.ampl,0));//TODO: put value here
 				}
 			}
 			else
@@ -177,9 +170,10 @@ void make_matrix(double cur_freq)
 		eqn++;
 	}
 }
+}
+}
 
-<<<<<<< HEAD
-=======
+
 void solve_circuit()
 {
 	make_adjlist();
@@ -198,7 +192,7 @@ void solve_circuit()
 	free_list_sources();
 	free_matrix_values();
 }
->>>>>>> cf7ba016c488bee16500a02d6d5ad261c470559d
+
 
 void free_matrix_values()
 {
