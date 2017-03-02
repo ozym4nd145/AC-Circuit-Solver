@@ -1,10 +1,4 @@
 #include "ac.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-#include <string.h>
-#include <ctype.h>
-#include "helper_functions.h"
 
 
 const double PIE = 3.1415926536;
@@ -20,11 +14,6 @@ struct source_data parse_source(char* str)
 }
 
 
-
-// complex get_inductance(int id,double freq)
-// {
-// 	return make_complex(0,0);
-// }
 complex get_inductance(int id,double freq)
 {
 	if(list[id].type == resistor)
@@ -373,13 +362,16 @@ void free_list_sources()
 }
 
 void pass()
-{int i,j;
+{	int i,j;
 	n=numnets+numvoltage;
 
 a = (complex**)calloc((n+10),sizeof(complex*));
 for (i = 0; i < n; ++i) 
 {a[i] = (complex*)calloc((n+10),sizeof(complex));}
 
+ao = (complex**)calloc((n+10),sizeof(complex*));
+for (i = 0; i < n; ++i) 
+{ao[i] = (complex*)calloc((n+10),sizeof(complex));}
 	
 	for(i=0;i<n;++i)
 	{
@@ -387,10 +379,7 @@ for (i = 0; i < n; ++i)
 		{a[i][j].real=matrix[i][j].real;a[i][j].img=matrix[i][j].img;
 		 ao[i][j].real=matrix[i][j].real;ao[i][j].img=matrix[i][j].img;}
 	}
-	// for(i=0;i<n;++i)
-	// {
-	// 	constants[i]=values[i];
-	// }
+
 }
 
 

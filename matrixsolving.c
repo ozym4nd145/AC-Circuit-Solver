@@ -1,6 +1,4 @@
-#include <math.h>
 #include "ac.h"
-
 
 
 complex add(complex a,complex b)
@@ -76,7 +74,7 @@ void init()//initialise for testing
     //     for(int j=0;j<n;++j)
     //     {scanf("%lf%lf",&a[i][j].real,&a[i][j].img);}
     // }   
-values = (complex*)calloc((n+10),sizeof(complex));
+    values = (complex*)calloc((n+10),sizeof(complex));
     
     values[0].real=4;values[0].img=-2;
     values[1].real=5;values[1].img=-1;
@@ -105,29 +103,27 @@ void print()
 void test()
 {
 
-t = (complex*)calloc((n+10),sizeof(complex));
+    t = (complex*)calloc((n+10),sizeof(complex));
     
-printf("n=%d\n",n);
+    printf("n=%d\n",n);
 
-int i,j;
+    int i,j;
     /*for(i=0;i<n;++i)
     {
         for(j=0;j<n;++j)
-        {printf("a[%d][%d]=(%lf, %lf)       matrix[%d][%d]=(%lf, %lf)\n",i,j,ao[i][j].real,ao[i][j].img,i,j,matrix[i][j].real,matrix[i][j].img);}
+        {printf("a[%d][%d]=(%lf, %lf)\tmatrix[%d][%d]=(%lf, %lf)\n",i,j,ao[i][j].real,ao[i][j].img,i,j,matrix[i][j].real,matrix[i][j].img);}
     printf("\n");
     }*/
 
     for(i=0;i<n;++i)
     {
         t[i].real=0;t[i].img=0;
-//        printf("t[%d]=(%lf, %lf)\n",i,t[i].real,t[i].img);
+    //        printf("t[%d]=(%lf, %lf)\n",i,t[i].real,t[i].img);
         for(j=0;j<n;++j)
         {
             t[i] = add(t[i],mult(ao[i][j], answer[j]));   
-            //printf("t[%d]=(%lf, %lf)\n",i,t[i].real,t[i].img);
-
         }
-         //       printf("t[%d]=(%lf, %lf)\n",i,t[i].real,t[i].img);
+    //       printf("t[%d]=(%lf, %lf)\n",i,t[i].real,t[i].img);
 
     }
     int error=0;
@@ -145,22 +141,23 @@ int i,j;
 }
 
 void solve_matrix()
-{int i,j;
+{
+    int i,j;
 
-inverted_mat = (complex**)calloc((n+10),sizeof(complex*));
-for (i = 0; i < n; i++) 
-{inverted_mat[i] = (complex*)calloc((n+10),sizeof(complex));}
+    inverted_mat = (complex**)calloc((n+10),sizeof(complex*));
+    for (i = 0; i < n; i++) 
+    {inverted_mat[i] = (complex*)calloc((n+10),sizeof(complex));}
 
 
-invert();
+    invert();
 
-answer = (complex*)calloc((n+10),sizeof(complex));
+    answer = (complex*)calloc((n+10),sizeof(complex));
 
-        for (int i = 0; i < n; i++) 
+        for (i = 0; i < n; i++) 
         {
-                for (int k = 0; k < n; k++)
+                for (j = 0; j < n; j++)
                 {	 
-                    answer[i] = add(answer[i], mult(inverted_mat[i][k], values[k]) );
+                    answer[i] = add(answer[i], mult(inverted_mat[i][j], values[j]) );
                 }      
         }
 }
@@ -183,18 +180,18 @@ int main()
     test();
 }*/
 
-//struct complex a[][] is in "ac.h"
 void invert() 
 {
+    
     complex** x;
     complex** b;
 
-x = (complex**)calloc((n+10),sizeof(complex*));
-for (int i = 0; i < n; i++) 
-{x[i] = (complex*)calloc((n+10),sizeof(complex));}
-b = (complex**)calloc((n+10),sizeof(complex*));
-for (int i = 0; i < n; i++) 
-{b[i] = (complex*)calloc((n+10),sizeof(complex));}
+    x = (complex**)calloc((n+10),sizeof(complex*));
+    for (int i = 0; i < n; i++) 
+    {x[i] = (complex*)calloc((n+10),sizeof(complex));}
+    b = (complex**)calloc((n+10),sizeof(complex*));
+    for (int i = 0; i < n; i++) 
+    {b[i] = (complex*)calloc((n+10),sizeof(complex));}
         
         int index[n];
         
@@ -240,7 +237,6 @@ for (int i = 0; i < n; i++)
 
  
 
-//struct complex a[][] is in "ac.h" 
 void gaussian(int index[]) 
 {
        

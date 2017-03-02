@@ -5,7 +5,9 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+#include <ctype.h>
 #include "stack.h"
+#include "helper_functions.h"
 
 #define inf 1000000000
 
@@ -51,7 +53,6 @@ double img;
 
 typedef struct complex complex;
 
-complex ao[20005][2005];/*!!Not able to make it of [20005][20005]!!*/
 //a*result=constants
 
 /*-------x is horizontal, y is vertical------*/
@@ -78,7 +79,8 @@ complex get_inverse(complex a);
 complex get_inductance(int ,double);
 
 stack **adjlist;
-complex** matrix;complex** a;
+complex** matrix;
+complex** a;complex** ao;
 complex** inverted_mat;
 complex* t;
 complex* values;
