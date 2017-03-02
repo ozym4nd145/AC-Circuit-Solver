@@ -235,6 +235,7 @@ void make_matrix(double cur_freq)
 	j=0;
 	for(i=0;i<numnets-1;i++)
 	{
+		matrix[eqn] = (complex*)calloc((numnets+numvoltage),sizeof(complex));
 		stack* temp= adjlist[i];
 		int id;
 		while(temp!=NULL)
@@ -343,8 +344,8 @@ void solve_circuit()
 		{
 			voltage_soln[i][j] = answer[j];
 		}
+		free_matrix_values();
 	}
 	free_list_sources();
-	free_matrix_values();
 }
 
