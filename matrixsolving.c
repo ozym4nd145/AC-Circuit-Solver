@@ -76,35 +76,50 @@ void init()//initialise for testing
 
 void test()
 {
-    complex t[n];
+complex* t;
+t = (complex*)calloc((n+10),sizeof(complex));
+    
 
-    for(int i=0;i<n;++i)
+    for(i=0;i<n;++i)
     {
-        for(int j=0;j<n;++j)
-        {printf("a[%d][%d]=(%lf, %lf)       ",i,j,ao[i][j].real,ao[i][j].img);}
+        for(j=0;j<n;++j)
+        {printf("matrix[%d][%d]=(%lf, %lf)       ",i,j,matrix[i][j].real,matrix[i][j].img);}
     printf("\n");
     }
 
     for(int i=0;i<n;++i)
     {
         t[i].real=0;t[i].img=0;
-   //     printf("t[%d]=(%lf, %lf)\n",i,t[i].real,t[i].img);
+//        printf("t[%d]=(%lf, %lf)\n",i,t[i].real,t[i].img);
         for(int j=0;j<n;++j)
         {
-             t[i] = add(t[i],mult(ao[i][j], answer[j]));   
+            t[i] = add(t[i],mult(ao[i][j], answer[j]));   
+            //printf("t[%d]=(%lf, %lf)\n",i,t[i].real,t[i].img);
+
         }
-//                printf("t[%d]=(%lf, %lf)\n",i,t[i].real,t[i].img);
+                printf("t[%d]=(%lf, %lf)\n",i,t[i].real,t[i].img);
 
     }
+    int error=0;
     for(int i=0;i<n;++i)
-    {printf("t[%d]=(%lf, %lf)\n",i,t[i].real,t[i].img);}
+    {//printf("t[%d]=(%lf, %lf)\n",i,t[i].real,t[i].img);
+        
+        if(t[i].real!=values[i].real)    
+        {++error;printf("t[%d].real=%lf, values[%d].real= %lf \n",i,t[i].real,i,values[i].real);}
+        if(t[i].img!=values[i].img)
+        {++error;printf("t[%d].img=%lf, values[%d].img= %lf \n",i,t[i].img,i,values[i].img);}
+
+    }
+    printf("Error count=%d\n",error);
 }
 
 void solve_matrix()
 {
+
 inverted_mat = (complex**)calloc((n+10),sizeof(complex*));
 for (int i = 0; i < n; i++) 
 {inverted_mat[i] = (complex*)calloc((n+10),sizeof(complex));}
+
 
 invert();
 
@@ -118,7 +133,6 @@ answer = (complex*)calloc((n+10),sizeof(complex));
                 }
             
         }
-
 }
 
 void print()

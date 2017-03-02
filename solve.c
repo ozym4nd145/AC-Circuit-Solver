@@ -316,11 +316,16 @@ void free_list_sources()
 void pass()
 {
 	n=numnets+numvoltage;
-	int i,j;
+
+a = (complex**)calloc((n+10),sizeof(complex*));
+for (i = 0; i < n; ++i) 
+{a[i] = (complex*)calloc((n+10),sizeof(complex));}
+
+	
 	for(i=0;i<n;++i)
 	{
 		for(j=0;j<n;++j)
-		{a[i][j]=matrix[i][j];}
+		{a[i][j]=matrix[i][j];ao[i][j]=a[i][j];}
 	}
 	// for(i=0;i<n;++i)
 	// {
@@ -331,17 +336,19 @@ void pass()
 
 void solve_circuit()
 {
-	i=-2;j=-2;
+	//i=-2;j=-2;
 	make_adjlist();
 	voltage_soln = (complex**)calloc((freq_arr_len+10),sizeof(complex*));
-	i=-1;j=-1;
+	//i=-1;j=-1;
+	
 	for(i=0;i<freq_arr_len;i++)
 	{
 		voltage_soln[i] = (complex*)calloc((numnets+10),sizeof(complex));
 		make_matrix(freq_arr[i]);
 		pass();
 		solve_matrix();
-		for(j=0;j<numnets;j++)
+		test();
+		for(j=0;j<numnets;j++)//-----------------CHECK------??-------------
 		{
 			voltage_soln[i][j] = answer[j];
 		}
