@@ -83,7 +83,7 @@ t = (complex*)calloc((n+10),sizeof(complex));
     for(i=0;i<n;++i)
     {
         for(j=0;j<n;++j)
-        {printf("matrix[%d][%d]=(%lf, %lf)       ",i,j,matrix[i][j].real,matrix[i][j].img);}
+        {printf("matrix[%d][%d]=(%lf, %lf)\n",i,j,matrix[i][j].real,matrix[i][j].img);}
     printf("\n");
     }
 

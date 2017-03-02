@@ -4,7 +4,7 @@
 #include <math.h>
 #include <string.h>
 #include <ctype.h>
-
+#include "helper_functions.h"
 
 //TODO PARSE UNITS ALSO
 struct source_data parse_source(char* str)
@@ -340,11 +340,12 @@ void solve_circuit()
 	make_adjlist();
 	voltage_soln = (complex**)calloc((freq_arr_len+10),sizeof(complex*));
 	//i=-1;j=-1;
-	
+	int i=0,j=0;	
 	for(i=0;i<freq_arr_len;i++)
 	{
 		voltage_soln[i] = (complex*)calloc((numnets+10),sizeof(complex));
 		make_matrix(freq_arr[i]);
+		print_matrix();
 		pass();
 		solve_matrix();
 		test();
