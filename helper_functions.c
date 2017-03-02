@@ -3,11 +3,15 @@
 #include <stdlib.h>
 #include "helper_functions.h"
 
-void print_matrix()
+void print_matrix(int rows)
 {
+	if(rows == 0)
+	{
+		rows = numnets+numvoltage;
+	}
 	int i=0,j=0;
 
-	for(i=0;i<(numnets+numvoltage);i++)
+	for(i=0;i<rows;i++)
 	{
 		for(j=0;j<(numnets+numvoltage);j++)
 		{
@@ -15,5 +19,5 @@ void print_matrix()
 		}
 		printf("\n");
 	}
-	printf("\n");
+	printf("-------------------------------\n");
 }

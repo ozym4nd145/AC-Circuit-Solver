@@ -202,7 +202,7 @@ void make_matrix(double cur_freq)
 
 	matrix[eqn] = (complex*)calloc((numnets+numvoltage),sizeof(complex));
 	matrix[eqn++][numnets-1] = make_complex(1,0);//WRONG
-
+	// print_matrix(1);
 
 	int i=0,j=0;
 	//V1 - V2 = V eqns
@@ -229,12 +229,14 @@ void make_matrix(double cur_freq)
 			}
 		}
 	}
+	// print_matrix(numvoltage+1);
 
 
 	i=0;
 	j=0;
 	for(i=0;i<numnets-1;i++)
 	{
+		// printf("eqn - %d\n",eqn);
 		matrix[eqn] = (complex*)calloc((numnets+numvoltage),sizeof(complex));
 		stack* temp= adjlist[i];
 		int id;
@@ -274,8 +276,8 @@ void make_matrix(double cur_freq)
 			{
 				complex inductance = div_(make_complex(1,0),get_inductance(id,cur_freq));	
 				int other_net = (list[id].id1==i)?(list[id].id2):(list[id].id1);
-				matrix[i][i] = sub(matrix[i][i],inductance);
-				matrix[i][other_net] = add(matrix[i][other_net],inductance);
+				matrix[eqn][i] = sub(matrix[eqn][i],inductance);
+				matrix[eqn][other_net] = add(matrix[eqn][other_net],inductance);
 			}
 			temp = temp->next;
 		}
@@ -340,12 +342,14 @@ void solve_circuit()
 	make_adjlist();
 	voltage_soln = (complex**)calloc((freq_arr_len+10),sizeof(complex*));
 	//i=-1;j=-1;
+	printf("numsources - %d\nnumvoltage - %d\nnumnets - %d\nfreq_len - %d\n",numsources,numvoltage,numnets,freq_arr_len);
 	int i=0,j=0;	
 	for(i=0;i<freq_arr_len;i++)
 	{
+		printf("Freq - %lf\n",freq_arr[i]);
 		voltage_soln[i] = (complex*)calloc((numnets+10),sizeof(complex));
 		make_matrix(freq_arr[i]);
-		print_matrix();
+		print_matrix(0);
 		pass();
 		solve_matrix();
 		test();
