@@ -1,10 +1,3 @@
-V1 0 Net1 SINE ( 0 5 10Hz 0s )
-<<<<<<< HEAD
-R1 Net1 Net2 10
-L1 Net2 Net3 10H
-C1 Net3 0 10F
-=======
-R1 Net1 Net2 10K
-L1 Net2 Net3 10KH
-C1 Net3 0 10KF
->>>>>>> 7115b755bc4b8814a2ebef576f68db223ce86531
+V1 Net1 0 SINE ( 0 10 159Hz 0.0S )
+R1 Net1 NET2 10
+L1 NET2 0 10MH

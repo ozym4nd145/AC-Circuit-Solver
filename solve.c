@@ -60,9 +60,13 @@ complex get_inductance(int id,double freq)
 			{
 				value = value/1000000000;
 			}
-			else if(strcmp(unit,"M")==0)
+			else if(strcmp(unit,"U")==0)
 			{
 				value = value/1000000;
+			}
+			else if(strcmp(unit,"M")==0)
+			{
+				value = value/1000;
 			}
 		}
 		return make_complex(value,0);
@@ -100,12 +104,16 @@ complex get_inductance(int id,double freq)
 			{
 				value = value/1000000000;
 			}
-			else if(strcmp(unit,"MF")==0)
+			else if(strcmp(unit,"UF")==0)
 			{
 				value = value/1000000;
 			}
+			else if(strcmp(unit,"MF")==0)
+			{
+				value = value/1000;
+			}
 		}
-		return div_(make_complex(1,0),make_complex(0,value*freq));
+		return div_(make_complex(1,0),make_complex(0,value*freq*2*PIE));
 	}
 	if(list[id].type == inductor)
 	{
@@ -140,12 +148,16 @@ complex get_inductance(int id,double freq)
 			{
 				value = value/1000000000;
 			}
-			else if(strcmp(unit,"MH")==0)
+			else if(strcmp(unit,"UH")==0)
 			{
 				value = value/1000000;
 			}
+			else if(strcmp(unit,"MH")==0)
+			{
+				value = value/1000;
+			}
 		}
-		return make_complex(0,freq*value);
+		return make_complex(0,freq*value*2*PIE);
 	}
 	return make_complex(0,0);
 }
@@ -320,7 +332,7 @@ void print_soln()
 			{
 				curr = div_(sub(voltage_soln[j][list[i].id2],voltage_soln[j][list[i].id1]),(get_inductance(i,freq_arr[j])));
 			}
-			printf("%lf ",abs_(curr));
+			printf("%lf ",abs_(curr)/sqrt(2));
 			printf("%lf \n",(atan(curr.img/(curr.real+EPSILON))*180)/PIE);
 		}
 		printf("\n");
