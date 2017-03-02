@@ -53,7 +53,6 @@ double abs_(complex a)
 }
 
 
-complex** inverted_mat;
 
 void init()//initialise for testing
 {
@@ -114,7 +113,7 @@ int i,j;
     /*for(i=0;i<n;++i)
     {
         for(j=0;j<n;++j)
-        {printf("a[%d][%d]=(%3.5lf, %3.5lf)       matrix[%d][%d]=(%3.5lf, %3.5lf)\n",i,j,ao[i][j].real,ao[i][j].img,i,j,matrix[i][j].real,matrix[i][j].img);}
+        {printf("a[%d][%d]=(%lf, %lf)       matrix[%d][%d]=(%lf, %lf)\n",i,j,ao[i][j].real,ao[i][j].img,i,j,matrix[i][j].real,matrix[i][j].img);}
     printf("\n");
     }*/
 
@@ -154,22 +153,15 @@ for (i = 0; i < n; i++)
 
 
 invert();
-    for(i=0;i<n;++i)
-    {
-        for(j=0;j<n;++j)
-        {printf("inverted_mat[%d][%d]=(%lf, %lf)\n",i,j,inverted_mat[i][j].real,inverted_mat[i][j].img);}
-    printf("\n");
-    }
 
 answer = (complex*)calloc((n+10),sizeof(complex));
+
         for (int i = 0; i < n; i++) 
         {
-
                 for (int k = 0; k < n; k++)
                 {	 
                     answer[i] = add(answer[i], mult(inverted_mat[i][k], values[k]) );
-                }
-            
+                }      
         }
 }
 
@@ -194,9 +186,8 @@ int main()
 //struct complex a[][] is in "ac.h"
 void invert() 
 {
- 
-        complex** x;
-        complex** b;
+    complex** x;
+    complex** b;
 
 x = (complex**)calloc((n+10),sizeof(complex*));
 for (int i = 0; i < n; i++) 

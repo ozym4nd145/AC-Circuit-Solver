@@ -302,23 +302,27 @@ void make_matrix(double cur_freq)
 
 void print_soln()
 {
+	FILE* f=fopen("results.txt","w");
+	if(f==NULL)
+	{fprintf(stderr,"Error - Can't open results.txt\n");}
+
 	int i=0;int j=0;
 	for(j=0;j<freq_arr_len;j++)
 	{
-		printf("FREQ = %lfHz\n",freq_arr[j]);
-		printf("VOLTAGES\n");
+		fprintf(f,"FREQ = %lfHz\n",freq_arr[j]);
+		fprintf(f,"VOLTAGES\n");
 		for(i=0;i<numcmp;i++)
 		{
 			complex volt = sub(voltage_soln[j][list[i].id2],voltage_soln[j][list[i].id1]);
-			printf("%s ",list[i].name);
-			printf("%lf ",abs_(volt)/sqrt(2));
-			printf("%lf \n",(atan(volt.img/(volt.real+EPSILON))*180)/PIE);
+			fprintf(f,"%s ",list[i].name);
+			fprintf(f,"%lf ",abs_(volt)/sqrt(2));
+			fprintf(f,"%lf \n",(atan(volt.img/(volt.real+EPSILON))*180)/PIE);
 		}
-		printf("\nCURRENTS\n");
+		fprintf(f,"\nCURRENTS\n");
 		for(i=0;i<numcmp;i++)
 		{
 			complex curr;
-			printf("%s ",list[i].name);
+			fprintf(f,"%s ",list[i].name);
 			if(list[i].type==voltage)
 			{
 				curr = voltage_soln[j][index_cur_src[i]];
@@ -332,11 +336,12 @@ void print_soln()
 			{
 				curr = div_(sub(voltage_soln[j][list[i].id2],voltage_soln[j][list[i].id1]),(get_inductance(i,freq_arr[j])));
 			}
-			printf("%lf ",abs_(curr)/sqrt(2));
-			printf("%lf \n",(atan(curr.img/(curr.real+EPSILON))*180)/PIE);
+			fprintf(f,"%lf ",abs_(curr)/sqrt(2));
+			fprintf(f,"%lf \n",(atan(curr.img/(curr.real+EPSILON))*180)/PIE);
 		}
-		printf("\n");
+		fprintf(f,"\n");
 	}
+	fclose(f);
 }
 
 void free_matrix_values()

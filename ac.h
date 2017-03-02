@@ -79,6 +79,7 @@ complex get_inductance(int ,double);
 
 stack **adjlist;
 complex** matrix;complex** a;
+complex** inverted_mat;
 complex* t;
 complex* values;
 complex** voltage_soln; //array of freq_arr_len X num_nets containing voltage of net at frequency of source
