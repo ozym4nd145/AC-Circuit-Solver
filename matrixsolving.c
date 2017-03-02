@@ -69,10 +69,8 @@ void init()//initialise for testing
     //constants[1].real=5;constants[1].img=-1;
     for(int i=0;i<n;++i)
     {
-        scanf("%lf%lf",&constants[i].real,&constants[i].img);
+        scanf("%lf%lf",&values[i].real,&values[i].img);
     }
-
-       
 }
 
 
@@ -111,7 +109,7 @@ invert();
             result[i].real=0;result[i].img=0;    
                 for (int k = 0; k < n; k++)
                 {	 
-                    result[i] = add(result[i], mult(inverted_mat[i][k], constants[k]) );
+                    result[i] = add(result[i], mult(inverted_mat[i][k], values[k]) );
                 }
             
         }

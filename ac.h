@@ -46,7 +46,7 @@ char * arr[20005]; //arr[id] stores netlist name corresponding to the id
 struct complex{
 double real;
 double img;
-} a[20005][2005],constants[20005],result[20005];
+} a[20005][2005],/*constants[20005],*/result[20005];
 
 typedef struct complex complex;
 
