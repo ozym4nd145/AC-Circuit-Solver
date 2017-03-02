@@ -239,12 +239,6 @@ for (int i = 0; i < n; i++)
             }
         }
 
-   for(int i=0;i<n;++i)
-    {
-        for(int j=0;j<n;++j)
-        {printf("x[%d][%d]=(%lf, %lf)\n",i,j,x[i][j].real,x[i][j].img);}
-    printf("\n");
-    }
 
         for (int i=0; i<n; ++i)
             for (int j=0; j<n; ++j)
