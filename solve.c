@@ -201,7 +201,7 @@ void make_matrix(double cur_freq)
 	//V_net0 = 0
 
 	matrix[eqn] = (complex*)calloc((numnets+numvoltage),sizeof(complex));
-	matrix[eqn++][numnets-1] = make_complex(1,0);//1;  
+	matrix[eqn++][numnets-1] = make_complex(1,0);//WRONG
 
 
 	int i=0,j=0;

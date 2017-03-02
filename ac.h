@@ -65,6 +65,7 @@ complex add(complex a,complex b);
 complex sub(complex a,complex b);
 complex mult(complex a,complex b);
 complex div_(complex a,complex b);
+void solve_circuit();
 void solve_matrix();
 complex make_complex(double r,double i);
 

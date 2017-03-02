@@ -162,11 +162,13 @@ int check_ground()
 
 int main(int argc, char* argv[]) //TODO take file names from command line
 {
+    /*remove
     if(argc != 3)
     {
-        fprintf(stderr, "3 args required!\n");
+        fprintf(stderr, "3 args required! Now %d arguments\n",argc);
         exit(-1);
     }
+    */
     numsources = numvoltage = numcmp = numnets = 0;
 
     //Initializing start to infinity    
@@ -177,7 +179,7 @@ int main(int argc, char* argv[]) //TODO take file names from command line
         start[i] = inf;
     }
 
-    yyin = fopen(argv[1], "r");
+    yyin = fopen("top.cir"/*argv[1]*/, "r");
     if (yyin == NULL) {
         fprintf(stderr,"Error - Input file not found\n");
         exit(-1);
@@ -190,7 +192,7 @@ int main(int argc, char* argv[]) //TODO take file names from command line
 
 //	test_print();	//debug
 
-    outfile = fopen(argv[2], "w");
+    outfile = fopen("test.svg"/*argv[2]*/, "w");
     if (outfile == NULL) {
         fprintf(stderr,"Error - Output file not found\n");
         exit(-1);
@@ -265,6 +267,8 @@ int main(int argc, char* argv[]) //TODO take file names from command line
     }
 
     end_svg(outfile);
+
+    solve_circuit();
 
     return 0;
 }
