@@ -6,6 +6,9 @@
 #include <ctype.h>
 #include "helper_functions.h"
 
+
+const double PIE = 3.1415926536;
+const double EPSILON = 1e-16;
 //TODO PARSE UNITS ALSO
 struct source_data parse_source(char* str)
 {
@@ -285,7 +288,44 @@ void make_matrix(double cur_freq)
 	}
 }
 
-
+void print_soln()
+{
+	int i=0;int j=0;
+	for(j=0;j<freq_arr_len;j++)
+	{
+		printf("FREQ = %lfHz\n",freq_arr[j]);
+		printf("VOLTAGES\n");
+		for(i=0;i<numcmp;i++)
+		{
+			complex volt = sub(voltage_soln[j][list[i].id2],voltage_soln[j][list[i].id1]);
+			printf("%s ",list[i].name);
+			printf("%lf ",abs_(volt)/sqrt(2));
+			printf("%lf \n",(atan(volt.img/(volt.real+EPSILON))*180)/PIE);
+		}
+		printf("\nCURRENTS\n");
+		for(i=0;i<numcmp;i++)
+		{
+			complex curr;
+			printf("%s ",list[i].name);
+			if(list[i].type==voltage)
+			{
+				curr = voltage_soln[j][index_cur_src[i]];
+			}
+			else if(list[i].type==current)
+			{
+				struct source_data data = parse_source(list[i].val);
+				curr = make_complex(data.ampl*sqrt(2),0);//TODO: take into account the offset etc.
+			}
+			else
+			{
+				curr = div_(sub(voltage_soln[j][list[i].id2],voltage_soln[j][list[i].id1]),(get_inductance(i,freq_arr[j])));
+			}
+			printf("%lf ",abs_(curr));
+			printf("%lf \n",(atan(curr.img/(curr.real+EPSILON))*180)/PIE);
+		}
+		printf("\n");
+	}
+}
 
 void free_matrix_values()
 {
@@ -348,18 +388,19 @@ void solve_circuit()
 	for(i=0;i<freq_arr_len;i++)
 	{
 		printf("Freq - %lf\n",freq_arr[i]);
-		voltage_soln[i] = (complex*)calloc((numnets+10),sizeof(complex));
+		voltage_soln[i] = (complex*)calloc((numnets+10+numvoltage),sizeof(complex));
 		make_matrix(freq_arr[i]);
 		print_matrix(0);
 		pass();
 		solve_matrix();
 		test();
-		for(j=0;j<numnets;j++)//-----------------CHECK------??-------------
+		for(j=0;j<(numnets+numvoltage);j++)//-----------------CHECK------??-------------
 		{
 			voltage_soln[i][j] = answer[j];
 		}
 		free_matrix_values();
 	}
 	free_list_sources();
+	print_soln();
 }
 

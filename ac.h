@@ -9,6 +9,7 @@
 
 #define inf 1000000000
 
+
 FILE *outfile;
 
 enum component_type {resistor, inductor, capacitor, voltage, current};
@@ -65,8 +66,10 @@ complex add(complex a,complex b);
 complex sub(complex a,complex b);
 complex mult(complex a,complex b);
 complex div_(complex a,complex b);
+double abs_(complex a);
 void solve_circuit();
 void solve_matrix();
+void print_soln();
 void test();
 
 complex make_complex(double r,double i);
