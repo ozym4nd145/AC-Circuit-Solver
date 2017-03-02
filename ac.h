@@ -34,7 +34,6 @@ int numsources;
 int numvoltage;
 int n;
 int i,j;
-
 /*--------starting and ending pixels of each net---------*/
 int times[20005];
 int start[20005];
@@ -77,6 +76,7 @@ complex get_inductance(int ,double);
 
 stack **adjlist;
 complex** matrix;complex** a;
+complex* t;
 complex* values;
 complex** voltage_soln; //array of freq_arr_len X num_nets containing voltage of net at frequency of source
 double* freq_arr;

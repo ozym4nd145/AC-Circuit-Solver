@@ -314,7 +314,7 @@ void free_list_sources()
 }
 
 void pass()
-{
+{int i,j;
 	n=numnets+numvoltage;
 
 a = (complex**)calloc((n+10),sizeof(complex*));
@@ -325,7 +325,8 @@ for (i = 0; i < n; ++i)
 	for(i=0;i<n;++i)
 	{
 		for(j=0;j<n;++j)
-		{a[i][j]=matrix[i][j];ao[i][j]=a[i][j];}
+		{a[i][j].real=matrix[i][j].real;a[i][j].img=matrix[i][j].img;
+		 ao[i][j].real=matrix[i][j].real;ao[i][j].img=matrix[i][j].img;}
 	}
 	// for(i=0;i<n;++i)
 	// {
