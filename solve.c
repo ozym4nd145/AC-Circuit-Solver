@@ -322,21 +322,22 @@ void pass()
 		for(j=0;j<n;++j)
 		{a[i][j]=matrix[i][j];}
 	}
-	for(i=0;i<n;++i)
-	{
-		constants[i]=values[i];
-	}
+	// for(i=0;i<n;++i)
+	// {
+	// 	constants[i]=values[i];
+	// }
 }
 
 
 void solve_circuit()
 {
+	i=-2;j=-2;
 	make_adjlist();
-	voltage_soln = (complex**)calloc(freq_arr_len,sizeof(complex*));
-	int i=0,j=0;
+	voltage_soln = (complex**)calloc((freq_arr_len+10),sizeof(complex*));
+	i=-1;j=-1;
 	for(i=0;i<freq_arr_len;i++)
 	{
-		voltage_soln[i] = (complex*)calloc(numnets,sizeof(complex));
+		voltage_soln[i] = (complex*)calloc((numnets+10),sizeof(complex));
 		make_matrix(freq_arr[i]);
 		pass();
 		solve_matrix();

@@ -33,6 +33,7 @@ int numnets;//number of nets
 int numsources;
 int numvoltage;
 int n;
+int i,j;
 
 /*--------starting and ending pixels of each net---------*/
 int times[20005];

@@ -52,7 +52,7 @@ double abs_(complex a)
 }
 
 
-complex inverted_mat[21005][21005];
+complex** inverted_mat;
 
 void init()//initialise for testing
 {
@@ -91,7 +91,7 @@ void test()
    //     printf("t[%d]=(%lf, %lf)\n",i,t[i].real,t[i].img);
         for(int j=0;j<n;++j)
         {
-             t[i] = add(t[i],mult(ao[i][j], result[j]));   
+             t[i] = add(t[i],mult(ao[i][j], answer[j]));   
         }
 //                printf("t[%d]=(%lf, %lf)\n",i,t[i].real,t[i].img);
 
@@ -102,14 +102,19 @@ void test()
 
 void solve_matrix()
 {
+inverted_mat = (complex**)calloc((n+10),sizeof(complex*));
+for (int i = 0; i < n; i++) 
+{inverted_mat[i] = (complex*)calloc((n+10),sizeof(complex));}
 
 invert();
+
+answer = (complex*)calloc((n+10),sizeof(complex));
         for (int i = 0; i < n; i++) 
         {
-            result[i].real=0;result[i].img=0;    
+
                 for (int k = 0; k < n; k++)
                 {	 
-                    result[i] = add(result[i], mult(inverted_mat[i][k], values[k]) );
+                    answer[i] = add(answer[i], mult(inverted_mat[i][k], values[k]) );
                 }
             
         }
@@ -126,7 +131,7 @@ void print()
     }
     for(int i=0;i<n;++i)
     {
-        printf("result[%d]=(%lf, %lf)\n",i,result[i].real,result[i].img);
+        printf("answer[%d]=(%lf, %lf)\n",i,answer[i].real,answer[i].img);
     }
 
 }
