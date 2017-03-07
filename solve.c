@@ -256,8 +256,6 @@ void make_matrix(double cur_freq) {
     while (temp != NULL) {
       id = temp->id;
 
-      struct source_data data = parsed_source[map_source_list[id]];
-
       if (list[id].type == voltage) {
         if (list[id].id1 == i) {
           // current outgoing from id1
@@ -267,8 +265,11 @@ void make_matrix(double cur_freq) {
           matrix[eqn][index_cur_src[id]] = make_complex(-1, 0);
         }
 
-      } else if (list[id].type == current && data.freq == cur_freq) {
+      } else if (list[id].type == current &&
+                 parsed_source[map_source_list[id]].freq == cur_freq) {
         // if current starts from here
+        struct source_data data = parsed_source[map_source_list[id]];
+
         if (list[id].id1 == i) {
           values[eqn] =
               add(values[eqn],
