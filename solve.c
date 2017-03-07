@@ -16,7 +16,7 @@ struct source_data parse_source(char* str)
 	
 	printf("string = \"%s\"\n",str);
 	sscanf(str," ( %s %s %s %s )",dc,amp,freq,phase);
-	printf(" ( %s * %s * %s * %s ) \n",dc,amp,freq,phase);
+//	printf(" ( %s * %s * %s * %s ) \n",dc,amp,freq,phase);
 
 
 	int i,j,temp;	
@@ -33,7 +33,7 @@ struct source_data parse_source(char* str)
 	udc[temp-i]='\0';
 
 	sscanf(dc,"%lf",&data.dcoff);
-	printf("*%s*\n",udc);
+//	printf("*%s*\n",udc);
 			if(strcmp(udc,"K")==0)
 			{
 				data.dcoff = 1000*data.dcoff;
@@ -62,6 +62,10 @@ struct source_data parse_source(char* str)
 			{
 				data.dcoff = data.dcoff/1000;
 			}
+			else if(strcmp(udc,"")==0)
+			{
+				data.dcoff = data.dcoff/1000;
+			}
 			else
 			{fprintf(stderr,"Invalid unit for dc offset\n");}
 
@@ -76,7 +80,7 @@ struct source_data parse_source(char* str)
 	{amp[j]=toupper(amp[j]);
 	 uamp[j-i]=amp[j];}
 	uamp[temp-i]='\0';
-	printf("*%s*\n",uamp);
+//	printf("*%s*\n",uamp);
 	
 	sscanf(amp,"%lf",&data.ampl);
 	
@@ -107,6 +111,10 @@ struct source_data parse_source(char* str)
 			else if(strcmp(uamp,"M")==0)
 			{
 				data.ampl = data.ampl/1000;
+			}
+			else if(strcmp(uamp,"")==0)
+			{
+				data.ampl = data.ampl;
 			}
 			else
 			{fprintf(stderr,"Invalid unit for amplitude\n");}
