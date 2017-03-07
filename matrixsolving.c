@@ -31,8 +31,16 @@ complex div_(complex a,complex b)// a / b
 	complex c;c.real=b.real;c.img=-1*b.img;
     
 	complex res=mult(a,c);
-	res.real /= temp;
-	res.img /= temp;
+
+//----------------------TODO:check------------------------
+	if(temp==0)
+	{//fprintf(stderr,"division by zero\n");
+	res.real = 0;
+	res.img = 0;}
+	else
+	{res.real /= temp;
+	res.img /= temp;}
+	
 	return res;
 }
 

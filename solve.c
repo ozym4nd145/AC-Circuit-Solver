@@ -4,12 +4,213 @@
 const double PIE = 3.1415926536;
 const double EPSILON = 1e-16;
 //TODO PARSE UNITS ALSO
+
+
 struct source_data parse_source(char* str)
 {
 	struct source_data data;
 	char unit_freq[5];unit_freq[0]='\0';
 	char unit_phase[5];unit_phase[0]='\0';
-	sscanf(str," ( %lf %lf %lf %s %lf %s",&data.dcoff,&data.ampl,&data.freq,unit_freq,&data.phase,unit_phase);
+	
+	char dc[100],amp[100],freq[100],phase[100];
+	char udc[100],uamp[100],ufreq[100],uphase[100];
+	
+	printf("string = \"%s\"\n",str);
+	sscanf(str," ( %s %s %s %s )",dc,amp,freq,phase);
+	printf(" ( %s * %s * %s * %s ) \n",dc,amp,freq,phase);
+
+
+	int i,j,temp;	
+	//dc
+	temp=strlen(dc);
+	for(i=0;i<temp;++i)
+	{
+		if(('a'<=dc[i] && dc[i]<='z')||('A'<=dc[i] && dc[i]<='Z'))
+		{break;}
+	}
+	for(j=i;j<temp;++j)
+	{dc[j]=toupper(dc[j]);
+	 udc[j-i]=dc[j];}
+	udc[temp-i]='\0';
+
+	sscanf(dc,"%lf",&data.dcoff);
+	printf("*%s*\n",udc);
+			if(strcmp(udc,"K")==0)
+			{
+				data.dcoff = 1000*data.dcoff;
+			}
+			else if(strcmp(udc,"MEG")==0)
+			{
+				data.dcoff = 1000000*data.dcoff;
+			}
+			else if(strcmp(udc,"F")==0)
+			{
+				data.dcoff = data.dcoff/1000000000000000L;
+			}
+			else if(strcmp(udc,"P")==0)
+			{
+				data.dcoff = data.dcoff/1000000000000L;
+			}
+			else if(strcmp(udc,"N")==0)
+			{
+				data.dcoff = data.dcoff/1000000000;
+			}
+			else if(strcmp(udc,"U")==0)
+			{
+				data.dcoff = data.dcoff/1000000;
+			}
+			else if(strcmp(udc,"M")==0)
+			{
+				data.dcoff = data.dcoff/1000;
+			}
+			else
+			{fprintf(stderr,"Invalid unit for dc offset\n");}
+
+	//amp
+		temp=strlen(amp);
+	for(i=0;i<temp;++i)
+	{
+		if(('a'<=amp[i] && amp[i]<='z')||('A'<=amp[i] && amp[i]<='Z'))
+		{break;}
+	}
+	for(j=i;j<temp;++j)
+	{amp[j]=toupper(amp[j]);
+	 uamp[j-i]=amp[j];}
+	uamp[temp-i]='\0';
+	printf("*%s*\n",uamp);
+	
+	sscanf(amp,"%lf",&data.ampl);
+	
+			if(strcmp(uamp,"K")==0)
+			{
+				data.ampl = 1000*data.ampl;
+			}
+			else if(strcmp(uamp,"MEG")==0)
+			{
+				data.ampl = 1000000*data.ampl;
+			}
+			else if(strcmp(uamp,"F")==0)
+			{
+				data.ampl = data.ampl/1000000000000000L;
+			}
+			else if(strcmp(uamp,"P")==0)
+			{
+				data.ampl = data.ampl/1000000000000L;
+			}
+			else if(strcmp(uamp,"N")==0)
+			{
+				data.ampl = data.ampl/1000000000;
+			}
+			else if(strcmp(uamp,"U")==0)
+			{
+				data.ampl = data.ampl/1000000;
+			}
+			else if(strcmp(uamp,"M")==0)
+			{
+				data.ampl = data.ampl/1000;
+			}
+			else
+			{fprintf(stderr,"Invalid unit for amplitude\n");}
+
+	//freq
+		temp=strlen(freq);
+	for(i=0;i<temp;++i)
+	{
+		if(('a'<=freq[i] && freq[i]<='z')||('A'<=freq[i] && freq[i]<='Z'))
+		{break;}
+	}
+	for(j=i;j<temp;++j)
+	{freq[j]=toupper(freq[j]);
+	 ufreq[j-i]=freq[j];}
+	ufreq[temp-i]='\0';
+
+	sscanf(freq,"%lf",&data.freq);
+	
+			if(strcmp(ufreq,"KHZ")==0)
+			{
+				data.freq = 1000*data.freq;
+			}
+			else if(strcmp(ufreq,"MEGHZ")==0)
+			{
+				data.freq = 1000000*data.freq;
+			}
+			else if(strcmp(ufreq,"FHZ")==0)
+			{
+				data.freq = data.freq/1000000000000000L;
+			}
+			else if(strcmp(ufreq,"PHZ")==0)
+			{
+				data.freq = data.freq/1000000000000L;
+			}
+			else if(strcmp(ufreq,"NHZ")==0)
+			{
+				data.freq = data.freq/1000000000;
+			}
+			else if(strcmp(ufreq,"UHZ")==0)
+			{
+				data.freq = data.freq/1000000;
+			}
+			else if(strcmp(ufreq,"MHZ")==0)
+			{
+				data.freq = data.freq/1000;
+			}
+			else if(strcmp(ufreq,"HZ")==0)
+			{
+				data.freq = data.freq;
+			}
+			else
+			{fprintf(stderr,"Invalid unit for frequency\n");}
+
+	//phase
+		temp=strlen(phase);
+	for(i=0;i<temp;++i)
+	{
+		if(('a'<=phase[i] && phase[i]<='z')||('A'<=phase[i] && phase[i]<='Z'))
+		{break;}
+	}
+	for(j=i;j<temp;++j)
+	{phase[j]=toupper(phase[j]);
+	 uphase[j-i]=phase[j];}
+	uphase[temp-i]='\0';
+
+	sscanf(phase,"%lf",&data.phase);
+	
+			if(strcmp(uphase,"KS")==0)
+			{
+				data.phase = 1000*data.phase;
+			}
+			else if(strcmp(uphase,"MEGS")==0)
+			{
+				data.phase = 1000000*data.phase;
+			}
+			else if(strcmp(uphase,"FS")==0)
+			{
+				data.phase = data.phase/1000000000000000L;
+			}
+			else if(strcmp(uphase,"PS")==0)
+			{
+				data.phase = data.phase/1000000000000L;
+			}
+			else if(strcmp(uphase,"NS")==0)
+			{
+				data.phase = data.phase/1000000000;
+			}
+			else if(strcmp(uphase,"US")==0)
+			{
+				data.phase = data.phase/1000000;
+			}
+			else if(strcmp(uphase,"MS")==0)
+			{
+				data.phase = data.phase/1000;
+			}
+			else if(strcmp(uphase,"S")==0)
+			{
+				data.phase = data.phase;
+			}	
+			else
+			{fprintf(stderr,"Invalid unit for phase\n");}
+
+//	sscanf(str," ( %lf %lf %lf %s %lf %s",&data.dcoff,&data.ampl,&data.freq,unit_freq,&data.phase,unit_phase);
 	return data;
 }
 
@@ -154,6 +355,7 @@ complex get_inductance(int id,double freq)
 void make_adjlist()
 {
 	sources = (int*)calloc(numsources,sizeof(int));
+
 	index_cur_src = (int*)calloc(numcmp,sizeof(int));
 	adjlist = (stack**)calloc(numnets,sizeof(stack*));
 	freq_arr = (double*)calloc(numsources,sizeof(double));
@@ -389,6 +591,7 @@ void solve_circuit()
 	make_adjlist();
 	voltage_soln = (complex**)calloc((freq_arr_len+10),sizeof(complex*));
 	//i=-1;j=-1;
+
 	printf("numsources - %d\nnumvoltage - %d\nnumnets - %d\nfreq_len - %d\n",numsources,numvoltage,numnets,freq_arr_len);
 	int i=0,j=0;	
 	for(i=0;i<freq_arr_len;i++)
