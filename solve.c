@@ -1,6 +1,7 @@
 #include "ac.h"
 #include <stdlib.h>
 #include "helper_functions.h"
+#include <math.h>
 
 const double PIE = 3.1415926536;
 const double EPSILON = 1e-16;
@@ -219,6 +220,7 @@ struct source_data parse_source(char* str)
 			else
 			{fprintf(stderr,"Invalid unit for phase\n");}
 
+  data.phase = data.freq*2*data.phase*PIE;
 	return data;
 }
 
@@ -418,7 +420,7 @@ void make_matrix_dc() {
       } else if (list[id].type == current && data.dcoff != 0) {
         // if current starts from here
         if (list[id].id1 == i) {
-          values[eqn] = add(values[eqn], make_complex(-1 * data.ampl, 0));
+          values[eqn] = add(values[eqn], make_complex(-1 * data.dcoff, 0));
         } else {
           values[eqn] = add(values[eqn], make_complex(data.dcoff, 0));
         }
@@ -431,10 +433,10 @@ void make_matrix_dc() {
           matrix[eqn][index_cur_src[id]] = make_complex(-1, 0);
         }
       } else if (list[id].type == resistor) {
-        complex inductance = get_impedance(id, 0);
+        complex impedance = div_(make_complex(1,0),get_impedance(id, 0));
         int other_net = (list[id].id1 == i) ? (list[id].id2) : (list[id].id1);
-        matrix[eqn][i] = sub(matrix[eqn][i], inductance);
-        matrix[eqn][other_net] = add(matrix[eqn][other_net], inductance);
+        matrix[eqn][i] = sub(matrix[eqn][i], impedance);
+        matrix[eqn][other_net] = add(matrix[eqn][other_net], impedance);
       }
       temp = temp->next;
     }
@@ -463,7 +465,7 @@ void make_matrix(double cur_freq) {
       if (parsed_source[i].freq == cur_freq) {
         matrix[eqn][list[sources[i]].id1] = make_complex(-1, 0);
         matrix[eqn][list[sources[i]].id2] = make_complex(1, 0);
-        values[eqn++] = make_complex(parsed_source[i].ampl, 0);
+        values[eqn++] = make_complex(parsed_source[i].ampl*cos(parsed_source[i].phase),parsed_source[i].ampl*sin(parsed_source[i].phase));
 
       } else {
         matrix[eqn][list[sources[i]].id1] = make_complex(-1, 0);
@@ -501,10 +503,10 @@ void make_matrix(double cur_freq) {
         if (list[id].id1 == i) {
           values[eqn] =
               add(values[eqn],
-                  make_complex(-1 * data.ampl, 0));  // TODO: put value here
+                  make_complex(-1 * data.ampl*cos(data.phase),-1 *data.ampl*sin(data.phase)));  // TODO: put value here
         } else {
           values[eqn] = add(
-              values[eqn], make_complex(data.ampl, 0));  // TODO: put value here
+              values[eqn], make_complex(data.ampl*cos(data.phase),data.ampl*sin(data.phase)));  // TODO: put value here
         }
       } else {
         complex inductance =
@@ -662,6 +664,8 @@ void solve_circuit() {
     free_matrix_values();
   }
 
+
+  printf("##################################################################\n");
 
   if(1)//some condition to check whether to print dc offset results
   {
