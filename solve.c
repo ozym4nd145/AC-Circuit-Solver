@@ -16,7 +16,7 @@ struct source_data parse_source(char* str)
 	
 	printf("string = \"%s\"\n",str);
 	sscanf(str," ( %s %s %s %s )",dc,amp,freq,phase);
-//	printf(" ( %s * %s * %s * %s ) \n",dc,amp,freq,phase);
+	//	printf(" ( %s * %s * %s * %s ) \n",dc,amp,freq,phase);
 
 
 	int i,j,temp;	
@@ -33,7 +33,7 @@ struct source_data parse_source(char* str)
 	udc[temp-i]='\0';
 
 	sscanf(dc,"%lf",&data.dcoff);
-//	printf("*%s*\n",udc);
+	//	printf("*%s*\n",udc);
 			if(strcmp(udc,"K")==0)
 			{
 				data.dcoff = 1000*data.dcoff;
@@ -80,7 +80,7 @@ struct source_data parse_source(char* str)
 	{amp[j]=toupper(amp[j]);
 	 uamp[j-i]=amp[j];}
 	uamp[temp-i]='\0';
-//	printf("*%s*\n",uamp);
+	//	printf("*%s*\n",uamp);
 	
 	sscanf(amp,"%lf",&data.ampl);
 	
@@ -499,28 +499,26 @@ void make_matrix(double cur_freq) {
 }
 
 void print_soln() {
-  FILE* f = fopen("results.txt", "w");
-  if (f == NULL) {
-    fprintf(stderr, "Error - Can't open results.txt\n");
-  }
+  
+
 
   int i = 0;
   int j = 0;
   for (j = 0; j < freq_arr_len; j++) {
-    fprintf(f, "FREQ = %lfHz\n", freq_arr[j]);
-    fprintf(f, "VOLTAGES\n");
+    fprintf(resultfile, "FREQ = %lfHz\n", freq_arr[j]);
+    fprintf(resultfile, "VOLTAGES\n");
     for (i = 0; i < numcmp; i++) {
       complex volt =
           sub(voltage_soln[j][list[i].id2], voltage_soln[j][list[i].id1]);
-      fprintf(f, "%s ", list[i].name);
-      fprintf(f, "%lf ", abs_(volt));
-      fprintf(f, "%lf \n",
+      fprintf(resultfile, "%s ", list[i].name);
+      fprintf(resultfile, "%lf ", abs_(volt));
+      fprintf(resultfile, "%lf \n",
               (atan(volt.img / (volt.real + EPSILON)) * 180) / PIE);
     }
-    fprintf(f, "\nCURRENTS\n");
+    fprintf(resultfile, "\nCURRENTS\n");
     for (i = 0; i < numcmp; i++) {
       complex curr;
-      fprintf(f, "%s ", list[i].name);
+      fprintf(resultfile, "%s ", list[i].name);
       if (list[i].type == voltage) {
         curr = voltage_soln[j][index_cur_src[i]];
       } else if (list[i].type == current) {
@@ -532,13 +530,13 @@ void print_soln() {
             sub(voltage_soln[j][list[i].id2], voltage_soln[j][list[i].id1]),
             (get_impedance(i, freq_arr[j])));
       }
-      fprintf(f, "%lf ", abs_(curr));
-      fprintf(f, "%lf \n",
+      fprintf(resultfile, "%lf ", abs_(curr));
+      fprintf(resultfile, "%lf \n",
               (atan(curr.img / (curr.real + EPSILON)) * 180) / PIE);
     }
-    fprintf(f, "\n");
+    fprintf(resultfile, "\n");
   }
-  fclose(f);
+  fclose(resultfile);
 }
 
 void free_matrix_values() {

@@ -12,6 +12,7 @@
 #define inf 1000000000
 
 FILE* outfile;
+FILE* resultfile;
 
 enum component_type { resistor, inductor, capacitor, voltage, current };
 struct component {

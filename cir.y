@@ -162,7 +162,7 @@ int check_ground()
 
 int main(int argc, char* argv[]) //TODO take file names from command line
 {
-    if(argc != 3)
+    if(argc != 4)
     {
         fprintf(stderr, "3 args required! Now %d arguments\n",argc);
         exit(-1);
@@ -194,6 +194,12 @@ int main(int argc, char* argv[]) //TODO take file names from command line
     outfile = fopen(argv[2], "w");
     if (outfile == NULL) {
         fprintf(stderr,"Error - Output file not found\n");
+        exit(-1);
+    }
+
+    resultfile = fopen(argv[3], "w");
+    if (resultfile == NULL) {
+        fprintf(stderr,"Error - Result Output file not found\n");
         exit(-1);
     }
 
