@@ -505,7 +505,7 @@ void print_soln() {
   int i = 0;
   int j = 0;
   for (j = 0; j < freq_arr_len; j++) {
-    fprintf(resultfile, "FREQ = %lfHz\n", freq_arr[j]);
+    fprintf(resultfile, "FREQ = %lfKhz\n", freq_arr[j]/1000);
     fprintf(resultfile, "VOLTAGES\n");
     for (i = 0; i < numcmp; i++) {
       complex volt =
