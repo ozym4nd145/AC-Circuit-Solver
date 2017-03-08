@@ -220,7 +220,7 @@ struct source_data parse_source(char* str)
 			else
 			{fprintf(stderr,"Invalid unit for phase\n");}
 
-  data.phase = data.freq*2*data.phase*PIE;
+  data.phase = -1*data.freq*2*data.phase*PIE;
 	return data;
 }
 
