@@ -14,7 +14,7 @@ struct source_data parse_source(char* str)
 	char dc[100],amp[100],freq[100],phase[100];
 	char udc[100],uamp[100],ufreq[100],uphase[100];
 	
-	printf("string = \"%s\"\n",str);
+	//printf("string = \"%s\"\n",str);
 	sscanf(str," ( %s %s %s %s )",dc,amp,freq,phase);
 	//	printf(" ( %s * %s * %s * %s ) \n",dc,amp,freq,phase);
 
@@ -603,7 +603,7 @@ void solve_circuit() {
     print_matrix(0);
     pass();
     solve_matrix();
-    test();
+    //test();
     for (j = 0; j < (numnets + numvoltage); j++) {
       voltage_soln[i][j] = answer[j];
     }
