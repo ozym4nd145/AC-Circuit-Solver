@@ -21,3 +21,26 @@ void print_matrix(int rows)
 	}
 	printf("-------------------------------\n");
 }
+
+int comparator_double(const void* p1, const void* p2)
+{
+	if (*(double*)p1 < *(double *)p2)
+	{
+		return -1;
+	}
+	else if (*(double*)p1 > *(double *)p2)
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+void print_source(int id)
+{
+	printf("SOURCE - %s\n",list[id].name);
+	struct source_data data = parsed_source[map_source_list[id]];
+	printf("Ampl - %lf, Freq - %lf, Phase - %lf, Offset - %lf \n",data.ampl,data.freq,data.phase,data.dcoff);
+}

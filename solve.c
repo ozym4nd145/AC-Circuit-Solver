@@ -1,4 +1,6 @@
 #include "ac.h"
+#include <stdlib.h>
+#include "helper_functions.h"
 
 const double PIE = 3.1415926536;
 const double EPSILON = 1e-16;
@@ -64,7 +66,7 @@ struct source_data parse_source(char* str)
 			}
 			else if(strcmp(udc,"")==0)
 			{
-				data.dcoff = data.dcoff/1000;
+				data.dcoff = data.dcoff;
 			}
 			else
 			{fprintf(stderr,"Invalid unit for dc offset\n");}
@@ -320,6 +322,7 @@ void make_adjlist() {
   int i = 0;
   int j = 0, l = 0;
   int k = numnets;
+  int m = numnets+numvoltage; //used for mapping index of current through inductor to index in matrix in case of dc matrix
   for (i = 0; i < numcmp; i++) {
     adjlist[list[i].id1] = push(adjlist[list[i].id1], i);
     adjlist[list[i].id2] = push(adjlist[list[i].id2], i);
@@ -344,38 +347,49 @@ void make_adjlist() {
       }
       sources[j++] = i;
     }
+    else if(list[i].type==inductor)
+    {
+      index_cur_src[i] = m++;
+    }
   }
 }
 
 
-void make_matrix_dc(double cur_freq) {
+void make_matrix_dc() {
   // current_variables of voltage sources are
-  matrix = (complex**)calloc((numnets + numvoltage), sizeof(complex*));
-  values = (complex*)calloc((numnets + numvoltage), sizeof(complex));
+  matrix = (complex**)calloc((numnets + numvoltage+numinductor), sizeof(complex*));
+  values = (complex*)calloc((numnets + numvoltage+numinductor), sizeof(complex));
   int eqn = 0;
 
   // V_net0 = 0
 
-  matrix[eqn] = (complex*)calloc((numnets + numvoltage), sizeof(complex));
-  matrix[eqn++][numnets - 1] = make_complex(1, 0);  // WRONG
+  matrix[eqn] = (complex*)calloc((numnets + numvoltage+numinductor), sizeof(complex));
+  matrix[eqn++][numnets - 1] = make_complex(1, 0);
   // print_matrix(1);
 
   int i = 0, j = 0;
   // V1 - V2 = V eqns
-  for (i = 0; i < numsources; i++) {
-    if (list[sources[i]].type == voltage) {
-      matrix[eqn] = (complex*)calloc((numnets + numvoltage), sizeof(complex));
+  for (i = 0; i < numcmp; i++) {
+    if (list[i].type == voltage) {
+      matrix[eqn] = (complex*)calloc((numnets + numvoltage+numinductor), sizeof(complex));
 
-      if (parsed_source[i].dcoff != 0 && parsed_source[i].freq == cur_freq) {
-        matrix[eqn][list[sources[i]].id1] = make_complex(-1, 0);
-        matrix[eqn][list[sources[i]].id2] = make_complex(1, 0);
-        values[eqn++] = make_complex(parsed_source[i].dcoff, 0);
+      if (parsed_source[map_source_list[i]].dcoff != 0) {
+        matrix[eqn][list[i].id1] = make_complex(-1, 0);
+        matrix[eqn][list[i].id2] = make_complex(1, 0);
+        values[eqn++] = make_complex(parsed_source[map_source_list[i]].dcoff, 0);
 
       } else {
-        matrix[eqn][list[sources[i]].id1] = make_complex(-1, 0);
-        matrix[eqn][list[sources[i]].id2] = make_complex(1, 0);
+        matrix[eqn][list[i].id1] = make_complex(-1, 0);
+        matrix[eqn][list[i].id2] = make_complex(1, 0);
         values[eqn++] = make_complex(0, 0);
       }
+    }
+    else if(list[i].type==inductor)
+    {
+      matrix[eqn] = (complex*)calloc((numnets + numvoltage+numinductor), sizeof(complex));
+      matrix[eqn][list[i].id1] = make_complex(-1, 0);
+      matrix[eqn][list[i].id2] = make_complex(1, 0);
+      values[eqn++] = make_complex(0, 0);
     }
   }
   // print_matrix(numvoltage+1);
@@ -384,7 +398,7 @@ void make_matrix_dc(double cur_freq) {
   j = 0;
   for (i = 0; i < numnets - 1; i++) {
     // printf("eqn - %d\n",eqn);
-    matrix[eqn] = (complex*)calloc((numnets + numvoltage), sizeof(complex));
+    matrix[eqn] = (complex*)calloc((numnets + numvoltage + numinductor), sizeof(complex));
     stack* temp = adjlist[i];
     int id;
     while (temp != NULL) {
@@ -401,13 +415,20 @@ void make_matrix_dc(double cur_freq) {
           matrix[eqn][index_cur_src[id]] = make_complex(-1, 0);
         }
 
-      } else if (list[id].type == current && data.dcoff != 0 &&
-                 data.freq == cur_freq) {
+      } else if (list[id].type == current && data.dcoff != 0) {
         // if current starts from here
         if (list[id].id1 == i) {
           values[eqn] = add(values[eqn], make_complex(-1 * data.ampl, 0));
         } else {
-          values[eqn] = add(values[eqn], make_complex(data.ampl, 0));
+          values[eqn] = add(values[eqn], make_complex(data.dcoff, 0));
+        }
+      } else if (list[id].type == inductor) {
+        if (list[id].id1 == i) {
+          // current outgoing from id1
+          matrix[eqn][index_cur_src[id]] = make_complex(1, 0);
+        } else {
+          // current incoming to id1
+          matrix[eqn][index_cur_src[id]] = make_complex(-1, 0);
         }
       } else if (list[id].type == resistor) {
         complex inductance = get_impedance(id, 0);
@@ -498,10 +519,7 @@ void make_matrix(double cur_freq) {
   }
 }
 
-void print_soln() {
-  
-
-
+void print_soln(int print_dc) {
   int i = 0;
   int j = 0;
   for (j = 0; j < freq_arr_len; j++) {
@@ -522,8 +540,7 @@ void print_soln() {
       if (list[i].type == voltage) {
         curr = voltage_soln[j][index_cur_src[i]];
       } else if (list[i].type == current) {
-        struct source_data data = parse_source(list[i].val);
-        curr = make_complex(data.ampl,
+        curr = make_complex(parsed_source[map_source_list[i]].ampl,
                             0);  // TODO: take into account the offset etc.
       } else {
         curr = div_(
@@ -536,7 +553,37 @@ void print_soln() {
     }
     fprintf(resultfile, "\n");
   }
-  fclose(resultfile);
+  if(print_dc)
+  {
+    fprintf(resultfile, "FREQ = 0.000Khz\n");
+    fprintf(resultfile, "VOLTAGES\n");
+    for (i = 0; i < numcmp; i++) {
+      complex volt =
+          sub(voltage_soln[freq_arr_len][list[i].id2], voltage_soln[freq_arr_len][list[i].id1]);
+      fprintf(resultfile, "%s ", list[i].name);
+      fprintf(resultfile, "%lf\n", abs_(volt));
+    }
+    fprintf(resultfile, "\nCURRENTS\n");
+    for (i = 0; i < numcmp; i++) {
+      complex curr;
+      fprintf(resultfile, "%s ", list[i].name);
+      if (list[i].type == voltage || list[i].type == inductor) {
+        curr = voltage_soln[freq_arr_len][index_cur_src[i]];
+      } else if (list[i].type == current && parsed_source[map_source_list[i]].dcoff != 0) {
+        print_source(i);
+        curr = make_complex(parsed_source[map_source_list[i]].dcoff,
+                            0);  // TODO: take into account the offset etc.
+      } else if (list[i].type==resistor){
+        curr = div_(
+            sub(voltage_soln[freq_arr_len][list[i].id2], voltage_soln[freq_arr_len][list[i].id1]),
+            (get_impedance(i, 0)));
+      } else {
+        curr = make_complex(0,0);
+      }
+      fprintf(resultfile, "%lf\n", abs_(curr));
+    }
+    fprintf(resultfile, "\n");
+  }
 }
 
 void free_matrix_values() {
@@ -562,10 +609,9 @@ void free_list_sources() {
   free(adjlist);
 }
 
-void pass() {
+void pass(int n) {
   int i, j;
-  n = numnets + numvoltage;
-
+  // printf("N = %d\n",n);
   a = (complex**)calloc((n + 10), sizeof(complex*));
   for (i = 0; i < n; ++i) {
     a[i] = (complex*)calloc((n + 10), sizeof(complex));
@@ -579,10 +625,13 @@ void pass() {
 
   for (i = 0; i < n; ++i) {
     for (j = 0; j < n; ++j) {
+      // printf("Mat - %.10lf + %.10lf i\n",matrix[i][j].real,matrix[i][j].img);
       a[i][j].real = matrix[i][j].real;
       a[i][j].img = matrix[i][j].img;
       ao[i][j].real = matrix[i][j].real;
       ao[i][j].img = matrix[i][j].img;
+      // printf("A - %.10lf + %.10lf i\n",a[i][j].real,a[i][j].img);
+      // printf("AO - %.10lf + %.10lf i\n",ao[i][j].real,ao[i][j].img);
     }
   }
 }
@@ -590,34 +639,46 @@ void pass() {
 void solve_circuit() {
   // i=-2;j=-2;
   make_adjlist();
-  voltage_soln = (complex**)calloc((freq_arr_len + 10), sizeof(complex*));
+  voltage_soln = (complex**)calloc((freq_arr_len+ 1 + 10), sizeof(complex*));
   // i=-1;j=-1;
   printf("numsources - %d\nnumvoltage - %d\nnumnets - %d\nfreq_len - %d\n",
          numsources, numvoltage, numnets, freq_arr_len);
   int i = 0, j = 0;
+  qsort(freq_arr,freq_arr_len,sizeof(double),comparator_double);
   for (i = 0; i < freq_arr_len; i++) {
     printf("Freq - %lf\n", freq_arr[i]);
     voltage_soln[i] =
         (complex*)calloc((numnets + 10 + numvoltage), sizeof(complex));
     make_matrix(freq_arr[i]);
     print_matrix(0);
-    pass();
+    pass((numnets+numvoltage));
+    n = (numvoltage+numnets);
     solve_matrix();
     //test();
     for (j = 0; j < (numnets + numvoltage); j++) {
+      printf("Answer - %.10lf + %.10lf i\n",answer[j].real,answer[j].img);
       voltage_soln[i][j] = answer[j];
     }
     free_matrix_values();
-    // make_matrix_dc(freq_arr[i]);
-    // print_matrix(0);
-    // pass();
-    // solve_matrix();
-    // test();
-    // for (j = 0; j < (numnets + numvoltage); j++) {
-    //   voltage_soln[i][j] = add(voltage_soln[i][j], answer[j]);
-    // }
-    // free_matrix_values();
   }
-  free_list_sources();
-  print_soln();
+
+
+  if(1)//some condition to check whether to print dc offset results
+  {
+    voltage_soln[freq_arr_len] = (complex*)calloc((numnets + 10 + numvoltage + numinductor), sizeof(complex));
+    make_matrix_dc();
+    print_matrix(0);
+    pass((numnets+numvoltage+numinductor));
+    n = (numnets+numvoltage+numinductor);
+    solve_matrix();
+    test();
+    for (j = 0; j < (numnets + numvoltage+numinductor); j++) {
+      voltage_soln[freq_arr_len][j] = answer[j];
+    }
+    free_matrix_values();
+    free_list_sources();
+  }
+
+  print_soln(1);
+  fclose(resultfile);
 }

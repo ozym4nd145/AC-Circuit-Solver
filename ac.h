@@ -33,6 +33,7 @@ int numcmp;   // number of components
 int numnets;  // number of nets
 int numsources;
 int numvoltage;
+int numinductor;
 int n;
 int i, j;
 /*--------starting and ending pixels of each net---------*/

@@ -31,7 +31,7 @@ Expression:
 COMPONENT TERMINAL TERMINAL RESISTANCE END
 	{list[numcmp].name=strdup($1);list[numcmp].id1=accept($2);list[numcmp].id2=accept($3);list[numcmp].val=strdup($4);list[numcmp].type=0;if(check(numcmp)==1){++numcmp;}}
 | COMPONENT TERMINAL TERMINAL INDUCTANCE END 
-	{list[numcmp].name=strdup($1);list[numcmp].id1=accept($2);list[numcmp].id2=accept($3);list[numcmp].val=strdup($4);list[numcmp].type=1;if(check(numcmp)==1){++numcmp;}}
+	{list[numcmp].name=strdup($1);list[numcmp].id1=accept($2);list[numcmp].id2=accept($3);list[numcmp].val=strdup($4);list[numcmp].type=1;if(check(numcmp)==1){++numcmp;++numinductor;}}
 | COMPONENT TERMINAL TERMINAL CAPACITANCE END
 	{list[numcmp].name=strdup($1);list[numcmp].id1=accept($2);list[numcmp].id2=accept($3);list[numcmp].val=strdup($4);list[numcmp].type=2;if(check(numcmp)==1){++numcmp;}}
 | VSOURCE TERMINAL TERMINAL SINE SOURCEDATA END
