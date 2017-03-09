@@ -381,8 +381,8 @@ void make_matrix_dc() {
       matrix[eqn] = (complex*)calloc((numnets + numvoltage+numinductor), sizeof(complex));
 
       if (parsed_source[map_source_list[i]].dcoff != 0) {
-        matrix[eqn][list[i].id1] = make_complex(1, 0);
-        matrix[eqn][list[i].id2] = make_complex(-1, 0);
+        matrix[eqn][list[i].id1] = make_complex(-1, 0);
+        matrix[eqn][list[i].id2] = make_complex(1, 0);
         values[eqn++] = make_complex(parsed_source[map_source_list[i]].dcoff, 0);
 
       } else {
@@ -468,8 +468,8 @@ void make_matrix(double cur_freq) {
       matrix[eqn] = (complex*)calloc((numnets + numvoltage), sizeof(complex));
 
       if (parsed_source[i].freq == cur_freq) {
-        matrix[eqn][list[sources[i]].id1] = make_complex(1, 0);
-        matrix[eqn][list[sources[i]].id2] = make_complex(-1, 0);
+        matrix[eqn][list[sources[i]].id1] = make_complex(-1, 0);
+        matrix[eqn][list[sources[i]].id2] = make_complex(1, 0);
         values[eqn++] = make_complex(parsed_source[i].ampl*cos(parsed_source[i].phase),parsed_source[i].ampl*sin(parsed_source[i].phase));
 
       } else {
@@ -551,8 +551,17 @@ void print_soln(int print_dc) {
     fprintf(resultfile, "FREQ = 0.000Khz\n");
     fprintf(resultfile, "VOLTAGES\n");
     for (i = 0; i < numcmp; i++) {
-      complex volt =
-          sub(voltage_soln[freq_arr_len][list[i].id1], voltage_soln[freq_arr_len][list[i].id2]);
+      complex volt;
+      if(list[i].type == voltage || list[i].type == current)
+      {
+        volt =
+            sub(voltage_soln[freq_arr_len][list[i].id2], voltage_soln[freq_arr_len][list[i].id1]);
+      }
+      else
+      {
+        volt =
+            sub(voltage_soln[freq_arr_len][list[i].id1], voltage_soln[freq_arr_len][list[i].id2]);
+      }
       fprintf(resultfile, "%s ", list[i].name);
       fprintf(resultfile, "%.3lf\n", volt.real);
     }
@@ -580,8 +589,17 @@ void print_soln(int print_dc) {
     fprintf(resultfile, "FREQ = %.3lfKhz\n", freq_arr[j]/1000);
     fprintf(resultfile, "VOLTAGES\n");
     for (i = 0; i < numcmp; i++) {
-      complex volt =
-          sub(voltage_soln[j][list[i].id1], voltage_soln[j][list[i].id2]);
+      complex volt;
+      if(list[i].type == voltage || list[i].type == current)
+      {
+        volt =
+            sub(voltage_soln[j][list[i].id2], voltage_soln[j][list[i].id1]);
+      }
+      else
+      {
+        volt =
+            sub(voltage_soln[j][list[i].id1], voltage_soln[j][list[i].id2]);
+      }
       fprintf(resultfile, "%s ", list[i].name);
       fprintf(resultfile, "%.3lf ", abs_(volt));
       fprintf(resultfile, "%.3lf \n",calc_angle(volt));
