@@ -5,8 +5,8 @@
 
 float LINE_WIDTH=0.03;
 float CIRCLE_WIDTH=0.05;
-float WIDTH = 2000;
-float HEIGHT = 1500;
+float WIDTH = 1500;
+float HEIGHT = 900;
 
 /**
  * Convention: parameters x and y in functions
@@ -16,7 +16,64 @@ float HEIGHT = 1500;
 
 int start_svg(int rows, int cols, FILE* ptr)
 {
-	fprintf(ptr, "<svg width=\"%f\" height=\"%f\" viewBox=\"-2 -2 %d %d\" preserveAspectRatio=\"xMidYMid none\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n",WIDTH,HEIGHT,(cols+5),(rows+5));
+	fprintf(ptr, "<svg width=\"%f\" height=\"%f\" viewBox=\"-1.25 -1.25 %d %d\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" onload=\"init(evt)\">\n",WIDTH,HEIGHT,(cols+5),(rows+5));
+	fprintf(ptr, "<style>\n");
+	fprintf(ptr, "\t.button{\n");
+	fprintf(ptr, "\t    fill:           \t#225EA8;\n");
+	fprintf(ptr, "\t\tstroke:   \t\t\t#0C2C84;\n");
+	fprintf(ptr, "\t\tstroke-miterlimit:\t6;\n");
+	fprintf(ptr, "\t\tstroke-linecap:\t\tround;\n");
+	fprintf(ptr, "\t}\n");
+	fprintf(ptr, "\t.button:hover{\n");
+	fprintf(ptr, "\t\tstroke-width:   \t2;\n");
+	fprintf(ptr, "\t}\n");
+	fprintf(ptr, "\t.plus-minus{\n");
+	fprintf(ptr, "\t\tfill:\t#fff;\n");
+	fprintf(ptr, "\t\tpointer-events: none;\n");
+	fprintf(ptr, "\t}\n");
+	fprintf(ptr, "</style>\n");
+	fprintf(ptr, "\n");
+	fprintf(ptr, "<script type=\"text/ecmascript\">\n");
+	fprintf(ptr, "<![CDATA[\n");
+	fprintf(ptr, "\tvar transMatrix = [1,0,0,1,0,0];\n");
+	fprintf(ptr, "    \n");
+	fprintf(ptr, "    function init(evt)\n");
+	fprintf(ptr, "    {\n");
+	fprintf(ptr, "        if ( window.svgDocument == null )\n");
+	fprintf(ptr, "        {\n");
+	fprintf(ptr, "            svgDoc = evt.target.ownerDocument;\n");
+	fprintf(ptr, "\n");
+	fprintf(ptr, "        }\n");
+	fprintf(ptr, "        mapMatrix = svgDoc.getElementById(\"map-matrix\");\n");
+	fprintf(ptr, "        width  = evt.target.getAttributeNS(null, \"width\");\n");
+	fprintf(ptr, "        height = evt.target.getAttributeNS(null, \"height\");\n");
+	fprintf(ptr, "    }\n");
+	fprintf(ptr, "    \n");
+	fprintf(ptr, "    function pan(dx, dy)\n");
+	fprintf(ptr, "    {\n");
+	fprintf(ptr, "    \t\n");
+	fprintf(ptr, "\t\ttransMatrix[4] += dx;\n");
+	fprintf(ptr, "\t\ttransMatrix[5] += dy;\n");
+	fprintf(ptr, "        \n");
+	fprintf(ptr, "\t\tnewMatrix = \"matrix(\" +  transMatrix.join(' ') + \")\";\n");
+	fprintf(ptr, "\t\tmapMatrix.setAttributeNS(null, \"transform\", newMatrix);\n");
+	fprintf(ptr, "    }\n");
+	fprintf(ptr, "    \n");
+	fprintf(ptr, "\tfunction zoom(scale)\n");
+	fprintf(ptr, "\t{\n");
+	fprintf(ptr, "\t\tfor (var i=0; i<transMatrix.length; i++)\n");
+	fprintf(ptr, "\t\t{\n");
+	fprintf(ptr, "\t\t\ttransMatrix[i] *= scale;\n");
+	fprintf(ptr, "\t\t}\n");
+	fprintf(ptr, "\t\t//transMatrix[4] += (1-scale)*width/2;\n");
+	fprintf(ptr, "\t\t//transMatrix[5] += (1-scale)*height/2;\n");
+	fprintf(ptr, "\t        \n");
+	fprintf(ptr, "\t\tnewMatrix = \"matrix(\" +  transMatrix.join(' ') + \")\";\n");
+	fprintf(ptr, "\t\tmapMatrix.setAttributeNS(null, \"transform\", newMatrix);\n");
+	fprintf(ptr, "    }\n");
+	fprintf(ptr, "]]>\n");
+	fprintf(ptr, "</script>\n");
+	fprintf(ptr, "<g id=\"map-matrix\" transform=\"matrix(1 0 0 1 0 0)\">\n");
 }
 int draw_line(int x1,int y1, int x2, int y2,FILE* ptr)
 {
@@ -29,6 +86,23 @@ int draw_circle(int x,int y, FILE* ptr)
 }
 int end_svg(FILE* ptr)
 {
+	fprintf(ptr,"</g>\n");
+	fprintf(ptr,"\n");
+	fprintf(ptr,"<g transform=\"matrix(0.01 0 0 0.01 -1 -1)\">\n");
+	fprintf(ptr,"<circle cx=\"50\" cy=\"50\" r=\"42\" fill=\"white\" opacity=\"0.75\"/>\n");
+	fprintf(ptr,"<path class=\"button\" onclick=\"pan( 0, 0.3)\" d=\"M50 10 l12   20 a40, 70 0 0,0 -24,  0z\" />\n");
+	fprintf(ptr,"<path class=\"button\" onclick=\"pan( 0.3, 0)\" d=\"M10 50 l20  -12 a70, 40 0 0,0   0, 24z\" />\n");
+	fprintf(ptr,"<path class=\"button\" onclick=\"pan( 0,-0.3)\" d=\"M50 90 l12  -20 a40, 70 0 0,1 -24,  0z\" />\n");
+	fprintf(ptr,"<path class=\"button\" onclick=\"pan(-0.3, 0)\" d=\"M90 50 l-20 -12 a70, 40 0 0,1   0, 24z\" />\n");
+	fprintf(ptr,"  \n");
+	fprintf(ptr,"<circle class=\"compass\" cx=\"50\" cy=\"50\" r=\"20\"/>\n");
+	fprintf(ptr,"<circle class=\"button\"  cx=\"50\" cy=\"41\" r=\"8\" onclick=\"zoom(0.95)\"/>\n");
+	fprintf(ptr,"<circle class=\"button\"  cx=\"50\" cy=\"59\" r=\"8\" onclick=\"zoom(1.05)\"/>\n");
+	fprintf(ptr,"\n");
+	fprintf(ptr,"<rect class=\"plus-minus\" x=\"46\" y=\"39.5\" width=\"8\" height=\"3\"/>\n");
+	fprintf(ptr,"<rect class=\"plus-minus\" x=\"46\" y=\"57.5\" width=\"8\" height=\"3\"/>\n");
+	fprintf(ptr,"<rect class=\"plus-minus\" x=\"48.5\" y=\"55\" width=\"3\" height=\"8\"/>\n");
+	fprintf(ptr,"</g>\n");
 	fprintf(ptr, "</svg>\n");
 }
 

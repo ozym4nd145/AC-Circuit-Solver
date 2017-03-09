@@ -425,9 +425,9 @@ void make_matrix_dc() {
       } else if (list[id].type == current && data.dcoff != 0) {
         // if current starts from here
         if (list[id].id1 == i) {
-          values[eqn] = add(values[eqn], make_complex(data.dcoff, 0));
+          values[eqn] = add(values[eqn], make_complex(-1 *data.dcoff, 0));
         } else {
-          values[eqn] = add(values[eqn], make_complex(-1 * data.dcoff, 0));
+          values[eqn] = add(values[eqn], make_complex(data.dcoff, 0));
         }
       } else if (list[id].type == inductor) {
         if (list[id].id1 == i) {
@@ -508,10 +508,10 @@ void make_matrix(double cur_freq) {
         if (list[id].id1 == i) {
           values[eqn] =
               add(values[eqn],
-                  make_complex(data.ampl*cos(data.phase),-1 *data.ampl*sin(data.phase)));  // TODO: put value here
+                  make_complex(-1 * data.ampl*cos(data.phase),-1 *data.ampl*sin(data.phase)));  // TODO: put value here
         } else {
           values[eqn] = add(
-              values[eqn], make_complex(-1 * data.ampl*cos(data.phase),data.ampl*sin(data.phase)));  // TODO: put value here
+              values[eqn], make_complex(data.ampl*cos(data.phase),data.ampl*sin(data.phase)));  // TODO: put value here
         }
       } else {
         complex inductance =
