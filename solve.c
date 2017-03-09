@@ -5,7 +5,6 @@
 
 const double PIE = 3.1415926536;
 const double EPSILON = 1e-16;
-//TODO PARSE UNITS ALSO
 
 
 struct source_data parse_source(char* str)
@@ -70,7 +69,7 @@ struct source_data parse_source(char* str)
 				data.dcoff = data.dcoff;
 			}
 			else
-			{fprintf(stderr,"Invalid unit for dc offset\n");}
+			{fprintf(stderr,"Error - Invalid unit for dc offset\n");}
 
 	//amp
 		temp=strlen(amp);
@@ -120,7 +119,7 @@ struct source_data parse_source(char* str)
 				data.ampl = data.ampl;
 			}
 			else
-			{fprintf(stderr,"Invalid unit for amplitude\n");}
+			{fprintf(stderr,"Error - Invalid unit for amplitude\n");}
 
 	//freq
 		temp=strlen(freq);
@@ -169,8 +168,13 @@ struct source_data parse_source(char* str)
 				data.freq = data.freq;
 			}
 			else
-			{fprintf(stderr,"Invalid unit for frequency\n");}
+			{fprintf(stderr,"Error - Invalid unit for frequency\n");}
 
+	if(data.freq==0)
+	{
+		data.dcoff+=data.ampl;
+		data.ampl=0;   
+	}
 	//phase
 		temp=strlen(phase);
 	for(i=0;i<temp;++i)
@@ -218,7 +222,7 @@ struct source_data parse_source(char* str)
 				data.phase = data.phase;
 			}	
 			else
-			{fprintf(stderr,"Invalid unit for phase\n");}
+			{fprintf(stderr,"Error - Invalid unit for phase\n");}
 
   data.phase = -1*data.freq*2*data.phase*PIE;
 	return data;
@@ -333,12 +337,13 @@ void make_adjlist() {
     if (list[i].type == voltage || list[i].type == current) {
       map_source_list[i] = j;
       parsed_source[j] = parse_source(list[i].val);
-      if(parsed_source[j].dcoff !=0)
+      if(parsed_source[j].dcoff !=0 || parsed_source[j].freq ==0)
       {
         PRINT_DC=1;
       }
       double freq = parsed_source[j].freq;
 
+  
       for (l = 0; l < freq_arr_len; l++) {
         if (freq_arr[l] == freq) {
           break;
@@ -353,6 +358,7 @@ void make_adjlist() {
         index_cur_src[i] = k++;
       }
       sources[j++] = i;
+  
     }
     else if(list[i].type==inductor)
     {
@@ -380,7 +386,9 @@ void make_matrix_dc() {
     if (list[i].type == voltage) {
       matrix[eqn] = (complex*)calloc((numnets + numvoltage+numinductor), sizeof(complex));
 
-      if (parsed_source[map_source_list[i]].dcoff != 0) {
+      if (parsed_source[map_source_list[i]].dcoff != 0 || parsed_source[map_source_list[i]].freq == 0.00000) {
+
+
         matrix[eqn][list[i].id1] = make_complex(-1, 0);
         matrix[eqn][list[i].id2] = make_complex(1, 0);
         values[eqn++] = make_complex(parsed_source[map_source_list[i]].dcoff, 0);
@@ -586,6 +594,9 @@ void print_soln(int print_dc) {
     fprintf(resultfile, "\n");
   }
   for (j = 0; j < freq_arr_len; j++) {
+      	if(freq_arr[i]==0)
+  	{printf("excluded\n");continue;}
+
     fprintf(resultfile, "FREQ = %.3lfKhz\n", freq_arr[j]/1000);
     fprintf(resultfile, "VOLTAGES\n");
     for (i = 0; i < numcmp; i++) {
@@ -682,10 +693,14 @@ void solve_circuit() {
   int i = 0, j = 0;
   qsort(freq_arr,freq_arr_len,sizeof(double),comparator_double);
   for (i = 0; i < freq_arr_len; i++) {
+
+
     // printf("Freq - %lf\n", freq_arr[i]);
     voltage_soln[i] =
         (complex*)calloc((numnets + 10 + numvoltage), sizeof(complex));
     make_matrix(freq_arr[i]);
+
+
     // print_matrix(0);
     pass((numnets+numvoltage));
     n = (numvoltage+numnets);
