@@ -594,8 +594,9 @@ void print_soln(int print_dc) {
     fprintf(resultfile, "\n");
   }
   for (j = 0; j < freq_arr_len; j++) {
-      	if(freq_arr[i]==0)
-  	{printf("excluded\n");continue;}
+    if(freq_arr[j]==0)
+  	{//printf("excluded\n");
+     continue;}
 
     fprintf(resultfile, "FREQ = %.3lfKhz\n", freq_arr[j]/1000);
     fprintf(resultfile, "VOLTAGES\n");
