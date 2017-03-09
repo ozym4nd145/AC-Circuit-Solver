@@ -591,7 +591,7 @@ void print_soln(int print_dc) {
       }
       fprintf(resultfile, "%.3lf 0.000\n", curr.real);
     }
-    fprintf(resultfile, "\n");
+    fprintf(resultfile, "\n\n");
   }
   for (j = 0; j < freq_arr_len; j++) {
     if(freq_arr[j]==0)
@@ -633,7 +633,7 @@ void print_soln(int print_dc) {
       fprintf(resultfile, "%.3lf ", abs_(curr));
       fprintf(resultfile, "%.3lf\n", calc_angle(curr));
     }
-    fprintf(resultfile, "\n");
+    fprintf(resultfile, "\n\n");
   }
 }
 
