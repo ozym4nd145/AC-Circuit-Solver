@@ -5,7 +5,7 @@ all: cir.l cir.y draw.c matrixsolving.c solve.c stack.c helper_functions.c
 	rm *.tab.*
 	rm *.yy.*
 clean:
-	rm ac_circuit_solver a.out *.svg
+	rm ac_circuit_solver a.out *.svg results*.txt
 	
 		
 		
