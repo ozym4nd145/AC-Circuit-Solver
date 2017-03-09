@@ -386,7 +386,7 @@ void make_matrix_dc() {
     if (list[i].type == voltage) {
       matrix[eqn] = (complex*)calloc((numnets + numvoltage+numinductor), sizeof(complex));
 
-      if (parsed_source[map_source_list[i]].dcoff != 0 || parsed_source[map_source_list[i]].freq == 0.00000) {
+      if (parsed_source[map_source_list[i]].dcoff != 0 || parsed_source[map_source_list[i]].freq == 0) {
 
 
         matrix[eqn][list[i].id1] = make_complex(-1, 0);
@@ -430,7 +430,7 @@ void make_matrix_dc() {
           matrix[eqn][index_cur_src[id]] = make_complex(-1, 0);
         }
 
-      } else if (list[id].type == current && data.dcoff != 0) {
+      } else if (list[id].type == current && (data.dcoff != 0 || data.freq == 0)) {
         // if current starts from here
         if (list[id].id1 == i) {
           values[eqn] = add(values[eqn], make_complex(-1 *data.dcoff, 0));
@@ -579,7 +579,7 @@ void print_soln(int print_dc) {
       fprintf(resultfile, "%s ", list[i].name);
       if (list[i].type == voltage || list[i].type == inductor) {
         curr = voltage_soln[freq_arr_len][index_cur_src[i]];
-      } else if (list[i].type == current && parsed_source[map_source_list[i]].dcoff != 0) {
+      } else if (list[i].type == current && (parsed_source[map_source_list[i]].dcoff != 0 || parsed_source[map_source_list[i]].freq == 0)) {
         curr = make_complex(parsed_source[map_source_list[i]].dcoff,
                             0);
       } else if (list[i].type==resistor){
