@@ -313,6 +313,7 @@ complex get_impedance(int id, double freq) {
 }
 
 void make_adjlist() {
+  PRINT_DC = 0;
   sources = (int*)calloc(numsources, sizeof(int));
   parsed_source =
       (struct source_data*)calloc(numsources, sizeof(struct source_data));
@@ -332,6 +333,10 @@ void make_adjlist() {
     if (list[i].type == voltage || list[i].type == current) {
       map_source_list[i] = j;
       parsed_source[j] = parse_source(list[i].val);
+      if(parsed_source[j].dcoff !=0)
+      {
+        PRINT_DC=1;
+      }
       double freq = parsed_source[j].freq;
 
       for (l = 0; l < freq_arr_len; l++) {
@@ -376,8 +381,8 @@ void make_matrix_dc() {
       matrix[eqn] = (complex*)calloc((numnets + numvoltage+numinductor), sizeof(complex));
 
       if (parsed_source[map_source_list[i]].dcoff != 0) {
-        matrix[eqn][list[i].id1] = make_complex(-1, 0);
-        matrix[eqn][list[i].id2] = make_complex(1, 0);
+        matrix[eqn][list[i].id1] = make_complex(1, 0);
+        matrix[eqn][list[i].id2] = make_complex(-1, 0);
         values[eqn++] = make_complex(parsed_source[map_source_list[i]].dcoff, 0);
 
       } else {
@@ -420,9 +425,9 @@ void make_matrix_dc() {
       } else if (list[id].type == current && data.dcoff != 0) {
         // if current starts from here
         if (list[id].id1 == i) {
-          values[eqn] = add(values[eqn], make_complex(-1 * data.dcoff, 0));
-        } else {
           values[eqn] = add(values[eqn], make_complex(data.dcoff, 0));
+        } else {
+          values[eqn] = add(values[eqn], make_complex(-1 * data.dcoff, 0));
         }
       } else if (list[id].type == inductor) {
         if (list[id].id1 == i) {
@@ -435,8 +440,8 @@ void make_matrix_dc() {
       } else if (list[id].type == resistor) {
         complex impedance = div_(make_complex(1,0),get_impedance(id, 0));
         int other_net = (list[id].id1 == i) ? (list[id].id2) : (list[id].id1);
-        matrix[eqn][i] = sub(matrix[eqn][i], impedance);
-        matrix[eqn][other_net] = add(matrix[eqn][other_net], impedance);
+        matrix[eqn][i] = add(matrix[eqn][i], impedance);
+        matrix[eqn][other_net] = sub(matrix[eqn][other_net], impedance);
       }
       temp = temp->next;
     }
@@ -463,8 +468,8 @@ void make_matrix(double cur_freq) {
       matrix[eqn] = (complex*)calloc((numnets + numvoltage), sizeof(complex));
 
       if (parsed_source[i].freq == cur_freq) {
-        matrix[eqn][list[sources[i]].id1] = make_complex(-1, 0);
-        matrix[eqn][list[sources[i]].id2] = make_complex(1, 0);
+        matrix[eqn][list[sources[i]].id1] = make_complex(1, 0);
+        matrix[eqn][list[sources[i]].id2] = make_complex(-1, 0);
         values[eqn++] = make_complex(parsed_source[i].ampl*cos(parsed_source[i].phase),parsed_source[i].ampl*sin(parsed_source[i].phase));
 
       } else {
@@ -503,22 +508,39 @@ void make_matrix(double cur_freq) {
         if (list[id].id1 == i) {
           values[eqn] =
               add(values[eqn],
-                  make_complex(-1 * data.ampl*cos(data.phase),-1 *data.ampl*sin(data.phase)));  // TODO: put value here
+                  make_complex(data.ampl*cos(data.phase),-1 *data.ampl*sin(data.phase)));  // TODO: put value here
         } else {
           values[eqn] = add(
-              values[eqn], make_complex(data.ampl*cos(data.phase),data.ampl*sin(data.phase)));  // TODO: put value here
+              values[eqn], make_complex(-1 * data.ampl*cos(data.phase),data.ampl*sin(data.phase)));  // TODO: put value here
         }
       } else {
         complex inductance =
             div_(make_complex(1, 0), get_impedance(id, cur_freq));
         int other_net = (list[id].id1 == i) ? (list[id].id2) : (list[id].id1);
-        matrix[eqn][i] = sub(matrix[eqn][i], inductance);
-        matrix[eqn][other_net] = add(matrix[eqn][other_net], inductance);
+        matrix[eqn][i] = add(matrix[eqn][i], inductance);
+        matrix[eqn][other_net] = sub(matrix[eqn][other_net], inductance);
       }
       temp = temp->next;
     }
     eqn++;
   }
+}
+
+double calc_angle(complex vec)
+{
+  double angle = (atan(vec.img / (vec.real + EPSILON)) * 180) / PIE;
+  if(vec.real < 0 )
+  {
+    if(angle < 0)
+    {
+      angle += 180;
+    }
+    else
+    {
+      angle -= 180;
+    }
+  }
+  return angle;
 }
 
 void print_soln(int print_dc) {
@@ -530,9 +552,9 @@ void print_soln(int print_dc) {
     fprintf(resultfile, "VOLTAGES\n");
     for (i = 0; i < numcmp; i++) {
       complex volt =
-          sub(voltage_soln[freq_arr_len][list[i].id2], voltage_soln[freq_arr_len][list[i].id1]);
+          sub(voltage_soln[freq_arr_len][list[i].id1], voltage_soln[freq_arr_len][list[i].id2]);
       fprintf(resultfile, "%s ", list[i].name);
-      fprintf(resultfile, "%.10lf\n", abs_(volt));
+      fprintf(resultfile, "%.3lf\n", volt.real);
     }
     fprintf(resultfile, "\nCURRENTS\n");
     for (i = 0; i < numcmp; i++) {
@@ -545,25 +567,24 @@ void print_soln(int print_dc) {
                             0);
       } else if (list[i].type==resistor){
         curr = div_(
-            sub(voltage_soln[freq_arr_len][list[i].id2], voltage_soln[freq_arr_len][list[i].id1]),
+            sub(voltage_soln[freq_arr_len][list[i].id1], voltage_soln[freq_arr_len][list[i].id2]),
             (get_impedance(i, 0)));
       } else {
         curr = make_complex(0,0);
       }
-      fprintf(resultfile, "%.10lf\n", abs_(curr));
+      fprintf(resultfile, "%.3lf\n", curr.real);
     }
     fprintf(resultfile, "\n");
   }
   for (j = 0; j < freq_arr_len; j++) {
-    fprintf(resultfile, "FREQ = %.10lfKhz\n", freq_arr[j]/1000);
+    fprintf(resultfile, "FREQ = %.3lfKhz\n", freq_arr[j]/1000);
     fprintf(resultfile, "VOLTAGES\n");
     for (i = 0; i < numcmp; i++) {
       complex volt =
-          sub(voltage_soln[j][list[i].id2], voltage_soln[j][list[i].id1]);
+          sub(voltage_soln[j][list[i].id1], voltage_soln[j][list[i].id2]);
       fprintf(resultfile, "%s ", list[i].name);
-      fprintf(resultfile, "%.10lf ", abs_(volt));
-      fprintf(resultfile, "%.10lf \n",
-              (atan(volt.img / (volt.real + EPSILON)) * 180) / PIE);
+      fprintf(resultfile, "%.3lf ", abs_(volt));
+      fprintf(resultfile, "%.3lf \n",calc_angle(volt));
     }
     fprintf(resultfile, "\nCURRENTS\n");
     for (i = 0; i < numcmp; i++) {
@@ -576,12 +597,11 @@ void print_soln(int print_dc) {
                             0);
       } else {
         curr = div_(
-            sub(voltage_soln[j][list[i].id2], voltage_soln[j][list[i].id1]),
+            sub(voltage_soln[j][list[i].id1], voltage_soln[j][list[i].id2]),
             (get_impedance(i, freq_arr[j])));
       }
-      fprintf(resultfile, "%.10lf ", abs_(curr));
-      fprintf(resultfile, "%.10lf\n",
-              (atan(curr.img / (curr.real + EPSILON)) * 180) / PIE);
+      fprintf(resultfile, "%.3lf ", abs_(curr));
+      fprintf(resultfile, "%.3lf\n", calc_angle(curr));
     }
     fprintf(resultfile, "\n");
   }
@@ -661,9 +681,7 @@ void solve_circuit() {
   }
 
 
-  // printf("##################################################################\n");
-
-  if(1)//some condition to check whether to print dc offset results
+  if(PRINT_DC)//some condition to check whether to print dc offset results
   {
     voltage_soln[freq_arr_len] = (complex*)calloc((numnets + 10 + numvoltage + numinductor), sizeof(complex));
     make_matrix_dc();
@@ -671,12 +689,13 @@ void solve_circuit() {
     n = (numnets+numvoltage+numinductor);
     solve_matrix();
     for (j = 0; j < (numnets + numvoltage+numinductor); j++) {
+      // printf("Answer - %.10lf + %.10lf i\n",answer[j].real,answer[j].img);
       voltage_soln[freq_arr_len][j] = answer[j];
     }
     free_matrix_values();
     free_list_sources();
   }
 
-  print_soln(1);
+  print_soln(PRINT_DC);
   fclose(resultfile);
 }

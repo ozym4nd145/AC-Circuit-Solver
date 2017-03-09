@@ -68,6 +68,7 @@ void solve_circuit();
 void solve_matrix();
 void print_soln();
 void test();
+double calc_angle(complex vec);
 
 complex make_complex(double r, double i);
 
@@ -92,4 +93,5 @@ int* sources;        // maps 0,1,2... to indices of sources in list array
 int* index_cur_src;  // maps index of current through voltage_sources in list
                      // array to index in matrix
 int* map_source_list;
+int PRINT_DC;
 #endif
