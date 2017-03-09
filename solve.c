@@ -571,7 +571,7 @@ void print_soln(int print_dc) {
             sub(voltage_soln[freq_arr_len][list[i].id1], voltage_soln[freq_arr_len][list[i].id2]);
       }
       fprintf(resultfile, "%s ", list[i].name);
-      fprintf(resultfile, "%.3lf\n", volt.real);
+      fprintf(resultfile, "%.3lf 0.000\n", volt.real);
     }
     fprintf(resultfile, "\nCURRENTS\n");
     for (i = 0; i < numcmp; i++) {
@@ -589,7 +589,7 @@ void print_soln(int print_dc) {
       } else {
         curr = make_complex(0,0);
       }
-      fprintf(resultfile, "%.3lf\n", curr.real);
+      fprintf(resultfile, "%.3lf 0.000\n", curr.real);
     }
     fprintf(resultfile, "\n");
   }
