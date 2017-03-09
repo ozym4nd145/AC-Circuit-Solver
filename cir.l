@@ -14,10 +14,10 @@ frequency {real}{unit}?[Hh][Zz]
 voltage [Vv][^ \t\n]*
 current [Ii][^ \t\n]*
 unit ([Ff]|[Pp]|[Nn]|[Uu]|[Mm]|[Kk]|([Mm][Ee][Gg]))
-DC_Offset			{real}{unit}?
+DC_Offset			[+-]?{real}{unit}?
 Amplitude			{real}{unit}?
-Delay				{real}{unit}?[sS]
-Damping_Factor 		{real}{unit}?
+Delay				[+-]?{real}{unit}?[sS]
+Damping_Factor 		[+-]?{real}{unit}?
 %s TERMINAL1
 %s TERMINAL2
 %s value
