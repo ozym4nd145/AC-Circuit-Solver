@@ -1,7 +1,6 @@
 %{
 #include "ac.h"
 #include "draw.h"
-#include <string.h>
     
 void test_print();
 extern FILE *yyin;

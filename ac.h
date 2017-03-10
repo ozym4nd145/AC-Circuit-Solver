@@ -45,13 +45,11 @@ char* arr[20005];  // arr[id] stores netlist name corresponding to the id
 struct complex {
   double real;
   double img;
-} /*a[20005][2005]/*,constants[20005], result[20005]*/;
+};
 
 typedef struct complex complex;
 
 // a*result=constants
-
-/*-------x is horizontal, y is vertical------*/
 
 void yyerror(char* s);
 int accept(char* s);

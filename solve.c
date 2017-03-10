@@ -1,7 +1,4 @@
 #include "ac.h"
-#include <stdlib.h>
-#include "helper_functions.h"
-#include <math.h>
 
 const double PIE = 3.1415926536;
 const double EPSILON = 1e-16;
@@ -10,11 +7,9 @@ const double EPSILON = 1e-16;
 struct source_data parse_source(char* str)
 {
 	struct source_data data;
-	char unit_freq[5];unit_freq[0]='\0';
-	char unit_phase[5];unit_phase[0]='\0';
 	
-	char dc[100],amp[100],freq[100],phase[100];
-	char udc[100],uamp[100],ufreq[100],uphase[100];
+	char dc[200],amp[200],freq[200],phase[200];
+	char udc[200],uamp[200],ufreq[200],uphase[200];
 	
 	//printf("string = \"%s\"\n",str);
 	sscanf(str," ( %s %s %s %s )",dc,amp,freq,phase);
@@ -380,7 +375,7 @@ void make_matrix_dc() {
   matrix[eqn++][numnets - 1] = make_complex(1, 0);
   // print_matrix(1);
 
-  int i = 0, j = 0;
+  int i = 0;
   // V1 - V2 = V eqns
   for (i = 0; i < numcmp; i++) {
     if (list[i].type == voltage) {
@@ -469,7 +464,7 @@ void make_matrix(double cur_freq) {
   matrix[eqn++][numnets - 1] = make_complex(1, 0);
   // print_matrix(1);
 
-  int i = 0, j = 0;
+  int i = 0;
   // V1 - V2 = V eqns
   for (i = 0; i < numsources; i++) {
     if (list[sources[i]].type == voltage) {
@@ -691,6 +686,11 @@ void solve_circuit() {
   // i=-1;j=-1;
   // printf("numsources - %d\nnumvoltage - %d\nnumnets - %d\nfreq_len - %d\n",
          // numsources, numvoltage, numnets, freq_arr_len);
+  
+  //printf("numsources=%d\n",numsources);
+  if(numsources==0)
+  {fprintf(stderr,"Error - There are no sources in the circuit\n");}
+
   int i = 0, j = 0;
   qsort(freq_arr,freq_arr_len,sizeof(double),comparator_double);
   for (i = 0; i < freq_arr_len; i++) {
@@ -714,7 +714,7 @@ void solve_circuit() {
     free_matrix_values();
   }
 
-
+  
   if(PRINT_DC)//some condition to check whether to print dc offset results
   {
     voltage_soln[freq_arr_len] = (complex*)calloc((numnets + 10 + numvoltage + numinductor), sizeof(complex));

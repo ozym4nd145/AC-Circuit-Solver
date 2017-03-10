@@ -14,7 +14,7 @@ float HEIGHT = 900;
  * Y : -> Vertical shift
  */
 
-int start_svg(int rows, int cols, FILE* ptr)
+void start_svg(int rows, int cols, FILE* ptr)
 {
 	fprintf(ptr, "<svg width=\"%f\" height=\"%f\" viewBox=\"-1.25 -1.25 %d %d\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" onload=\"init(evt)\">\n",WIDTH,HEIGHT,(cols+5),(rows+5));
 	fprintf(ptr, "<style>\n");
@@ -75,16 +75,17 @@ int start_svg(int rows, int cols, FILE* ptr)
 	fprintf(ptr, "</script>\n");
 	fprintf(ptr, "<g id=\"map-matrix\" transform=\"matrix(1 0 0 1 0 0)\">\n");
 }
-int draw_line(int x1,int y1, int x2, int y2,FILE* ptr)
+
+void draw_line(int x1,int y1, int x2, int y2,FILE* ptr)
 {
-	if(x1==x2 && y1==y2) { return 0; }
+	if(x1==x2 && y1==y2) { return ; }
 	fprintf(ptr, "<line x1=\"%d\" x2=\"%d\" y1=\"%d\" y2=\"%d\" stroke-width=\"%f\" stroke=\"black\"/>\n",x1,x2,y1,y2,LINE_WIDTH);
 }
-int draw_circle(int x,int y, FILE* ptr)
+void draw_circle(int x,int y, FILE* ptr)
 {
 	fprintf(ptr, "<circle cx=\"%d\" cy=\"%d\" r=\"%f\"/>\n",x,y,CIRCLE_WIDTH);
 }
-int end_svg(FILE* ptr)
+void end_svg(FILE* ptr)
 {
 	fprintf(ptr,"</g>\n");
 	fprintf(ptr,"\n");
@@ -106,7 +107,7 @@ int end_svg(FILE* ptr)
 	fprintf(ptr, "</svg>\n");
 }
 
-int draw_resistor(int x1,int y1, int x2, int y2,FILE* ptr)
+void draw_resistor(int x1,int y1, int x2, int y2,FILE* ptr)
 {
 	assert(x1==x2);
 	assert(y1<y2);
@@ -118,7 +119,7 @@ int draw_resistor(int x1,int y1, int x2, int y2,FILE* ptr)
 	draw_line(x1,y1+1,x2,y2,ptr);
 }
 
-int draw_capacitor(int x1,int y1, int x2, int y2,FILE* ptr)
+void draw_capacitor(int x1,int y1, int x2, int y2,FILE* ptr)
 {
 	assert(x1==x2);
 	assert(y1<y2);
@@ -130,7 +131,7 @@ int draw_capacitor(int x1,int y1, int x2, int y2,FILE* ptr)
 	draw_line(x1,y1+1,x2,y2,ptr);
 }
 
-int draw_inductor(int x1,int y1, int x2, int y2,FILE* ptr)
+void draw_inductor(int x1,int y1, int x2, int y2,FILE* ptr)
 {
 	assert(x1==x2);
 	assert(y1<y2);
@@ -142,7 +143,7 @@ int draw_inductor(int x1,int y1, int x2, int y2,FILE* ptr)
 	draw_line(x1,y1+1,x2,y2,ptr);
 }
 
-int draw_ac(int x1,int y1, int x2, int y2,FILE* ptr)
+void draw_ac(int x1,int y1, int x2, int y2,FILE* ptr)
 {
 	assert(x1==x2);
 	assert(y1<y2);
@@ -154,7 +155,7 @@ int draw_ac(int x1,int y1, int x2, int y2,FILE* ptr)
 	draw_line(x1,y1+1,x2,y2,ptr);
 }
 
-int draw_current(int x1,int y1, int x2, int y2,FILE* ptr)
+void draw_current(int x1,int y1, int x2, int y2,FILE* ptr)
 {
 	assert(x1==x2);
 	assert(y1<y2);
@@ -166,12 +167,12 @@ int draw_current(int x1,int y1, int x2, int y2,FILE* ptr)
 	draw_line(x1,y1+1,x2,y2,ptr);
 }
 
-int draw_ground(int x,int y, FILE* ptr)
+void draw_ground(int x,int y, FILE* ptr)
 {
 	fprintf(ptr, " <g transform=\"translate(%d,%d)\"> <g transform=\"matrix(0.01259861,0,0,0.01413041,-0.15527664,-0.06236267)\"> <path d=\"m 0.5,24.5 24,0\" style=\"fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:%f;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1\"/> <path d=\"m 4.5,27.5 16,0\" style=\"fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:%f;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1\"/> <path d=\"m 16.5,30.5 -8,0\" style=\"fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:%f;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1\"/> <path d=\"m 12.5,24.5 0,-20\" style=\"fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:%f;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1\"/> </g> </g> \n",x,y,(60*LINE_WIDTH),(60*LINE_WIDTH),(60*LINE_WIDTH),(60*LINE_WIDTH));
 }
 
-int draw_text(int x, int y, char* text, enum component_type type, FILE* ptr)
+void draw_text(int x, int y, char* text, enum component_type type, FILE* ptr)
 {
 	switch(type)
 	{
@@ -193,7 +194,7 @@ int draw_text(int x, int y, char* text, enum component_type type, FILE* ptr)
 	}
 }
 
-int draw_net_text(int x, int y, int is_up,char* text, FILE* ptr)
+void draw_net_text(int x, int y, int is_up,char* text, FILE* ptr)
 {
 	float off_y;
 	if(is_up)
@@ -207,17 +208,17 @@ int draw_net_text(int x, int y, int is_up,char* text, FILE* ptr)
 	fprintf(ptr, "<text x = \"%f\" y=\"%f\" font-size=\"%f\" fill=\"black\">%s</text>\n",x-0.15,y+off_y,LINE_WIDTH*4,text);	
 }
 
-int place_text(int x,int y, float off_x,char* text, char* color, FILE* ptr)
+void place_text(int x,int y, float off_x,char* text, char* color, FILE* ptr)
 {
 	fprintf(ptr, "<text x = \"%f\" y=\"%f\" font-size=\"%f\" style=\"writing-mode: tb;\" fill=\"%s\">%s</text>\n",x+off_x,y+0.2,LINE_WIDTH*4,color,text);
 }
 
-int place_resistor(int x, int y, FILE* ptr)
+void place_resistor(int x, int y, FILE* ptr)
 {
 	fprintf(ptr,"<path d=\" M 0 0 l 0.25 0 l 0.04166666667 -0.08333333334 l 0.08333333334 0.166666666667 l 0.08333333334 -0.166666666667 l 0.08333333334 0.166666666667 l 0.08333333334 -0.166666666667 l 0.08333333334 0.166666666667 l 0.04166666667 -0.08333333334 l 0.25 0 \" stroke=\"black\" stroke-width=\"%f\" stroke-linejoin=\"bevel\" fill=\"none\"  transform=\"translate(%d %d) rotate(90)\"/>\n",LINE_WIDTH,x,y);
 }
 
-int place_capacitor(int x, int y, FILE* ptr)
+void place_capacitor(int x, int y, FILE* ptr)
 {
 	fprintf(ptr," \
 	<g transform = \"translate(%d,%d)\"> \
@@ -241,7 +242,7 @@ int place_capacitor(int x, int y, FILE* ptr)
  	",x,y,LINE_WIDTH,LINE_WIDTH,LINE_WIDTH,LINE_WIDTH);
 }
 
-int place_inductor(int x,int y, FILE* ptr)
+void place_inductor(int x,int y, FILE* ptr)
 {
 	fprintf(ptr, "<path \
 		d=\" \
@@ -260,17 +261,17 @@ int place_inductor(int x,int y, FILE* ptr)
 		stroke=\"black\" stroke-width=\"%f\" stroke-linejoin=\"miter\" fill=\"none\" fill-rule=\"evenodd\" fill-opacity=\"0.75\" stroke-linecap=\"butt\" stroke-opacity=\"1\" transform=\"translate(%d,%d) scale(0.02325581395) rotate(90) \" />\n ",(43*LINE_WIDTH),x,y);
 }
 
-int place_ac(int x,int y, FILE* ptr)
+void place_ac(int x,int y, FILE* ptr)
 {
 	fprintf(ptr, "<g transform=\"translate(%d,%d) scale(0.02125,0.022727272727272728)\"> <g transform=\"translate(-25.08161,-2.992383)\"> <path d=\"m 40,25 c 0,8.284271 -6.715729,15 -15,15 -8.284271,0 -15,-6.715729 -15,-15 0,-8.284271 6.715729,-15 15,-15 8.284271,0 15,6.715729 15,15 l 0,0 z\" style=\"opacity:1;fill:none;fill-opacity:1;stroke:#000000;stroke-width:%f;stroke-linecap:square;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1\"/> <path d=\"M 25,10 25,3\" style=\"fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:%f;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1\"/> <path d=\"m 25,40 0,7\" style=\"fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:%f;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1\"/> <path d=\"m 16,25.000005 c 0,0 1.5,-5.000001 4.5,-5.000001 3,0 6,10.000002 9,10.000002 3,0 4.5,-5.000001 4.5,-5.000001\" style=\"fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:%f;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1\"/> </g> </g>\n",x,y,(43*LINE_WIDTH),(43*LINE_WIDTH),(43*LINE_WIDTH),(43*LINE_WIDTH));
 }
 
-int place_current(int x,int y, FILE* ptr)
+void place_current(int x,int y, FILE* ptr)
 {
 	fprintf(ptr, "<g transform=\"translate(%d,%d) scale(0.02125,0.022727272727272728)\"> <g transform=\"translate(-25.08161,-2.992383)\"> <path d=\"m 40,25 c 0,8.284271 -6.715729,15 -15,15 -8.284271,0 -15,-6.715729 -15,-15 0,-8.284271 6.715729,-15 15,-15 8.284271,0 15,6.715729 15,15 l 0,0 z\" style=\"opacity:1;fill:none;fill-opacity:1;stroke:#000000;stroke-width:%f;stroke-linecap:square;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1\" /> <path d=\"M 25,10 25,3\" style=\"fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:%f;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1\"/> <path d=\"m 25,40 0,7\" style=\"fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:%f;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1\"/> <path d=\"m 25.136017,23.540261 0,11.951034\" style=\"fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:%f;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1\"/> <path style=\"fill:#000000;fill-rule:evenodd;stroke:#000000;stroke-width:%f;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1\" d=\"m 25.136017,18.552775 -3.210011,4.951033 6.63765,0.05441 z\"/> </g> </g>\n",x,y,(43*LINE_WIDTH),(43*LINE_WIDTH),(43*LINE_WIDTH),(43*LINE_WIDTH),(43*LINE_WIDTH));
 }
 
-int make_element(int x1,int y1,int x2,int y2,enum component_type type,char* name,FILE* ptr)
+void make_element(int x1,int y1,int x2,int y2,enum component_type type,char* name,FILE* ptr)
 {
 	draw_text(x1,y1,name,type,ptr);
 	switch(type)

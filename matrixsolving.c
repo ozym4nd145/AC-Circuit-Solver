@@ -32,7 +32,7 @@ complex div_(complex a,complex b)// a / b
     
 	complex res=mult(a,c);
 
-//----------------------TODO:check------------------------
+	//----------------------TODO:check------------------------
 	if(temp==0)
 	{//fprintf(stderr,"division by zero\n");
 	res.real = 0;
@@ -239,7 +239,6 @@ void invert()
         for (int i=0; i<n; ++i)
             for (int j=0; j<n; ++j)
 		        {inverted_mat[i][j].real=x[i][j].real;inverted_mat[i][j].img=x[i][j].img;}
-
 
 }
 

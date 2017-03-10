@@ -1,5 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include "stack.h"
 
 stack* push(stack* lst,int data)
