@@ -41,8 +41,8 @@ Damping_Factor 		[+-]?{real}{unit}?
 <TERMINAL1>[^ \t\n]* {/* printf("Err match = \"%s\"\n",yytext);*/BEGIN ERR;}
 <TERMINAL2>[^ \t\n]* { /*printf("Err match = \"%s\"\n",yytext);*/BEGIN ERR;}
 <EXPECTINGEND>[.\n] {/*printf("Matched End\n");*/BEGIN INITIAL;/*printf("12\n");*/ /*printf("%d\n",yylineno);*/yylineno++;return END;}
-<SOURCE>[ \t]*\({sp}{DC_Offset}{sp}{Amplitude}{sp}{frequency}{sp}{Delay}{sp}{Damping_Factor}{sp}\)[ \t]* { yylval.s=strdup(yytext);/*printf("Src = \"%s\"\n",yytext);*/ BEGIN EXPECTINGEND;return SOURCEDATA;}
-<SOURCE>[ \t]*\({sp}{DC_Offset}{sp}{Amplitude}{sp}{frequency}{sp}{Delay}{sp}\)[ \t]* { yylval.s=strdup(yytext);fprintf(stderr,"Line %d: Warning - Damping factor not specified, taking it as 0.0\n",yylineno); BEGIN EXPECTINGEND;return SOURCEDATA;}
+<SOURCE>[ \t]*\([ \t]*{DC_Offset}{sp}{Amplitude}{sp}{frequency}{sp}{Delay}{sp}{Damping_Factor}[ \t]*\)[ \t]* { yylval.s=strdup(yytext);/*printf("Src = \"%s\"\n",yytext);*/ BEGIN EXPECTINGEND;return SOURCEDATA;}
+<SOURCE>[ \t]*\([ \t]*{DC_Offset}{sp}{Amplitude}{sp}{frequency}{sp}{Delay}[ \t]*\)[ \t]* { yylval.s=strdup(yytext);fprintf(stderr,"Line %d: Warning - Damping factor not specified, taking it as 0.0\n",yylineno); BEGIN EXPECTINGEND;return SOURCEDATA;}
 <SOURCE>[^ \t\n]*	 {/*printf("Err match = \"%s\"\n",yytext);*/BEGIN ERR;}
 . 					{yyerror("Error - Format of input file is wrong 2");}
 \n {/*printf("Matched stray \"\\n\"\n");*/ BEGIN INITIAL; fprintf(stderr,"Syntax Error in line no. %d\n",yylineno);/*printf("%d\n",yylineno);*/yylineno++; return er;}
