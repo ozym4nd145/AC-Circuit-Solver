@@ -2,7 +2,7 @@
 
 const double PIE = 3.1415926536;
 const double EPSILON = 1e-16;
-
+const double SMALL_FREQ=1e-9;
 
 struct source_data parse_source(char* str)
 {
@@ -365,41 +365,32 @@ void make_adjlist() {
 
 void make_matrix_dc() {
   // current_variables of voltage sources are
-  matrix = (complex**)calloc((numnets + numvoltage+numinductor), sizeof(complex*));
-  values = (complex*)calloc((numnets + numvoltage+numinductor), sizeof(complex));
+  matrix = (complex**)calloc((numnets + numvoltage), sizeof(complex*));
+  values = (complex*)calloc((numnets + numvoltage), sizeof(complex));
   int eqn = 0;
 
   // V_net0 = 0
 
-  matrix[eqn] = (complex*)calloc((numnets + numvoltage+numinductor), sizeof(complex));
+  matrix[eqn] = (complex*)calloc((numnets + numvoltage), sizeof(complex));
   matrix[eqn++][numnets - 1] = make_complex(1, 0);
   // print_matrix(1);
 
   int i = 0;
   // V1 - V2 = V eqns
-  for (i = 0; i < numcmp; i++) {
-    if (list[i].type == voltage) {
-      matrix[eqn] = (complex*)calloc((numnets + numvoltage+numinductor), sizeof(complex));
+  for (i = 0; i < numsources; i++) {
+    if (list[sources[i]].type == voltage) {
+      matrix[eqn] = (complex*)calloc((numnets + numvoltage), sizeof(complex));
 
       if (parsed_source[map_source_list[i]].dcoff != 0 || parsed_source[map_source_list[i]].freq == 0) {
-
-
-        matrix[eqn][list[i].id1] = make_complex(-1, 0);
-        matrix[eqn][list[i].id2] = make_complex(1, 0);
+        matrix[eqn][list[sources[i]].id1] = make_complex(-1, 0);
+        matrix[eqn][list[sources[i]].id2] = make_complex(1, 0);
         values[eqn++] = make_complex(parsed_source[map_source_list[i]].dcoff, 0);
 
       } else {
-        matrix[eqn][list[i].id1] = make_complex(-1, 0);
-        matrix[eqn][list[i].id2] = make_complex(1, 0);
+        matrix[eqn][list[sources[i]].id1] = make_complex(-1, 0);
+        matrix[eqn][list[sources[i]].id2] = make_complex(1, 0);
         values[eqn++] = make_complex(0, 0);
       }
-    }
-    else if(list[i].type==inductor)
-    {
-      matrix[eqn] = (complex*)calloc((numnets + numvoltage+numinductor), sizeof(complex));
-      matrix[eqn][list[i].id1] = make_complex(-1, 0);
-      matrix[eqn][list[i].id2] = make_complex(1, 0);
-      values[eqn++] = make_complex(0, 0);
     }
   }
   // print_matrix(numvoltage+1);
@@ -408,12 +399,12 @@ void make_matrix_dc() {
   j = 0;
   for (i = 0; i < numnets - 1; i++) {
     // printf("eqn - %d\n",eqn);
-    matrix[eqn] = (complex*)calloc((numnets + numvoltage + numinductor), sizeof(complex));
+    matrix[eqn] = (complex*)calloc((numnets + numvoltage), sizeof(complex));
     stack* temp = adjlist[i];
     int id;
     while (temp != NULL) {
       id = temp->id;
-
+      
       struct source_data data = parsed_source[map_source_list[id]];
 
       if (list[id].type == voltage) {
@@ -432,19 +423,12 @@ void make_matrix_dc() {
         } else {
           values[eqn] = add(values[eqn], make_complex(data.dcoff, 0));
         }
-      } else if (list[id].type == inductor) {
-        if (list[id].id1 == i) {
-          // current outgoing from id1
-          matrix[eqn][index_cur_src[id]] = make_complex(1, 0);
-        } else {
-          // current incoming to id1
-          matrix[eqn][index_cur_src[id]] = make_complex(-1, 0);
-        }
-      } else if (list[id].type == resistor) {
-        complex impedance = div_(make_complex(1,0),get_impedance(id, 0));
+      } else {
+        complex inductance =
+            div_(make_complex(1, 0), get_impedance(id, SMALL_FREQ));
         int other_net = (list[id].id1 == i) ? (list[id].id2) : (list[id].id1);
-        matrix[eqn][i] = add(matrix[eqn][i], impedance);
-        matrix[eqn][other_net] = sub(matrix[eqn][other_net], impedance);
+        matrix[eqn][i] = add(matrix[eqn][i], inductance);
+        matrix[eqn][other_net] = sub(matrix[eqn][other_net], inductance);
       }
       temp = temp->next;
     }
@@ -572,15 +556,15 @@ void print_soln(int print_dc) {
     for (i = 0; i < numcmp; i++) {
       complex curr;
       fprintf(resultfile, "%s ", list[i].name);
-      if (list[i].type == voltage || list[i].type == inductor) {
+      if (list[i].type == voltage) {
         curr = voltage_soln[freq_arr_len][index_cur_src[i]];
       } else if (list[i].type == current && (parsed_source[map_source_list[i]].dcoff != 0 || parsed_source[map_source_list[i]].freq == 0)) {
         curr = make_complex(parsed_source[map_source_list[i]].dcoff,
                             0);
-      } else if (list[i].type==resistor){
+      } else if (list[i].type==resistor || list[i].type==inductor || list[i].type ==capacitor){
         curr = div_(
             sub(voltage_soln[freq_arr_len][list[i].id1], voltage_soln[freq_arr_len][list[i].id2]),
-            (get_impedance(i, 0)));
+            (get_impedance(i, SMALL_FREQ)));
       } else {
         curr = make_complex(0,0);
       }
@@ -617,13 +601,14 @@ void print_soln(int print_dc) {
       fprintf(resultfile, "%s ", list[i].name);
       if (list[i].type == voltage) {
         curr = voltage_soln[j][index_cur_src[i]];
-      } else if (list[i].type == current) {
-        curr = make_complex(parsed_source[map_source_list[i]].ampl,
-                            0);
-      } else {
+      } else if (list[i].type == current && parsed_source[map_source_list[i]].freq == freq_arr[j]) {
+        curr = make_complex(parsed_source[map_source_list[i]].ampl*cos(parsed_source[map_source_list[i]].phase),parsed_source[map_source_list[i]].ampl*sin(parsed_source[map_source_list[i]].phase));
+      } else if (list[i].type==resistor || list[i].type==inductor || list[i].type ==capacitor){
         curr = div_(
             sub(voltage_soln[j][list[i].id1], voltage_soln[j][list[i].id2]),
             (get_impedance(i, freq_arr[j])));
+      } else {
+        curr = make_complex(0,0);
       }
       fprintf(resultfile, "%.3lf ", abs_(curr));
       fprintf(resultfile, "%.3lf\n", calc_angle(curr));
