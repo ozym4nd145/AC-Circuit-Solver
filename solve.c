@@ -704,8 +704,8 @@ void solve_circuit() {
   {
     voltage_soln[freq_arr_len] = (complex*)calloc((numnets + 10 + numvoltage + numinductor), sizeof(complex));
     make_matrix_dc();
-    pass((numnets+numvoltage+numinductor));
-    n = (numnets+numvoltage+numinductor);
+    pass((numnets+numvoltage));
+    n = (numnets+numvoltag);
     solve_matrix();
     for (j = 0; j < (numnets + numvoltage+numinductor); j++) {
       // printf("Answer - %.10lf + %.10lf i\n",answer[j].real,answer[j].img);
